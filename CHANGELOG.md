@@ -2,11 +2,12 @@
 
 Each version's section is written to be pasted into its GitHub release
 description, which Nag shows in the Update Notes window.
-
-## v0.3.2 (unreleased)
+## v0.3.3 (unreleased)
 
 ### Changes
 - **Closing Nag's window now sends it to the system tray.** Nag keeps running your triggers and overlays, like other tray apps on Windows. To quit, right-click the tray icon and choose Exit. The separate minimize-to-tray button is gone, since the close button now does the same thing. If a log archive is in progress when you choose Exit, Nag asks whether to wait for it first.
+
+## v0.3.2
 
 ### Fixes
 - **The Update Notes title is fixed.** It showed the version with two v's, such as "vv0.3.1".
