@@ -11,7 +11,8 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component( {
     selector: 'app-trigger-action-audio',
     templateUrl: 'trigger-action-audio.component.html',
-    styleUrls: [ 'trigger-action-audio.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['trigger-action-audio.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class TriggerActionAudioComponent implements OnInit {
     

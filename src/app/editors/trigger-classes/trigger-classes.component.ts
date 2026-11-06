@@ -8,7 +8,8 @@ import { MatTable } from '@angular/material/table';
 @Component( {
     selector: 'app-trigger-classes',
     templateUrl: 'trigger-classes.component.html',
-    styleUrls: ['trigger-classes.component.scss', '../../core.scss']
+    styleUrls: ['trigger-classes.component.scss', '../../core.scss'],
+    standalone: false
 } )
 export class TriggerClassesComponent implements OnInit {
 

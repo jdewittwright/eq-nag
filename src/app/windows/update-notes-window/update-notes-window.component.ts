@@ -19,7 +19,8 @@ interface IReleaseInfo {
 @Component( {
     selector: 'app-update-notes-window',
     templateUrl: 'update-notes-window.component.html',
-    styleUrls: [ './update-notes-window.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['./update-notes-window.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class UpdateNotesWindowComponent implements OnInit {
 

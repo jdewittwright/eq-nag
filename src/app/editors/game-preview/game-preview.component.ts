@@ -3,7 +3,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 @Component( {
     selector: 'game-preview',
     templateUrl: 'game-preview.component.html',
-    styleUrls: [ 'game-preview.component.scss' ],
+    styleUrls: ['game-preview.component.scss'],
+    standalone: false
 } )
 export class GamePreviewComponent implements OnInit {
 

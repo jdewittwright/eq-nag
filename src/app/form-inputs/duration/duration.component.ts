@@ -4,14 +4,15 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component( {
     selector: 'app-duration',
     templateUrl: 'duration.component.html',
-    styleUrls: [ 'duration.component.scss' ],
+    styleUrls: ['duration.component.scss'],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef( () => DurationComponent ),
+            useExisting: forwardRef(() => DurationComponent),
             multi: true
         }
     ],
+    standalone: false
 } )
 export class DurationComponent implements OnInit, ControlValueAccessor {
 

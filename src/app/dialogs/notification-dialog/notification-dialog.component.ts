@@ -6,7 +6,8 @@ import { NotificationDialogModel, NotificationTypes } from './notification-dialo
 @Component( {
     selector: 'app-notification-dialog',
     templateUrl: 'notification-dialog.component.html',
-    styleUrls: [ 'notification-dialog.component.scss', '../dialog.styles.scss' ],
+    styleUrls: ['notification-dialog.component.scss', '../dialog.styles.scss'],
+    standalone: false
 } )
 export class NotificationDialogComponent implements OnInit {
 

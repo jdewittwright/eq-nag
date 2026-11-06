@@ -7,14 +7,15 @@ import * as Palettes from './color-picker.palettes';
 @Component( {
     selector: 'app-color-picker',
     templateUrl: 'color-picker.component.html',
-    styleUrls: [ 'color-picker.component.scss' ],
+    styleUrls: ['color-picker.component.scss'],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef( () => ColorPickerComponent ),
+            useExisting: forwardRef(() => ColorPickerComponent),
             multi: true
         }
     ],
+    standalone: false
 } )
 
 export class ColorPickerComponent implements OnInit, ControlValueAccessor {

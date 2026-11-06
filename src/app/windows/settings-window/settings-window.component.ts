@@ -8,7 +8,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'settings-window',
     templateUrl: 'settings-window.component.html',
-    styleUrls: [ 'settings-window.component.scss', '../../core.scss', '../../modal.scss' ],
+    styleUrls: ['settings-window.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class SettingsWindowComponent implements OnInit {
 

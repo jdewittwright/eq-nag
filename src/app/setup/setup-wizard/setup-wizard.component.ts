@@ -15,7 +15,8 @@ const setupStepTimeoutMs = 10000;
 @Component( {
     selector: 'app-setup-wizard',
     templateUrl: 'setup-wizard.component.html',
-    styleUrls: [ 'setup-wizard.component.scss' ]
+    styleUrls: ['setup-wizard.component.scss'],
+    standalone: false
 } )
 export class SetupWizardComponent implements OnInit {
 

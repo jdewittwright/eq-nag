@@ -5,7 +5,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'app-trigger-action-speak',
     templateUrl: 'trigger-action-speak.component.html',
-    styleUrls: ['trigger-action-speak.component.scss']
+    styleUrls: ['trigger-action-speak.component.scss'],
+    standalone: false
 } )
 export class TriggerActionSpeakComponent implements OnInit {
 

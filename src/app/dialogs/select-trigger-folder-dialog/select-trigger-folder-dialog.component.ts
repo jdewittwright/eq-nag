@@ -14,7 +14,8 @@ interface ExampleFlatNode {
 @Component( {
     selector: 'app-select-trigger-folder-dialog',
     templateUrl: 'select-trigger-folder-dialog.component.html',
-    styleUrls: [ 'select-trigger-folder-dialog.component.scss', '../dialog.styles.scss', '../../core.scss' ]
+    styleUrls: ['select-trigger-folder-dialog.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    standalone: false
 } )
 export class SelectTriggerFolderDialogComponent implements OnInit {
 

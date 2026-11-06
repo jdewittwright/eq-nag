@@ -4,8 +4,9 @@ import { nagId } from 'src/app/core/nag-id.util';
 @Component( {
     selector: 'app-accordion-panel',
     templateUrl: 'accordion-panel.component.html',
-    styleUrls: [ 'accordion-panel.component.scss' ],
-    host: {'class': 'accordion-panel'}
+    styleUrls: ['accordion-panel.component.scss'],
+    host: { 'class': 'accordion-panel' },
+    standalone: false
 } )
 export class AccordionPanelComponent implements OnInit {
 

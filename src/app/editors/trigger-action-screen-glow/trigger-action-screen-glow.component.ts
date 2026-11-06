@@ -7,7 +7,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component({
     selector: 'app-trigger-action-screen-glow',
     templateUrl: 'trigger-action-screen-glow.component.html',
-    styleUrls: ['trigger-action-screen-glow.component.scss']
+    styleUrls: ['trigger-action-screen-glow.component.scss'],
+    standalone: false
 })
 export class TriggerActionScreenGlowComponent implements OnInit {
     

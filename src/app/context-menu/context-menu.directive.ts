@@ -2,7 +2,10 @@ import { AfterViewInit, ComponentRef, Directive, ElementRef, HostListener, Input
 import { ContextMenuComponent } from './context-menu.component';
 import { ContextMenuModel } from './context-menu.model';
 
-@Directive( { selector: '[appContextMenu]' } )
+@Directive( {
+    selector: '[appContextMenu]',
+    standalone: false
+} )
 export class ContextMenuDirective implements AfterViewInit {
 
     private _menu: ContextMenuModel[];

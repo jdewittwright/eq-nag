@@ -5,7 +5,8 @@ import { ColoredString } from '../dialog.model';
 @Component( {
     selector: 'app-confirm-dialog',
     templateUrl: 'confirm-dialog.component.html',
-    styleUrls: [ 'confirm-dialog.component.scss', '../dialog.styles.scss', '../../core.scss' ]
+    styleUrls: ['confirm-dialog.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    standalone: false
 } )
 export class ConfirmDialogComponent implements OnInit {
 

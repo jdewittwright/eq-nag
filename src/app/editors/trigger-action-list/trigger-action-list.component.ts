@@ -9,7 +9,8 @@ import { StringUtility } from 'src/app/utilities';
 @Component( {
     selector: 'app-trigger-action-list',
     templateUrl: './trigger-action-list.component.html',
-    styleUrls: [ './trigger-action-list.component.scss' ]
+    styleUrls: ['./trigger-action-list.component.scss'],
+    standalone: false
 } )
 export class TriggerActionListComponent implements OnInit, OnDestroy {
     

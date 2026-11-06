@@ -1,7 +1,10 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 import { EasingUtilities, MathUtilities } from '../utilities/math.utilities';
 
-@Directive( { selector: '[horizontalScroll]' } )
+@Directive( {
+    selector: '[horizontalScroll]',
+    standalone: false
+} )
 export class HorizontalScrollDirective {
 
     private destinationScroll: number = null;

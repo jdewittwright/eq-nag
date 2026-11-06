@@ -7,7 +7,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component({
     selector: 'app-conditions',
     templateUrl: 'conditions.component.html',
-    styleUrls: ['conditions.component.scss', '../../core.scss']
+    styleUrls: ['conditions.component.scss', '../../core.scss'],
+    standalone: false
 })
 
 export class ConditionsComponent implements OnInit {

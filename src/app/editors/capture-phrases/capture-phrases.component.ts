@@ -26,7 +26,8 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component( {
     selector: 'app-capture-phrases',
     templateUrl: 'capture-phrases.component.html',
-    styleUrls: [ 'capture-phrases.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['capture-phrases.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class CapturePhrasesComponent implements OnInit {
 

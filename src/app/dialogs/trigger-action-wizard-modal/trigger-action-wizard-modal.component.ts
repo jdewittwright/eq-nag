@@ -6,7 +6,8 @@ import { TriggerAction, ActionTypes, OverlayWindowModel } from 'src/app/core.mod
 @Component( {
     selector: 'app-confirm-dialog',
     templateUrl: 'trigger-action-wizard-modal.component.html',
-    styleUrls: [ 'trigger-action-wizard-modal.component.scss', '../dialog.styles.scss', '../../core.scss' ]
+    styleUrls: ['trigger-action-wizard-modal.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    standalone: false
 } )
 export class TriggerActionWizardModalComponent implements OnInit, OnDestroy {
 

@@ -5,7 +5,8 @@ import { replaceAt } from 'src/app/utilities/string.utilities';
 @Component( {
     selector: 'console-progress',
     templateUrl: 'console-progress.component.html',
-    styleUrls: [ 'console-progress.component.scss' ],
+    styleUrls: ['console-progress.component.scss'],
+    standalone: false
 } )
 export class ConsoleProgressComponent implements OnInit {
 

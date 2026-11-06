@@ -17,7 +17,8 @@ function componentToHex( c ) {
 @Component( {
     selector: 'app-trigger-action-display-text',
     templateUrl: 'trigger-action-displayText.component.html',
-    styleUrls: ['trigger-action-displayText.component.scss']
+    styleUrls: ['trigger-action-displayText.component.scss'],
+    standalone: false
 } )
 export class TriggerActionDisplayTextComponent implements OnInit {
 

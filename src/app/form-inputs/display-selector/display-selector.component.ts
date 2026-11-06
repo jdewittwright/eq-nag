@@ -4,7 +4,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'app-display-selector',
     templateUrl: 'display-selector.component.html',
-    styleUrls: [ './display-selector.component.scss' ],
+    styleUrls: ['./display-selector.component.scss'],
+    standalone: false
 } )
 export class DisplaySelectorComponent implements OnInit {
     

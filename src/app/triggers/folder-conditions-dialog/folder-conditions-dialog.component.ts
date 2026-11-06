@@ -7,7 +7,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'app-folder-conditions-dialog',
     templateUrl: 'folder-conditions-dialog.component.html',
-    styleUrls: [ 'folder-conditions-dialog.component.scss' ],
+    styleUrls: ['folder-conditions-dialog.component.scss'],
+    standalone: false
 } )
 export class FolderConditionsDialogComponent implements OnInit {
 

@@ -5,7 +5,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'app-trigger-action-clear-variable',
     templateUrl: 'trigger-action-clearVariable.component.html',
-    styleUrls: ['trigger-action-clearVariable.component.scss']
+    styleUrls: ['trigger-action-clearVariable.component.scss'],
+    standalone: false
 } )
 export class TriggerActionClearVariableComponent implements OnInit {
 

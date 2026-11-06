@@ -16,7 +16,8 @@ export interface ITriggerHotkeyDialogData {
 @Component( {
     selector: 'app-trigger-hotkey-dialog',
     templateUrl: './trigger-hotkey-dialog.component.html',
-    styleUrls: [ './trigger-hotkey-dialog.component.scss', '../dialog.styles.scss' ]
+    styleUrls: ['./trigger-hotkey-dialog.component.scss', '../dialog.styles.scss'],
+    standalone: false
 } )
 export class TriggerHotkeyDialogComponent implements OnInit {
 

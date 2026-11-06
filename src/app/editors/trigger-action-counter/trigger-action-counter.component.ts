@@ -10,7 +10,8 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component( {
     selector: 'app-trigger-action-counter',
     templateUrl: 'trigger-action-counter.component.html',
-    styleUrls: [ 'trigger-action-counter.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['trigger-action-counter.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class TriggerActionCounterComponent implements OnInit {
     

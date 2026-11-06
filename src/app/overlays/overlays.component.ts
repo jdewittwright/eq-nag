@@ -13,7 +13,8 @@ import { IpcService } from '../ipc.service';
 @Component( {
     selector: 'app-overlays',
     templateUrl: 'overlays.component.html',
-    styleUrls: [ './overlays.component.scss' ],
+    styleUrls: ['./overlays.component.scss'],
+    standalone: false
 } )
 export class OverlaysComponent implements OnInit {
 

@@ -5,7 +5,8 @@ import { TriggerFolder } from '../../core.model';
 @Component( {
     selector: 'app-new-trigger-dialog',
     templateUrl: 'new-trigger-folder-dialog.component.html',
-    styleUrls: [ 'new-trigger-folder-dialog.component.scss', '../dialog.styles.scss', '../../core.scss' ]
+    styleUrls: ['new-trigger-folder-dialog.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    standalone: false
 } )
 export class NewTriggerFolderDialogComponent implements OnInit {
 

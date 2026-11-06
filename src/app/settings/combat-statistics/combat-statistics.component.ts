@@ -27,7 +27,8 @@ const pageSize = 10;
 @Component( {
     selector: 'combat-statistics',
     templateUrl: 'combat-statistics.component.html',
-    styleUrls: [ '../settings-component/settings.component.scss', '../../core.scss', './combat-statistics.component.scss' ],
+    styleUrls: ['../settings-component/settings.component.scss', '../../core.scss', './combat-statistics.component.scss'],
+    standalone: false
 } )
 export class CombatStatisticsComponent implements OnInit {
 

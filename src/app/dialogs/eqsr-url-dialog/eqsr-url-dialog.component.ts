@@ -7,7 +7,8 @@ const eqsrSpellUrlRegex = /^https?:\/\/spells\.eqresource\.com\/spells\.php\?id=
 @Component( {
     selector: 'app-eqsr-url-dialog',
     templateUrl: 'eqsr-url-dialog.component.html',
-    styleUrls: [ 'eqsr-url-dialog.component.scss', '../dialog.styles.scss' ],
+    styleUrls: ['eqsr-url-dialog.component.scss', '../dialog.styles.scss'],
+    standalone: false
 } )
 export class EqsrUrlDialogComponent {
 

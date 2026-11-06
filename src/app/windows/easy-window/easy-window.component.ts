@@ -7,7 +7,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'easy-window',
     templateUrl: 'easy-window.component.html',
-    styleUrls: [ 'easy-window.component.scss', '../../core.scss', '../../modal.scss' ],
+    styleUrls: ['easy-window.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class EasyWindowComponent implements OnInit {
 

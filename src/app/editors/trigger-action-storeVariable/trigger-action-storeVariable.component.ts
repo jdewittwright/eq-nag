@@ -4,7 +4,8 @@ import { TriggerAction } from 'src/app/core.model';
 @Component( {
     selector: 'app-trigger-action-store-variable',
     templateUrl: 'trigger-action-storeVariable.component.html',
-    styleUrls: ['trigger-action-storeVariable.component.scss']
+    styleUrls: ['trigger-action-storeVariable.component.scss'],
+    standalone: false
 } )
 export class TriggerActionStoreVariableComponent implements OnInit {
 

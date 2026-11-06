@@ -10,7 +10,8 @@ import { DialogService } from 'src/app/dialogs/dialog.service';
 @Component( {
     selector: 'app-trigger-action-dotTimer',
     templateUrl: 'trigger-action-dotTimer.component.html',
-    styleUrls: [ 'trigger-action-dotTimer.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['trigger-action-dotTimer.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class TriggerActionDotTimerComponent implements OnInit {
 

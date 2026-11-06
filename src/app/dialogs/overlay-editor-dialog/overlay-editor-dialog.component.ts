@@ -33,7 +33,8 @@ const availableFonts = {
 @Component( {
     selector: 'app-overlay-editor-dialog',
     templateUrl: 'overlay-editor-dialog.component.html',
-    styleUrls: [ 'overlay-editor-dialog.component.scss', '../../core.scss', '../../modal.scss' ],
+    styleUrls: ['overlay-editor-dialog.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class OverlayEditorDialogComponent implements OnInit {
 

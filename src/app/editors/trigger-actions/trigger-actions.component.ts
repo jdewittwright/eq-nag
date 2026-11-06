@@ -7,7 +7,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 @Component( {
     selector: 'app-trigger-actions',
     templateUrl: 'trigger-actions.component.html',
-    styleUrls: ['trigger-actions.component.scss', '../../core.scss', '../../modal.scss']
+    styleUrls: ['trigger-actions.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class TriggerActionsComponent implements OnInit {
 

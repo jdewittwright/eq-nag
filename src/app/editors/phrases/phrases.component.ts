@@ -9,7 +9,8 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component({
     selector: 'app-phrases',
     templateUrl: 'phrases.component.html',
-    styleUrls: ['phrases.component.scss', '../../core.scss', '../../modal.scss']
+    styleUrls: ['phrases.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 })
 export class PhrasesComponent implements OnInit {
 

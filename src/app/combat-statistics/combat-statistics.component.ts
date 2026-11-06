@@ -5,7 +5,8 @@ import { CharacterOptionModel } from '../core.model';
 @Component( {
     selector: 'app-combat-statistics',
     templateUrl: './combat-statistics.component.html',
-    styleUrls: [ './combat-statistics.component.scss', '../core.scss' ]
+    styleUrls: ['./combat-statistics.component.scss', '../core.scss'],
+    standalone: false
 } )
 export class CombatStatisticsComponent implements OnInit {
 

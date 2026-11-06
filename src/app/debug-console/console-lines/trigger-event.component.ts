@@ -7,7 +7,8 @@ import { sanitizeHtml } from 'src/app/utilities/html.utilities';
 @Component( {
     selector: 'console-trigger-event',
     templateUrl: 'trigger-event.component.html',
-    styleUrls: [ 'trigger-event.component.scss' ],
+    styleUrls: ['trigger-event.component.scss'],
+    standalone: false
 } )
 export class ConsoleTriggerEventComponent implements OnInit {
 

@@ -37,7 +37,8 @@ interface CharacterTriggerData {
 @Component( {
     selector: 'app-characters-list',
     templateUrl: 'characters-list.component.html',
-    styleUrls: [ 'characters-list.component.scss' ]
+    styleUrls: ['characters-list.component.scss'],
+    standalone: false
 } )
 export class CharactersListComponent implements OnInit {
 

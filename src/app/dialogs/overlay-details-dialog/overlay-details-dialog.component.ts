@@ -5,7 +5,8 @@ import { OverlayWindowModel } from 'src/app/core.model';
 @Component( {
     selector: 'app-overlay-details-dialog',
     templateUrl: 'overlay-details-dialog.component.html',
-    styleUrls: [ 'overlay-details-dialog.component.scss', '../dialog.styles.scss' ]
+    styleUrls: ['overlay-details-dialog.component.scss', '../dialog.styles.scss'],
+    standalone: false
 } )
 export class OverlayDetailsDialogComponent implements OnInit {
 

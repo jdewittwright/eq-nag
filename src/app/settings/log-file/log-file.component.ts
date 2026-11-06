@@ -6,7 +6,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'app-log-file',
     templateUrl: './log-file.component.html',
-    styleUrls: [ './log-file.component.scss' ]
+    styleUrls: ['./log-file.component.scss'],
+    standalone: false
 } )
 export class LogFileComponent implements OnInit {
 

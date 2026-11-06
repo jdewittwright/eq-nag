@@ -10,7 +10,8 @@ import * as _ from 'lodash-es';
 @Component( {
     selector: 'app-trigger-action-timer',
     templateUrl: 'trigger-action-timer.component.html',
-    styleUrls: [ 'trigger-action-timer.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['trigger-action-timer.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class TriggerActionTimerComponent implements OnInit {
     

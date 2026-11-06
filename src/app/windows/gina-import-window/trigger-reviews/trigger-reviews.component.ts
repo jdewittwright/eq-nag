@@ -32,7 +32,8 @@ interface ExampleFlatNode {
 @Component( {
     selector: 'app-trigger-reviews',
     templateUrl: 'trigger-reviews.component.html',
-    styleUrls: [ './trigger-reviews.component.scss', '../../../core.scss', '../../../modal.scss' ],
+    styleUrls: ['./trigger-reviews.component.scss', '../../../core.scss', '../../../modal.scss'],
+    standalone: false
 } )
 export class TriggerReviewsComponent implements OnInit {
 

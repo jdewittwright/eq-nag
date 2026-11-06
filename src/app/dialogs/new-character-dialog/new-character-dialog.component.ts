@@ -13,7 +13,8 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component( {
     selector: 'app-new-character-dialog',
     templateUrl: 'new-character-dialog.component.html',
-    styleUrls: [ '../dialog.styles.scss', '../../core.scss', '../../modal.scss', 'new-character-dialog.component.scss' ]
+    styleUrls: ['../dialog.styles.scss', '../../core.scss', '../../modal.scss', 'new-character-dialog.component.scss'],
+    standalone: false
 } )
 export class NewCharacterDialogComponent implements OnInit {
 

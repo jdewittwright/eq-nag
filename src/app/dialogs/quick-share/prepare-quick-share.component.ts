@@ -36,14 +36,15 @@ class QuickShareTreeObject {
 @Component( {
     selector: 'app-prepare-quick-share-dialog',
     templateUrl: 'prepare-quick-share.component.html',
-    styleUrls: [ 'prepare-quick-share.component.scss', '../dialog.styles.scss', '../../core.scss', '../../modal.scss' ], 
+    styleUrls: ['prepare-quick-share.component.scss', '../dialog.styles.scss', '../../core.scss', '../../modal.scss'],
     animations: [
-        trigger( 'detailExpand', [
-            state( 'collapsed', style( { height: '0px', minHeight: '0' } ) ),
-            state( 'expanded', style( { height: '*' } ) ),
-            transition( 'expanded <=> collapsed', animate( '225ms cubic-bezier(0.4, 0.0, 0.2, 1)' ) ),
-        ] ),
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
     ],
+    standalone: false
 } )
 export class PrepareQuickShareDialogComponent implements OnInit {
     

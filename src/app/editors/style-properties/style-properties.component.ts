@@ -14,7 +14,8 @@ const availableFonts = {
 @Component( {
     selector: 'app-style-properties',
     templateUrl: 'style-properties.component.html',
-    styleUrls: [ 'style-properties.component.scss' ],
+    styleUrls: ['style-properties.component.scss'],
+    standalone: false
 } )
 export class StylePropertiesComponent implements OnInit {
     

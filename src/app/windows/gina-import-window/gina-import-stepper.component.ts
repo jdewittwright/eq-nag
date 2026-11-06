@@ -10,7 +10,8 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'app-gina-import-stepper',
     templateUrl: 'gina-import-stepper.component.html',
-    styleUrls: [ 'gina-import-stepper.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['gina-import-stepper.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class GinaImportStepperComponent implements OnInit {
 

@@ -7,7 +7,8 @@ import { forkJoin, Observable } from 'rxjs';
 @Component( {
     selector: 'app-move-overlays-dialog',
     templateUrl: 'move-overlays-dialog.component.html',
-    styleUrls: [ 'move-overlays-dialog.component.scss', '../../core.scss', '../../modal.scss' ],
+    styleUrls: ['move-overlays-dialog.component.scss', '../../core.scss', '../../modal.scss'],
+    standalone: false
 } )
 export class MoveOverlaysDialogComponent implements OnInit {
 

@@ -6,7 +6,8 @@ import { InputDialogModel } from './input-dialog.model';
 @Component( {
     selector: 'app-input-dialog',
     templateUrl: 'input-dialog.component.html',
-    styleUrls: [ 'input-dialog.component.scss', '../dialog.styles.scss' ],
+    styleUrls: ['input-dialog.component.scss', '../dialog.styles.scss'],
+    standalone: false
 } )
 export class InputDialogComponent implements OnInit {
 

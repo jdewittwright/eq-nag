@@ -3,6 +3,7 @@ import { Directive, ElementRef, HostListener, Inject, Input, OnInit, Renderer2 }
 
 @Directive( {
     selector: '[nagResizeable]',
+    standalone: false
 } )
 export class ResizeableDirective implements OnInit {
 

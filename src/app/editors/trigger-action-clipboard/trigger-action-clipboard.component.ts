@@ -4,7 +4,8 @@ import { TriggerAction } from 'src/app/core.model';
 @Component( {
     selector: 'app-trigger-action-clipboard',
     templateUrl: 'trigger-action-clipboard.component.html',
-    styleUrls: ['trigger-action-clipboard.component.scss']
+    styleUrls: ['trigger-action-clipboard.component.scss'],
+    standalone: false
 } )
 export class TriggerActionClipboardComponent implements OnInit {
 

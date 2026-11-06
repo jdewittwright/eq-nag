@@ -4,7 +4,8 @@ import { ActionTypeIcons, ActionTypeLabels, TriggerAction } from 'src/app/core.m
 @Component( {
     selector: 'app-trigger-action-option',
     templateUrl: 'trigger-action-option.component.html',
-    styleUrls: [ './trigger-action-option.component.scss' ]
+    styleUrls: ['./trigger-action-option.component.scss'],
+    standalone: false
 } )
 export class TriggerActionOptionComponent implements OnInit {
 

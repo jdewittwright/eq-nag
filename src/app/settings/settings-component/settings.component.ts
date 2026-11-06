@@ -22,8 +22,9 @@ interface IPhoneticTransform {
 
 @Component( {
     selector: 'app-settings',
-    templateUrl: 'settings.component.html', 
-    styleUrls: [ 'settings.component.scss', '../../core.scss' ],
+    templateUrl: 'settings.component.html',
+    styleUrls: ['settings.component.scss', '../../core.scss'],
+    standalone: false
 } )
 export class SettingsComponent implements OnInit {
     

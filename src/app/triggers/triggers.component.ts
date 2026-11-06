@@ -27,7 +27,8 @@ interface FolderTreeNode {
 @Component( {
     selector: 'app-triggers',
     templateUrl: 'triggers.component.html',
-    styleUrls: [ 'triggers.component.scss', '../core.scss' ],
+    styleUrls: ['triggers.component.scss', '../core.scss'],
+    standalone: false
 } )
 export class TriggersComponent implements OnInit {
 

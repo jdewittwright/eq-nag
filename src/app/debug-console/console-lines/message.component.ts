@@ -6,7 +6,8 @@ import { escapeHtml, sanitizeHtml } from 'src/app/utilities/html.utilities';
 @Component( {
     selector: 'console-message',
     templateUrl: 'message.component.html',
-    styleUrls: [ 'message.component.scss' ],
+    styleUrls: ['message.component.scss'],
+    standalone: false
 } )
 export class ConsoleMessageComponent implements OnInit {
 

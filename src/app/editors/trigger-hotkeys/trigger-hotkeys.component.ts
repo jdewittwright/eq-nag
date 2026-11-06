@@ -13,7 +13,8 @@ import { StringUtility } from 'src/app/utilities';
 @Component( {
     selector: 'app-trigger-hotkeys',
     templateUrl: './trigger-hotkeys.component.html',
-    styleUrls: [ './trigger-hotkeys.component.scss', '../../core.scss' ]
+    styleUrls: ['./trigger-hotkeys.component.scss', '../../core.scss'],
+    standalone: false
 } )
 export class TriggerHotkeysComponent implements OnInit {
 

@@ -9,7 +9,8 @@ import { ImageUtility } from 'src/app/utilities';
 @Component( {
     selector: 'app-trigger-action-stopwatch',
     templateUrl: 'trigger-action-stopwatch.component.html',
-    styleUrls: [ 'trigger-action-stopwatch.component.scss' ],
+    styleUrls: ['trigger-action-stopwatch.component.scss'],
+    standalone: false
 } )
 export class TriggerActionStopwatchComponent implements OnInit {
     
