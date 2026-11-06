@@ -14,7 +14,7 @@ export class HorizontalScrollDirective {
     private wheelTickDuration: number = 200;
     private startScroll: number = null;
 
-    @HostListener( 'mousewheel', [ '$event' ] ) onMouseWheel( e: WheelEvent ) {
+    @HostListener( 'wheel', [ '$event' ] ) onMouseWheel( e: WheelEvent ) {
         
         if ( Math.abs( e.deltaY ) > 0 ) {
             
