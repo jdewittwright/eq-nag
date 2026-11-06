@@ -1,15 +1,17 @@
 <p [ngClass]="{'error': item.logType === logTypes.error}">
-    <span class="log-timestamp">[{{item.timestamp | date:'HH:mm:ss.SSS' }}]</span>
-    <span class="links">
-        <strong style="width: 15px;" [style.visibility]="item.logType === logTypes.error && item.duplicateCount > 0 ? 'visible' : 'hidden'">{{item.duplicateCount + 1}}</strong>
-        <mat-icon class="color-blue" title="{{getTitle(item)}}" (click)="showTriggerParseHistory(item.triggerId, item.triggerName)">filter_list</mat-icon>
-        <mat-icon class="color-green" title="Show more details" (click)="expanded = !expanded">{{!expanded ? 'expand_more' : 'expand_less'}}</mat-icon>
-    </span>
-    <span class="log-text">
-        <a (click)="showEditTriggerDialog(item.triggerId)" href="javascript:void(0);">{{item.triggerName}}</a>
-        {{getLogText(item)}}
-    </span>
+  <span class="log-timestamp">[{{item.timestamp | date:'HH:mm:ss.SSS' }}]</span>
+  <span class="links">
+    <strong style="width: 15px;" [style.visibility]="item.logType === logTypes.error && item.duplicateCount > 0 ? 'visible' : 'hidden'">{{item.duplicateCount + 1}}</strong>
+    <mat-icon class="color-blue" title="{{getTitle(item)}}" (click)="showTriggerParseHistory(item.triggerId, item.triggerName)">filter_list</mat-icon>
+    <mat-icon class="color-green" title="Show more details" (click)="expanded = !expanded">{{!expanded ? 'expand_more' : 'expand_less'}}</mat-icon>
+  </span>
+  <span class="log-text">
+    <a (click)="showEditTriggerDialog(item.triggerId)" href="javascript:void(0);">{{item.triggerName}}</a>
+    {{getLogText(item)}}
+  </span>
 </p>
-<p class="log-details" *ngIf="expanded">
+@if (expanded) {
+  <p class="log-details">
     <span class="log-details-line" [innerHTML]="renderParseToHtml(item)"></span>
-</p>
+  </p>
+}

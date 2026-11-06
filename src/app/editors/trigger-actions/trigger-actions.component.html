@@ -1,241 +1,303 @@
 
 <div class="floating-top-right"><button mat-button color="accent" (click)="addNewAction()"><mat-icon>add</mat-icon>New</button></div>
 <div class="content" #content>
-    <div class="flex-layout">
-        <mat-card appearance="outlined" class="card action-card" *ngFor="let action of actions; let i = index" style="margin: 20px; min-width: 550px; width: calc(100% - 6em);" [ngClass]="{'box-shadow-blue': scrollIndex === i}">
-            <mat-card-header>
-                <div mat-card-avatar class="action-header-image">
-                    <span class="material-icons" *ngIf="action.actionType == null">{{actionTypeIcons(null)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.DisplayText">{{actionTypeIcons(actionTypes.DisplayText)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.PlayAudio">{{actionTypeIcons(actionTypes.PlayAudio)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.Speak">{{actionTypeIcons(actionTypes.Speak)}}</span>
-                    <span class="material-icons material-icons-outlined" *ngIf="action.actionType === actionTypes.Timer">{{actionTypeIcons(actionTypes.Timer)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.Countdown">{{actionTypeIcons(actionTypes.Countdown)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.List">{{actionTypeIcons(actionTypes.List)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.StoreVariable">{{actionTypeIcons(actionTypes.StoreVariable)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.ClearVariable">{{actionTypeIcons(actionTypes.ClearVariable)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.DotTimer">{{actionTypeIcons(actionTypes.DotTimer)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.Counter">{{actionTypeIcons(actionTypes.Counter)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.Clipboard">{{actionTypeIcons(actionTypes.Clipboard)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.BeneficialTimer">{{actionTypeIcons(actionTypes.BeneficialTimer)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.DisplayDeathRecap">{{actionTypeIcons(actionTypes.DisplayDeathRecap)}}</span>
-                    <span class="material-icons" *ngIf="action.actionType === actionTypes.ScreenGlow">{{actionTypeIcons(actionTypes.ScreenGlow)}}</span>
-                    <span class="material-icons material-icons-outlined" *ngIf="action.actionType === actionTypes.ClearAll">{{actionTypeIcons(actionTypes.ClearAll)}}</span>
-                    <span class="material-icons material-icons-outlined" *ngIf="action.actionType === actionTypes.Stopwatch">{{actionTypeIcons(actionTypes.Stopwatch)}}</span>
-                </div>
-                <mat-card-title>{{action.actionType == null ? 'Unset Action' : actionTypeLabels(action.actionType)}}</mat-card-title>
-                <mat-card-subtitle>
-                    <span *ngIf="action.actionType === actionTypes.DisplayText">Display text on an overlay.</span>
-                    <span *ngIf="action.actionType === actionTypes.DotTimer">Creates a countdown until the dot expires.</span>
-                    <span *ngIf="action.actionType === actionTypes.PlayAudio">Play an audio file.</span>
-                    <span *ngIf="action.actionType === actionTypes.Speak">Speak a phrase.</span>
-                    <span *ngIf="action.actionType === actionTypes.Timer">Start a timer.</span>
-                    <span *ngIf="action.actionType === actionTypes.Countdown">Start a countdown.</span>
-                    <span *ngIf="action.actionType === actionTypes.List">Start and manage a list.</span>
-                    <span *ngIf="action.actionType === actionTypes.StoreVariable">Store a value in a variable.</span>
-                    <span *ngIf="action.actionType === actionTypes.ClearVariable">Empties the value in a variable.</span>
-                    <span *ngIf="action.actionType === actionTypes.Counter">Track the number of times an event occurs.</span>
-                    <span *ngIf="action.actionType === actionTypes.Clipboard">Put text into the clipboard.</span>
-                    <span *ngIf="action.actionType === actionTypes.BeneficialTimer">Creates a countdown until the buff expires.</span>
-                    <span *ngIf="action.actionType === actionTypes.DisplayDeathRecap">Displays the Death Recap window.</span>
-                    <span *ngIf="action.actionType === actionTypes.ScreenGlow">Renders a glow around the main display.</span>
-                    <span *ngIf="action.actionType === actionTypes.ClearAll">Stops all active components.</span>
-                    <span *ngIf="action.actionType === actionTypes.Stopwatch">Starts a stopwatch.</span>
-                    <mat-label *ngIf="isDev" style="color:#00000059;">&nbsp;{{action.actionId}}</mat-label>
-                </mat-card-subtitle>
-                <span class="spacer"></span>
-                <div class="action-movers">
-                    <button mat-icon-button (click)="moveUp(i, $event)" [disabled]="i === 0 || actions.length <= 1"><mat-icon>expand_less</mat-icon></button> <!-- up -->
-                    <button mat-icon-button (click)="moveDown(i, $event)" [disabled]="i === actions.length - 1 || actions.length <= 1"><mat-icon>expand_more</mat-icon></button> <!-- down -->
-                </div>
-            </mat-card-header>
-            <mat-card-content *ngIf="!scrolling">
-                
-                <div>
-                    <mat-form-field style="width: 100%;">
-                        <mat-label></mat-label>
-                        <input matInput [value]="actionTypeLabels(action.actionType)" readonly
-                            [matMenuTriggerFor]="multiColumnActionMenu"
-                            #menuTrigger="matMenuTrigger"  placeholder="Select an action type"
-                            attr.aria-label="Action Type Selector for {{ actionTypeLabels(action.actionType) }}">
-                            <mat-hint>Action Type</mat-hint>
-                    </mat-form-field>
-
-                    <mat-menu #multiColumnActionMenu="matMenu" class="multi-column-menu-panel">
-                        <ng-template matMenuContent>
-                            <div class="multi-column-container">
-                                <div class="menu-column">
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.DisplayText, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.DisplayText)}}</mat-icon>{{ actionTypeLabels(actionTypes.DisplayText) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.Speak, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.Speak)}}</mat-icon>{{ actionTypeLabels(actionTypes.Speak) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.Countdown, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.Countdown)}}</mat-icon>{{ actionTypeLabels(actionTypes.Countdown) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.Timer, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.Timer)}}</mat-icon>{{ actionTypeLabels(actionTypes.Timer) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.DotTimer, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.DotTimer)}}</mat-icon>{{ actionTypeLabels(actionTypes.DotTimer) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.BeneficialTimer, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.BeneficialTimer)}}</mat-icon>{{ actionTypeLabels(actionTypes.BeneficialTimer) }}
-                                    </button>
-                                </div>
-                                <div class="menu-column">
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.Counter, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.Counter)}}</mat-icon>{{ actionTypeLabels(actionTypes.Counter) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.Clipboard, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.Clipboard)}}</mat-icon>{{ actionTypeLabels(actionTypes.Clipboard) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.StoreVariable, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.StoreVariable)}}</mat-icon>{{ actionTypeLabels(actionTypes.StoreVariable) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.ClearVariable, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.ClearVariable)}}</mat-icon>{{ actionTypeLabels(actionTypes.ClearVariable) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.PlayAudio, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.PlayAudio)}}</mat-icon>{{ actionTypeLabels(actionTypes.PlayAudio) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.Stopwatch, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.Stopwatch)}}</mat-icon>{{ actionTypeLabels(actionTypes.Stopwatch) }}
-                                    </button>
-                                </div>
-                                <div class="menu-column">
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.List, menuTrigger)" *ngIf="canSelectList(action)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.List)}}</mat-icon>{{ actionTypeLabels(actionTypes.List) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.ScreenGlow, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.ScreenGlow)}}</mat-icon>{{ actionTypeLabels(actionTypes.ScreenGlow) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.ClearAll, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.ClearAll)}}</mat-icon>{{ actionTypeLabels(actionTypes.ClearAll) }}
-                                    </button>
-                                    <button mat-menu-item (click)="selectActionType(action, actionTypes.DisplayDeathRecap, menuTrigger)">
-                                        <mat-icon>{{actionTypeIcons(actionTypes.DisplayDeathRecap)}}</mat-icon>{{ actionTypeLabels(actionTypes.DisplayDeathRecap) }}
-                                    </button>
-                                </div>
-                            </div>
-                        </ng-template>
-                    </mat-menu>
-                </div>
-    
-                <div *ngIf="action.actionType != null && action.actionType != actionTypes.List">
-    
-                    <div>
-                        <mat-form-field style="width: 100%;">
-                            <mat-label></mat-label>
-                            <mat-select [(ngModel)]="action.phrases" name="ddlActionPhrase_{{i}}" multiple>
-                                <mat-option *ngFor="let phrase of capturePhrases" [value]="phrase.phraseId">{{phrase.phrase}}</mat-option>
-                            </mat-select>
-                            <mat-hint>Trigger on phrase</mat-hint>
-                        </mat-form-field>
+  <div class="flex-layout">
+    @for (action of actions; track action; let i = $index) {
+      <mat-card appearance="outlined" class="card action-card" style="margin: 20px; min-width: 550px; width: calc(100% - 6em);" [ngClass]="{'box-shadow-blue': scrollIndex === i}">
+        <mat-card-header>
+          <div mat-card-avatar class="action-header-image">
+            @if (action.actionType == null) {
+              <span class="material-icons">{{actionTypeIcons(null)}}</span>
+            }
+            @if (action.actionType === actionTypes.DisplayText) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.DisplayText)}}</span>
+            }
+            @if (action.actionType === actionTypes.PlayAudio) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.PlayAudio)}}</span>
+            }
+            @if (action.actionType === actionTypes.Speak) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.Speak)}}</span>
+            }
+            @if (action.actionType === actionTypes.Timer) {
+              <span class="material-icons material-icons-outlined">{{actionTypeIcons(actionTypes.Timer)}}</span>
+            }
+            @if (action.actionType === actionTypes.Countdown) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.Countdown)}}</span>
+            }
+            @if (action.actionType === actionTypes.List) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.List)}}</span>
+            }
+            @if (action.actionType === actionTypes.StoreVariable) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.StoreVariable)}}</span>
+            }
+            @if (action.actionType === actionTypes.ClearVariable) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.ClearVariable)}}</span>
+            }
+            @if (action.actionType === actionTypes.DotTimer) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.DotTimer)}}</span>
+            }
+            @if (action.actionType === actionTypes.Counter) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.Counter)}}</span>
+            }
+            @if (action.actionType === actionTypes.Clipboard) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.Clipboard)}}</span>
+            }
+            @if (action.actionType === actionTypes.BeneficialTimer) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.BeneficialTimer)}}</span>
+            }
+            @if (action.actionType === actionTypes.DisplayDeathRecap) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.DisplayDeathRecap)}}</span>
+            }
+            @if (action.actionType === actionTypes.ScreenGlow) {
+              <span class="material-icons">{{actionTypeIcons(actionTypes.ScreenGlow)}}</span>
+            }
+            @if (action.actionType === actionTypes.ClearAll) {
+              <span class="material-icons material-icons-outlined">{{actionTypeIcons(actionTypes.ClearAll)}}</span>
+            }
+            @if (action.actionType === actionTypes.Stopwatch) {
+              <span class="material-icons material-icons-outlined">{{actionTypeIcons(actionTypes.Stopwatch)}}</span>
+            }
+          </div>
+          <mat-card-title>{{action.actionType == null ? 'Unset Action' : actionTypeLabels(action.actionType)}}</mat-card-title>
+          <mat-card-subtitle>
+            @if (action.actionType === actionTypes.DisplayText) {
+              <span>Display text on an overlay.</span>
+            }
+            @if (action.actionType === actionTypes.DotTimer) {
+              <span>Creates a countdown until the dot expires.</span>
+            }
+            @if (action.actionType === actionTypes.PlayAudio) {
+              <span>Play an audio file.</span>
+            }
+            @if (action.actionType === actionTypes.Speak) {
+              <span>Speak a phrase.</span>
+            }
+            @if (action.actionType === actionTypes.Timer) {
+              <span>Start a timer.</span>
+            }
+            @if (action.actionType === actionTypes.Countdown) {
+              <span>Start a countdown.</span>
+            }
+            @if (action.actionType === actionTypes.List) {
+              <span>Start and manage a list.</span>
+            }
+            @if (action.actionType === actionTypes.StoreVariable) {
+              <span>Store a value in a variable.</span>
+            }
+            @if (action.actionType === actionTypes.ClearVariable) {
+              <span>Empties the value in a variable.</span>
+            }
+            @if (action.actionType === actionTypes.Counter) {
+              <span>Track the number of times an event occurs.</span>
+            }
+            @if (action.actionType === actionTypes.Clipboard) {
+              <span>Put text into the clipboard.</span>
+            }
+            @if (action.actionType === actionTypes.BeneficialTimer) {
+              <span>Creates a countdown until the buff expires.</span>
+            }
+            @if (action.actionType === actionTypes.DisplayDeathRecap) {
+              <span>Displays the Death Recap window.</span>
+            }
+            @if (action.actionType === actionTypes.ScreenGlow) {
+              <span>Renders a glow around the main display.</span>
+            }
+            @if (action.actionType === actionTypes.ClearAll) {
+              <span>Stops all active components.</span>
+            }
+            @if (action.actionType === actionTypes.Stopwatch) {
+              <span>Starts a stopwatch.</span>
+            }
+            @if (isDev) {
+              <mat-label style="color:#00000059;">&nbsp;{{action.actionId}}</mat-label>
+            }
+          </mat-card-subtitle>
+          <span class="spacer"></span>
+          <div class="action-movers">
+            <button mat-icon-button (click)="moveUp(i, $event)" [disabled]="i === 0 || actions.length <= 1"><mat-icon>expand_less</mat-icon></button> <!-- up -->
+            <button mat-icon-button (click)="moveDown(i, $event)" [disabled]="i === actions.length - 1 || actions.length <= 1"><mat-icon>expand_more</mat-icon></button> <!-- down -->
+          </div>
+        </mat-card-header>
+        @if (!scrolling) {
+          <mat-card-content>
+            <div>
+              <mat-form-field style="width: 100%;">
+                <mat-label></mat-label>
+                <input matInput [value]="actionTypeLabels(action.actionType)" readonly
+                  [matMenuTriggerFor]="multiColumnActionMenu"
+                  #menuTrigger="matMenuTrigger"  placeholder="Select an action type"
+                  attr.aria-label="Action Type Selector for {{ actionTypeLabels(action.actionType) }}">
+                  <mat-hint>Action Type</mat-hint>
+                </mat-form-field>
+                <mat-menu #multiColumnActionMenu="matMenu" class="multi-column-menu-panel">
+                  <ng-template matMenuContent>
+                    <div class="multi-column-container">
+                      <div class="menu-column">
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.DisplayText, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.DisplayText)}}</mat-icon>{{ actionTypeLabels(actionTypes.DisplayText) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.Speak, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.Speak)}}</mat-icon>{{ actionTypeLabels(actionTypes.Speak) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.Countdown, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.Countdown)}}</mat-icon>{{ actionTypeLabels(actionTypes.Countdown) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.Timer, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.Timer)}}</mat-icon>{{ actionTypeLabels(actionTypes.Timer) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.DotTimer, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.DotTimer)}}</mat-icon>{{ actionTypeLabels(actionTypes.DotTimer) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.BeneficialTimer, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.BeneficialTimer)}}</mat-icon>{{ actionTypeLabels(actionTypes.BeneficialTimer) }}
+                        </button>
+                      </div>
+                      <div class="menu-column">
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.Counter, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.Counter)}}</mat-icon>{{ actionTypeLabels(actionTypes.Counter) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.Clipboard, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.Clipboard)}}</mat-icon>{{ actionTypeLabels(actionTypes.Clipboard) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.StoreVariable, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.StoreVariable)}}</mat-icon>{{ actionTypeLabels(actionTypes.StoreVariable) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.ClearVariable, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.ClearVariable)}}</mat-icon>{{ actionTypeLabels(actionTypes.ClearVariable) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.PlayAudio, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.PlayAudio)}}</mat-icon>{{ actionTypeLabels(actionTypes.PlayAudio) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.Stopwatch, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.Stopwatch)}}</mat-icon>{{ actionTypeLabels(actionTypes.Stopwatch) }}
+                        </button>
+                      </div>
+                      <div class="menu-column">
+                        @if (canSelectList(action)) {
+                          <button mat-menu-item (click)="selectActionType(action, actionTypes.List, menuTrigger)">
+                            <mat-icon>{{actionTypeIcons(actionTypes.List)}}</mat-icon>{{ actionTypeLabels(actionTypes.List) }}
+                          </button>
+                        }
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.ScreenGlow, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.ScreenGlow)}}</mat-icon>{{ actionTypeLabels(actionTypes.ScreenGlow) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.ClearAll, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.ClearAll)}}</mat-icon>{{ actionTypeLabels(actionTypes.ClearAll) }}
+                        </button>
+                        <button mat-menu-item (click)="selectActionType(action, actionTypes.DisplayDeathRecap, menuTrigger)">
+                          <mat-icon>{{actionTypeIcons(actionTypes.DisplayDeathRecap)}}</mat-icon>{{ actionTypeLabels(actionTypes.DisplayDeathRecap) }}
+                        </button>
+                      </div>
                     </div>
-    
+                  </ng-template>
+                </mat-menu>
+              </div>
+              @if (action.actionType != null && action.actionType != actionTypes.List) {
+                <div>
+                  <div>
+                    <mat-form-field style="width: 100%;">
+                      <mat-label></mat-label>
+                      <mat-select [(ngModel)]="action.phrases" name="ddlActionPhrase_{{i}}" multiple>
+                        @for (phrase of capturePhrases; track phrase) {
+                          <mat-option [value]="phrase.phraseId">{{phrase.phrase}}</mat-option>
+                        }
+                      </mat-select>
+                      <mat-hint>Trigger on phrase</mat-hint>
+                    </mat-form-field>
+                  </div>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.PlayAudio">
-    
-                    <app-trigger-action-audio [action]="action"></app-trigger-action-audio>
-    
+              }
+              @if (action.actionType === actionTypes.PlayAudio) {
+                <div>
+                  <app-trigger-action-audio [action]="action"></app-trigger-action-audio>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.Counter">
-    
-                    <app-trigger-action-counter [action]="action" [overlayOptions]="alertOverlays"></app-trigger-action-counter>
-    
+              }
+              @if (action.actionType === actionTypes.Counter) {
+                <div>
+                  <app-trigger-action-counter [action]="action" [overlayOptions]="alertOverlays"></app-trigger-action-counter>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.Clipboard">
-    
-                    <app-trigger-action-clipboard [action]="action"></app-trigger-action-clipboard>
-    
+              }
+              @if (action.actionType === actionTypes.Clipboard) {
+                <div>
+                  <app-trigger-action-clipboard [action]="action"></app-trigger-action-clipboard>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.DisplayText">
-    
-                    <app-trigger-action-display-text [action]="action" [overlayOptions]="alertOverlays"></app-trigger-action-display-text>
-    
+              }
+              @if (action.actionType === actionTypes.DisplayText) {
+                <div>
+                  <app-trigger-action-display-text [action]="action" [overlayOptions]="alertOverlays"></app-trigger-action-display-text>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.StoreVariable">
-    
-                    <app-trigger-action-store-variable [action]="action"></app-trigger-action-store-variable>
-    
+              }
+              @if (action.actionType === actionTypes.StoreVariable) {
+                <div>
+                  <app-trigger-action-store-variable [action]="action"></app-trigger-action-store-variable>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.ClearVariable">
-    
-                    <app-trigger-action-clear-variable [action]="action"></app-trigger-action-clear-variable>
-    
+              }
+              @if (action.actionType === actionTypes.ClearVariable) {
+                <div>
+                  <app-trigger-action-clear-variable [action]="action"></app-trigger-action-clear-variable>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.DotTimer">
-    
-                    <app-trigger-action-dotTimer [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [capturePhrases]="capturePhrases" ></app-trigger-action-dotTimer>
-    
+              }
+              @if (action.actionType === actionTypes.DotTimer) {
+                <div>
+                  <app-trigger-action-dotTimer [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [capturePhrases]="capturePhrases" ></app-trigger-action-dotTimer>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.Speak">
-    
-                    <app-trigger-action-speak [action]="action"></app-trigger-action-speak>
-    
+              }
+              @if (action.actionType === actionTypes.Speak) {
+                <div>
+                  <app-trigger-action-speak [action]="action"></app-trigger-action-speak>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.Timer">
-    
-                    <app-trigger-action-timer [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-timer>
-    
+              }
+              @if (action.actionType === actionTypes.Timer) {
+                <div>
+                  <app-trigger-action-timer [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-timer>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.Countdown">
-    
-                    <app-trigger-action-timer [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-timer>
-    
+              }
+              @if (action.actionType === actionTypes.Countdown) {
+                <div>
+                  <app-trigger-action-timer [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-timer>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.List">
-    
-                    <app-trigger-action-list [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-list>
-    
+              }
+              @if (action.actionType === actionTypes.List) {
+                <div>
+                  <app-trigger-action-list [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-list>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.BeneficialTimer">
-    
-                    <app-trigger-action-timer [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-timer>
-    
+              }
+              @if (action.actionType === actionTypes.BeneficialTimer) {
+                <div>
+                  <app-trigger-action-timer [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-timer>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.DisplayDeathRecap">
-    
-                    <app-trigger-action-death-recap [action]="action"></app-trigger-action-death-recap>
-    
+              }
+              @if (action.actionType === actionTypes.DisplayDeathRecap) {
+                <div>
+                  <app-trigger-action-death-recap [action]="action"></app-trigger-action-death-recap>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.ScreenGlow">
-    
-                    <app-trigger-action-screen-glow [action]="action"></app-trigger-action-screen-glow>
-    
+              }
+              @if (action.actionType === actionTypes.ScreenGlow) {
+                <div>
+                  <app-trigger-action-screen-glow [action]="action"></app-trigger-action-screen-glow>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.ClearAll">
-                    <p>This action will clear all render elements, stop all timer types, reset all stored variables, end all audio files and speech, and restart all counters. </p>
+              }
+              @if (action.actionType === actionTypes.ClearAll) {
+                <div>
+                  <p>This action will clear all render elements, stop all timer types, reset all stored variables, end all audio files and speech, and restart all counters. </p>
                 </div>
-    
-                <div *ngIf="action.actionType === actionTypes.Stopwatch">
-    
-                    <app-trigger-action-stopwatch [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-stopwatch>
-    
+              }
+              @if (action.actionType === actionTypes.Stopwatch) {
+                <div>
+                  <app-trigger-action-stopwatch [action]="action" [overlayOptions]="timerOverlays" [alertOverlays]="alertOverlays" [triggerActions]="getOtherActions(action.actionId)" [phrases]="capturePhrases"></app-trigger-action-stopwatch>
                 </div>
-    
+              }
             </mat-card-content>
-            <mat-card-actions *ngIf="!scrolling">
-                <button mat-button color="warn" (click)="deleteAction(i)">Delete</button>
-                <mat-checkbox [(ngModel)]="action.onlyExecuteInDev" name="cbxOnlyShowInDev_{{i}}" *ngIf="isDev && predefined">Only execute in dev</mat-checkbox>
+          }
+          @if (!scrolling) {
+            <mat-card-actions>
+              <button mat-button color="warn" (click)="deleteAction(i)">Delete</button>
+              @if (isDev && predefined) {
+                <mat-checkbox [(ngModel)]="action.onlyExecuteInDev" name="cbxOnlyShowInDev_{{i}}">Only execute in dev</mat-checkbox>
+              }
             </mat-card-actions>
+          }
         </mat-card>
+      }
     </div>
-</div>
+  </div>

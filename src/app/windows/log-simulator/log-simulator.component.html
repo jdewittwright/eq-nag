@@ -1,60 +1,70 @@
 <div class="modal">
-    <header>
-        <mat-toolbar class="titlebar" color="default">
-            <span>Log Simulation</span>
-            <span class="spacer"></span>
-            <button mat-icon-button aria-label="Exit GINA import" (click)="closeModal()">
-                <mat-icon>clear</mat-icon>
-            </button>
-        </mat-toolbar>
-    </header>
-    <section>
-        <div class="menu">
+  <header>
+    <mat-toolbar class="titlebar" color="default">
+      <span>Log Simulation</span>
+      <span class="spacer"></span>
+      <button mat-icon-button aria-label="Exit GINA import" (click)="closeModal()">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-toolbar>
+  </header>
+  <section>
+    <div class="menu">
 
-            <button mat-button class="color-blue" (click)="showPasteDialog()" style="align-self: center;">Paste Log Entries</button>
+      <button mat-button class="color-blue" (click)="showPasteDialog()" style="align-self: center;">Paste Log Entries</button>
 
-            <span class="spacer">
-                <div class="progress-wrapper" *ngIf="simulationStatus === 'running'">
-                    <mat-progress-bar mode="determinate" [value]="simulationProgressPercent"></mat-progress-bar>
-                    <span class="label">Time Remaining: {{simulationProgressTimeRemainingString}}</span>
-                </div>
-            </span>
-            
-            <mat-form-field style="width: 220px;">
-                <mat-label></mat-label>
-                <mat-select [(ngModel)]="characterId" name="ddlCharacters">
-                    <mat-select-trigger>
-                        {{getSelectValue()}}
-                    </mat-select-trigger>
-                    <mat-option *ngFor="let option of characters" [value]="option.characterId">{{option.name}}<span>{{option.server}}</span></mat-option>
-                </mat-select>
-                <mat-hint>Select the character(s) to execute simulation.</mat-hint>
-            </mat-form-field>
+      <span class="spacer">
+        @if (simulationStatus === 'running') {
+          <div class="progress-wrapper">
+            <mat-progress-bar mode="determinate" [value]="simulationProgressPercent"></mat-progress-bar>
+            <span class="label">Time Remaining: {{simulationProgressTimeRemainingString}}</span>
+          </div>
+        }
+      </span>
 
-            <button mat-icon-button class="color-blue" [disabled]="characterId == null || true"><mat-icon>fast_rewind</mat-icon></button>
-            <button mat-icon-button class="material-icons-outlined color-green" [disabled]="characterId == null || rawData == null" (click)="beginSimulation()"><mat-icon>play_circle</mat-icon></button>
-            <button mat-icon-button class="color-red" [disabled]="characterId == null || rawData == null" (click)="stopSimulation()"><mat-icon>stop</mat-icon></button>
-            <button mat-icon-button class="color-yellow" [disabled]="characterId == null || true"><mat-icon>pause</mat-icon></button>
-            <button mat-icon-button class="color-blue" [disabled]="characterId == null || true"><mat-icon>fast_forward</mat-icon></button>
+      <mat-form-field style="width: 220px;">
+        <mat-label></mat-label>
+        <mat-select [(ngModel)]="characterId" name="ddlCharacters">
+          <mat-select-trigger>
+            {{getSelectValue()}}
+          </mat-select-trigger>
+          @for (option of characters; track option) {
+            <mat-option [value]="option.characterId">{{option.name}}<span>{{option.server}}</span></mat-option>
+          }
+        </mat-select>
+        <mat-hint>Select the character(s) to execute simulation.</mat-hint>
+      </mat-form-field>
 
+      <button mat-icon-button class="color-blue" [disabled]="characterId == null || true"><mat-icon>fast_rewind</mat-icon></button>
+      <button mat-icon-button class="material-icons-outlined color-green" [disabled]="characterId == null || rawData == null" (click)="beginSimulation()"><mat-icon>play_circle</mat-icon></button>
+      <button mat-icon-button class="color-red" [disabled]="characterId == null || rawData == null" (click)="stopSimulation()"><mat-icon>stop</mat-icon></button>
+      <button mat-icon-button class="color-yellow" [disabled]="characterId == null || true"><mat-icon>pause</mat-icon></button>
+      <button mat-icon-button class="color-blue" [disabled]="characterId == null || true"><mat-icon>fast_forward</mat-icon></button>
+
+    </div>
+    <div class="table-container">
+
+      @if (lines?.length < 50000) {
+        <table (wheel)="onTableScroll($event)">
+          <!-- [ngClass]="{'current': i === simulationLineIndex}" -->
+          @for (line of lines | slice:startIndex:endIndex; track line; let i = $index) {
+            <tr #trRef [attr.class]="getTrClass(i + startIndex, trRef)">
+              <td class="line-numbers" [ngClass]="{'even': i % 2 === 0, 'odd': i % 2 !== 0}">{{i + startIndex + 1}}</td>
+              <td class="log-text">{{line}}</td>
+            </tr>
+          }
+        </table>
+      }
+      @if (lines?.length >= 1000) {
+        <div style="padding-left: 3em;">
+          <h1 style="font-weight: 100;">Data set too large to preview during simulation.</h1>
+          <div style="padding: 0 15px;">Current line: {{simulationLineIndex < 0 ? 0 : simulationLineIndex}}</div>
         </div>
-        <div class="table-container">
-            
-            <table (wheel)="onTableScroll($event)" *ngIf="lines?.length < 50000">
-                <!-- [ngClass]="{'current': i === simulationLineIndex}" -->
-                <tr *ngFor="let line of lines | slice:startIndex:endIndex; let i = index" #trRef [attr.class]="getTrClass(i + startIndex, trRef)">
-                    <td class="line-numbers" [ngClass]="{'even': i % 2 === 0, 'odd': i % 2 !== 0}">{{i + startIndex + 1}}</td>
-                    <td class="log-text">{{line}}</td>
-                </tr>
-            </table>
-            <div *ngIf="lines?.length >= 1000" style="padding-left: 3em;">
-                <h1 style="font-weight: 100;">Data set too large to preview during simulation.</h1>
-                <div style="padding: 0 15px;">Current line: {{simulationLineIndex < 0 ? 0 : simulationLineIndex}}</div>
-            </div>
-        </div>
-    </section>
-    <footer>
-        <button mat-button color="warn" (click)="closeModal()">Close</button>
-    </footer>
+      }
+    </div>
+  </section>
+  <footer>
+    <button mat-button color="warn" (click)="closeModal()">Close</button>
+  </footer>
 </div>
 

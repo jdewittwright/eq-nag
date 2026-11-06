@@ -1,3 +1,5 @@
 <div class="quick-actions">
-    <button mat-button *ngFor="let qa of quickActions" (click)="executeQuickAction(qa)">{{qa.name}}</button>
+  @for (qa of quickActions; track qa) {
+    <button mat-button (click)="executeQuickAction(qa)">{{qa.name}}</button>
+  }
 </div>

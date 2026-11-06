@@ -1,11 +1,15 @@
 <p [ngClass]="{'error': item.logType === logTypes.error}">
-    <span class="log-timestamp">[{{item.timestamp | date:'HH:mm:ss.SSS' }}]</span>
-    <span class="links" style="margin-right: 2px;">
-        <mat-icon [ngClass]="{'color-green': item.logType !== logTypes.error}" title="Show more details" *ngIf="renderPayload" (click)="expanded = !expanded">{{!expanded ? 'expand_more' : 'expand_less'}}</mat-icon>
-    </span>
-    <span class="log-text label" [ngClass]="{'error': item.logType === logTypes.error, 'success': item.logType !== logTypes.error}">{{item.label}}</span>
-    <span class="log-text">{{item.message}}</span>
+  <span class="log-timestamp">[{{item.timestamp | date:'HH:mm:ss.SSS' }}]</span>
+  <span class="links" style="margin-right: 2px;">
+    @if (renderPayload) {
+      <mat-icon [ngClass]="{'color-green': item.logType !== logTypes.error}" title="Show more details" (click)="expanded = !expanded">{{!expanded ? 'expand_more' : 'expand_less'}}</mat-icon>
+    }
+  </span>
+  <span class="log-text label" [ngClass]="{'error': item.logType === logTypes.error, 'success': item.logType !== logTypes.error}">{{item.label}}</span>
+  <span class="log-text">{{item.message}}</span>
 </p>
-<p class="log-details" [ngClass]="{'error': item.logType === logTypes.error}" *ngIf="renderPayload && expanded">
+@if (renderPayload && expanded) {
+  <p class="log-details" [ngClass]="{'error': item.logType === logTypes.error}">
     <span class="log-details-line" [innerHTML]="payloadHtml"></span>
-</p>
+  </p>
+}

@@ -39,13 +39,16 @@ $nag-theme: mat.m2-define-dark-theme((
 @include mat.icon-button-density(-2);
 
 html {
+    // Angular Material 20 lightened the default dark toolbar from #212121.
+    --mat-toolbar-container-background-color: #212121;
+
     // The legacy tabs kept the selected label white; MDC colors it primary.
     .mat-mdc-tab-group,
     .mat-mdc-tab-nav-bar {
-        --mat-tab-header-active-label-text-color: #fff;
-        --mat-tab-header-active-focus-label-text-color: #fff;
-        --mat-tab-header-active-hover-label-text-color: #fff;
-        --mat-tab-header-label-text-tracking: normal;
+        --mat-tab-active-label-text-color: #fff;
+        --mat-tab-active-focus-label-text-color: #fff;
+        --mat-tab-active-hover-label-text-color: #fff;
+        --mat-tab-label-text-tracking: normal;
     }
 
     // The legacy tabs were at least 160px wide.
@@ -56,8 +59,8 @@ html {
     // Nag draws its own box around form fields (see dark.theme.scss), so the
     // MDC fill would only paint a lighter box inside it.
     .mat-mdc-form-field {
-        --mdc-filled-text-field-container-color: transparent;
-        --mdc-filled-text-field-disabled-container-color: transparent;
+        --mat-form-field-filled-container-color: transparent;
+        --mat-form-field-filled-disabled-container-color: transparent;
     }
 
     // The legacy fields took the font size of the text around them; MDC sets
@@ -97,7 +100,7 @@ html {
     // The migration made every card outlined to match the flat legacy card,
     // which had no border.
     .mat-mdc-card {
-        --mdc-outlined-card-outline-color: transparent;
+        --mat-card-outlined-outline-color: transparent;
         --mat-card-subtitle-text-weight: 400;
     }
 
