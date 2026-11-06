@@ -55,7 +55,13 @@ span.place-holder {
     position: relative;
 }
 
-::ng-deep mat-option.font-option span.mat-mdc-option-text::before {
+// The legacy options had a 48px line, which the font name's negative margin
+// counts on to sit under the preview text.
+::ng-deep mat-option.font-option span.mdc-list-item__primary-text {
+    line-height: 48px;
+}
+
+::ng-deep mat-option.font-option span.mdc-list-item__primary-text::before {
     content: "The quick brown fox jumped over the lazy dog."
 }
 

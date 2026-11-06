@@ -11,11 +11,13 @@ div.tab-content {
     }
 }
 
-:host ::ng-deep .mat-mdc-progress-bar.mat-accent .mdc-linear-progress__bar-inner {
-    background-color: #69f0ae78 !important;
-}
-:host ::ng-deep .mat-mdc-progress-bar.mat-accent .mdc-linear-progress__buffer-bar {
-    background-color: #503d5c !important;
+// The archive and transmit bars: a translucent green fill on a purple track,
+// as tall as their label.
+:host .mat-mdc-progress-bar.mat-accent {
+    --mat-progress-bar-active-indicator-color: #69f0ae78;
+    --mat-progress-bar-track-color: #503d5c;
+    --mat-progress-bar-track-height: 18px;
+    --mat-progress-bar-active-indicator-height: 18px;
 }
 
 div.progress-bars {

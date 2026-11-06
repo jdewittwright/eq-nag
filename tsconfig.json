@@ -7,6 +7,8 @@
       },
       // TypeScript 6 is strict by default; Nag never was.
       "strict": false,
+      // TypeScript 6 no longer infers it.
+      "rootDir": "./src",
       "outDir": "./out-tsc/app",
       "sourceMap": true,
       "declaration": false,

@@ -312,7 +312,7 @@ $bg-extreme-dark: #191919;
                 color: $option-small;
             }
         }
-        .mat-mdc-option.mat-mdc-selected:not(.mat-mdc-option-multiple) {
+        .mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple) {
             background-color: $option-selected !important;
             color: $color-green;
             font-weight: bolder;
