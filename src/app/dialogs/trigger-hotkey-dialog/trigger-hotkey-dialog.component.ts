@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { TriggerHotkey } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
 import { NotificationDialogModel, NotificationTypes } from '../notification-dialog/notification-dialog.model';
 import { NotificationDialogComponent } from '../notification-dialog/notification-dialog.component';
 import { StringUtility } from 'src/app/utilities';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 
 export interface ITriggerHotkeyDialogData {
     hotkey: TriggerHotkey;

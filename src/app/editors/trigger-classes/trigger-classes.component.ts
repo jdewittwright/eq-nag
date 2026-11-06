@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { CharacterClasses, CharacterClassLevel, CharacterClassNames, SelectableClassLevel } from 'src/app/core.model';
 import * as _ from 'lodash-es';
 import { DialogService } from 'src/app/dialogs/dialog.service';
-import { MatTable } from '@angular/material/table';
+import { MatLegacyTable as MatTable } from '@angular/material/legacy-table';
 // import { TriggerAction } from 'src/app/core.model';
 
 @Component( {

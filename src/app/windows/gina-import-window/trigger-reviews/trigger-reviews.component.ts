@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTable as MatTable, MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActionTypeLabels, ActionTypes, CapturePhrase, DuplicateTriggerAction, FileModel, OverlayWindowModel, OwnedTriggerAction, TimerRestartBehaviors, TriggerAction, TriggerFolder, TriggerModel } from 'src/app/core.model';
 import { GinaConfiguration, GinaMultiSelectDataModel, GinaOverlayIds, GinaToNagOverlay, GinaTreeObject, TriggerIdNameModel, TriggerReviewModel } from 'src/app/gina.model';
 import * as _ from 'lodash-es';
@@ -8,7 +8,7 @@ import { IpcService } from 'src/app/ipc.service';
 import { DialogService } from 'src/app/dialogs/dialog.service';
 import { Observable, forkJoin, timer } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { GinaImporter } from 'src/app/utilities/gina.import';
 import { Dictionary } from 'lodash';
 import { nagId } from 'src/app/core/nag-id.util';

@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, NgZone } from '@angular/core';
 import * as _ from 'lodash-es';
-import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarRef as MatSnackBarRef, LegacySimpleSnackBar as SimpleSnackBar } from '@angular/material/legacy-snack-bar';
 
 @Component( {
     selector: 'app-root',

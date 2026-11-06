@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { concat, forkJoin, Observable, of } from 'rxjs';
 import { concatAll, map } from 'rxjs/operators';

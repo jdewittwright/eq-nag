@@ -42,7 +42,7 @@ import { QuickActionsComponent } from './quick-actions/quick-actions.component';
         MaterialModule,
         DialogModule,
         BrowserAnimationsModule,
-        RouterModule.forRoot( appRoutes, { enableTracing: false, useHash: true, relativeLinkResolution: 'legacy' } ),
+        RouterModule.forRoot( appRoutes, { enableTracing: false, useHash: true } ),
         HttpClientModule,
         CoreModule,
         ContextMenuModule,

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { IpcService } from 'src/app/ipc.service';
 import { ColoredString } from '../dialog.model';
 // import * as Electron from 'electron';

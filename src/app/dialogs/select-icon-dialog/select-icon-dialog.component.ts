@@ -1,6 +1,6 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild, ChangeDetectorRef  } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { BasicError, ErrorCodes } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
 

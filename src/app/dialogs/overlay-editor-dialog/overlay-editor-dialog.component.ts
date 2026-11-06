@@ -7,7 +7,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
 import { ColorUtility, Color } from '../../utilities';
 import { customAlphabet } from 'nanoid';
 import { MonitorSelectDialogComponent } from '../monitor-select-dialog/monitor-select-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const nanoid = customAlphabet( alphabet, 16 );
 // import { Color } from '@angular-material-components/color-picker';

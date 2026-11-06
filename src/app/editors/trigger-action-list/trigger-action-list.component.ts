@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatTabGroup } from '@angular/material/tabs';
+import { MatLegacyTabGroup as MatTabGroup } from '@angular/material/legacy-tabs';
 import { Subscription } from 'rxjs';
 import { ActionTypes, availableFonts, generateRenderToken, ListObjectModel, OverlayWindowModel, Phrase, RenderTokenModel, TriggerAction } from 'src/app/core.model';
 import { DialogService } from 'src/app/dialogs/dialog.service';

@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import * as _ from 'lodash-es';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { IpcService } from './ipc.service';
 import { DkpEntryModel, OverlayWindowModel, FocusEffectSettings, StylePropertiesModel, FctStylesModel, VersionNumber } from './core.model';
 import { DialogService } from './dialogs/dialog.service';

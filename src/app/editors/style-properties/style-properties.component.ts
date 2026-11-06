@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatSliderChange } from '@angular/material/slider';
+import { MatLegacySliderChange as MatSliderChange } from '@angular/material/legacy-slider';
 import { StylePropertiesModel } from 'src/app/core.model';
 
 const availableFonts = {

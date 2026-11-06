@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatLegacyTable as MatTable } from '@angular/material/legacy-table';
 import { ContextService } from 'src/app/context-menu/context.service';
 import { FileModel, OverlayWindowModel, Phrase, TriggerAction } from 'src/app/core.model';
 import { customAlphabet } from 'nanoid';

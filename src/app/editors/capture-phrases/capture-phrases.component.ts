@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatTable } from '@angular/material/table';
+import { MatLegacyTable as MatTable } from '@angular/material/legacy-table';
 import { CapturePhrase } from 'src/app/core.model';
 import { DialogService } from 'src/app/dialogs/dialog.service';
 import { getRegexHighlightedHtml } from 'src/app/utilities/regex-highlighter.utilities';

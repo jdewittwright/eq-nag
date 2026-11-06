@@ -3,9 +3,9 @@ import { DialogService } from '../dialogs/dialog.service';
 import { FctCombatGroup, HitStartPositionTypes, OverlayWindowModel, QuickShareFctModel, StylePropertiesModel } from '../core.model';
 import { nagId } from '../core/nag-id.util';
 import { IpcService } from '../ipc.service';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
 import { QuestionDialogAnswerModel } from '../dialogs/question-dialog/question-dialog.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { Observable } from 'rxjs';
 import { ColoredString } from '../dialogs/dialog.model';
 
