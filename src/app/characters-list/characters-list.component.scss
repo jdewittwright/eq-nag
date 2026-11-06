@@ -48,6 +48,10 @@ mat-panel-description {
         height: 24px;
         line-height: 24px;
         margin-left: 15px;
+        // MDC pads icon buttons out to their 40px size, which pushed the icon
+        // down and right inside this 24px one.
+        padding: 0;
+        --mat-icon-button-state-layer-size: 24px;
 
         mat-icon {
             margin-left: 0;
