@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MainComponent } from './main.component';
 import { RouterModule, Routes } from '@angular/router';
 import { appRoutes } from './ng.routes';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { CharactersListComponent } from './characters-list/characters-list.component';
 import { ContextMenuModule } from './context-menu/context-menu.module';
 import { TriggersComponent } from './triggers/triggers.component';
@@ -44,7 +44,6 @@ import { MAT_TABS_CONFIG } from '@angular/material/tabs';
         DialogModule,
         BrowserAnimationsModule,
         RouterModule.forRoot( appRoutes, { enableTracing: false, useHash: true } ),
-        HttpClientModule,
         CoreModule,
         ContextMenuModule,
         WindowsModule,
@@ -77,6 +76,7 @@ import { MAT_TABS_CONFIG } from '@angular/material/tabs';
         SetupService,
         // The legacy tabs sized each tab to its label; keep that look.
         { provide: MAT_TABS_CONFIG, useValue: { stretchTabs: false } },
+        provideHttpClient( withInterceptorsFromDi() ),
     ],
     bootstrap: [ AppComponent ],
 } )
