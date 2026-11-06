@@ -1,4 +1,4 @@
-import { Component, DoCheck, KeyValueChanges, KeyValueDiffer, KeyValueDiffers, OnInit } from '@angular/core';
+import { Component, DoCheck, KeyValueChanges, KeyValueDiffer, KeyValueDiffers, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DialogService } from '../dialogs/dialog.service';
 import { FctCombatGroup, HitStartPositionTypes, OverlayWindowModel, QuickShareFctModel, StylePropertiesModel } from '../core.model';
 import { nagId } from '../core/nag-id.util';
@@ -23,7 +23,9 @@ const animateGrowShrinkDuration = 500;
 @Component( {
     selector: 'app-floating-combat-text',
     templateUrl: 'floating-combat-text.component.html',
-    styleUrls: [ 'floating-combat-text.component.scss', '../core.scss' ],
+    styleUrls: ['floating-combat-text.component.scss', '../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class FloatingCombatTextComponent implements OnInit, DoCheck {
 

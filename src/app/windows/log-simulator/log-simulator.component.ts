@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as _ from 'lodash-es';
 import { CharacterModel } from 'src/app/core.model';
@@ -15,14 +15,16 @@ import { StringUtility } from 'src/app/utilities';
 @Component( {
     selector: 'app-log-simulator',
     templateUrl: 'log-simulator.component.html',
-    styleUrls: [ 'log-simulator.component.scss', '../../core.scss', '../../modal.scss' ],
+    styleUrls: ['log-simulator.component.scss', '../../core.scss', '../../modal.scss'],
     animations: [
-        trigger( 'detailExpand', [
-            state( 'collapsed', style( { height: '0px', minHeight: '0' } ) ),
-            state( 'expanded', style( { height: '*' } ) ),
-            transition( 'expanded <=> collapsed', animate( '225ms cubic-bezier(0.4, 0.0, 0.2, 1)' ) ),
-        ] ),
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class LogSimulatorComponent implements OnInit {
 

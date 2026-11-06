@@ -1,6 +1,6 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { ContextMenuModel } from './context-menu.model';
@@ -9,7 +9,9 @@ import { ContextService } from './context.service';
 @Component( {
     selector: 'app-context-menu',
     templateUrl: 'context-menu.component.html',
-    styleUrls: [ 'context-menu.component.scss' ]
+    styleUrls: ['context-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class ContextMenuComponent implements OnInit {
 

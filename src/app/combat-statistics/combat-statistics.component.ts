@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { IpcService } from '../ipc.service';
 import { CharacterOptionModel } from '../core.model';
 
 @Component( {
     selector: 'app-combat-statistics',
     templateUrl: './combat-statistics.component.html',
-    styleUrls: [ './combat-statistics.component.scss', '../core.scss' ]
+    styleUrls: ['./combat-statistics.component.scss', '../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class CombatStatisticsComponent implements OnInit {
 

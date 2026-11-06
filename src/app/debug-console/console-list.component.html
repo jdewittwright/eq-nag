@@ -1,15 +1,15 @@
-<ng-template ngFor let-item [ngForOf]="history" [ngForTrackBy]="trackByFn">
-
-    <div [ngSwitch]="getLogType(item)">
-        <ng-template [ngSwitchCase]="'progress'">
-            <console-progress [item]="item"></console-progress>
-        </ng-template>
-        <ng-template [ngSwitchCase]="'trigger'">
-            <console-trigger-event [item]="asTriggerParseHistoryModel(item)" (showTriggerHistory)="showTriggerParseHistory($event.triggerId, $event.triggerName)"></console-trigger-event>
-        </ng-template>
-        <ng-template [ngSwitchCase]="'message'">
-            <console-message [item]="item"></console-message>
-        </ng-template>
-    </div>
-
-</ng-template>
+@for (item of history; track trackByFn($index, item)) {
+  <div>
+    @switch (getLogType(item)) {
+      @case ('progress') {
+        <console-progress [item]="item"></console-progress>
+      }
+      @case ('trigger') {
+        <console-trigger-event [item]="asTriggerParseHistoryModel(item)" (showTriggerHistory)="showTriggerParseHistory($event.triggerId, $event.triggerName)"></console-trigger-event>
+      }
+      @case ('message') {
+        <console-message [item]="item"></console-message>
+      }
+    }
+  </div>
+}

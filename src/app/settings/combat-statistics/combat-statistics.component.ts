@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { CharacterClassNames, DpsMeterSettings, PlayerInfo, ServerCombatModel, SettingsKeys } from 'src/app/core.model';
 import { DialogService } from 'src/app/dialogs/dialog.service';
@@ -27,7 +27,9 @@ const pageSize = 10;
 @Component( {
     selector: 'combat-statistics',
     templateUrl: 'combat-statistics.component.html',
-    styleUrls: [ '../settings-component/settings.component.scss', '../../core.scss', './combat-statistics.component.scss' ],
+    styleUrls: ['../settings-component/settings.component.scss', '../../core.scss', './combat-statistics.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class CombatStatisticsComponent implements OnInit {
 

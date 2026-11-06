@@ -179,13 +179,13 @@ app-style-properties {
     }
 }
 
-:host ::ng-deep .mat-tab-body-content {
+:host ::ng-deep .mat-mdc-tab-body-content {
     display: flex;
     flex-flow: column nowrap;
     background-color: #252525;
 }
 
-:host ::ng-deep .mat-tab-labels {
+:host ::ng-deep .mat-mdc-tab-labels {
     background-color: #1e1e1e;
 }
 

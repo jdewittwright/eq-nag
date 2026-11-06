@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Subscription } from 'rxjs';
 import { ActionTypes, availableFonts, generateRenderToken, ListObjectModel, OverlayWindowModel, Phrase, RenderTokenModel, TriggerAction } from 'src/app/core.model';
@@ -9,7 +9,9 @@ import { StringUtility } from 'src/app/utilities';
 @Component( {
     selector: 'app-trigger-action-list',
     templateUrl: './trigger-action-list.component.html',
-    styleUrls: [ './trigger-action-list.component.scss' ]
+    styleUrls: ['./trigger-action-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggerActionListComponent implements OnInit, OnDestroy {
     

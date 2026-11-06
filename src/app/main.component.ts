@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import * as _ from 'lodash-es';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IpcService } from './ipc.service';
@@ -17,7 +17,9 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component( {
     selector: 'app-main',
     templateUrl: 'main.component.html',
-    styleUrls: [ 'main.component.scss', 'core.scss' ]
+    styleUrls: ['main.component.scss', 'core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class MainComponent implements OnInit {
 

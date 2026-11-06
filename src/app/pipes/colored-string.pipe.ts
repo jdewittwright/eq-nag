@@ -5,6 +5,7 @@ import { ColoredString } from '../dialogs/dialog.model';
 
 @Pipe( {
     name: 'coloredString',
+    standalone: false
 } )
 export class ColoredStringPipe implements PipeTransform {
 

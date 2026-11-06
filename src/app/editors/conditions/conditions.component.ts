@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { OperatorTypes, TriggerCondition, TriggerConditionTypes } from 'src/app/core.model';
 import { DialogService } from 'src/app/dialogs/dialog.service';
@@ -7,7 +7,9 @@ import { IpcService } from 'src/app/ipc.service';
 @Component({
     selector: 'app-conditions',
     templateUrl: 'conditions.component.html',
-    styleUrls: ['conditions.component.scss', '../../core.scss']
+    styleUrls: ['conditions.component.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 
 export class ConditionsComponent implements OnInit {

@@ -2,34 +2,50 @@
 
 <mat-dialog-content>
 
-    <div *ngIf="!eqFolderNotFound && spellIcons?.length > 0">
-        <mat-paginator #paginator 
-            [length]="spellIcons.length"
-            [pageSize]="25"
-            [pageSizeOptions]="[25, 50, 100]">
-        </mat-paginator>
-        <div class="icon-container" [style.maxWidth]="(paginator.pageSize == 25 ? 230 : 460) + 'px'" *ngIf="pagedImages?.length > 0">
-            <div class="icon-view" *ngFor="let icon of pagedImages; let i = index">
-                <img *ngIf="icon != null" style="width: 40px;" [src]="icon" (click)="selectIcon(i)" />
+  @if (!eqFolderNotFound && spellIcons?.length > 0) {
+    <div>
+      <mat-paginator #paginator
+        [length]="spellIcons.length"
+        [pageSize]="25"
+        [pageSizeOptions]="[25, 50, 100]">
+      </mat-paginator>
+      @if (pagedImages?.length > 0) {
+        <div class="icon-container" [style.maxWidth]="(paginator.pageSize == 25 ? 230 : 460) + 'px'">
+          @for (icon of pagedImages; track icon; let i = $index) {
+            <div class="icon-view">
+              @if (icon != null) {
+                <img style="width: 40px;" [src]="icon" (click)="selectIcon(i)" />
+              }
             </div>
+          }
         </div>
+      }
     </div>
-    <p *ngIf="!eqFolderNotFound && (spellIcons == null || spellIcons.length === 0)">
-        Processing game files ...
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+  @if (!eqFolderNotFound && (spellIcons == null || spellIcons.length === 0)) {
+    <p>
+      Processing game files ...
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </p>
-    <p *ngIf="eqFolderNotFound">
-        Could not locate your EverQuest folder.
+  }
+  @if (eqFolderNotFound) {
+    <p>
+      Could not locate your EverQuest folder.
     </p>
-    <p *ngIf="eqFolderNotFound && invalidFolderSelected">
-        Invalid file
+  }
+  @if (eqFolderNotFound && invalidFolderSelected) {
+    <p>
+      Invalid file
     </p>
-    <p *ngIf="eqFolderNotFound">
-        Please select the eqgame.exe file in your EverQuest folder.
-        <button mat-button (click)="showFileSelector()" color="accent">Select EverQuest Folder</button>
+  }
+  @if (eqFolderNotFound) {
+    <p>
+      Please select the eqgame.exe file in your EverQuest folder.
+      <button mat-button (click)="showFileSelector()" color="accent">Select EverQuest Folder</button>
     </p>
-    
-    <input type="file" #fileSelector style="display:none;" accept=".exe" (change)="fileSelected($event)" />
+  }
+
+  <input type="file" #fileSelector style="display:none;" accept=".exe" (change)="fileSelected($event)" />
 </mat-dialog-content>
 
 <mat-dialog-actions>

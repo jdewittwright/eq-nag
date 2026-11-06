@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { ContextService } from 'src/app/context-menu/context.service';
 import { FileModel, OverlayWindowModel, Phrase, TriggerAction } from 'src/app/core.model';
@@ -11,7 +11,9 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component( {
     selector: 'app-trigger-action-audio',
     templateUrl: 'trigger-action-audio.component.html',
-    styleUrls: [ 'trigger-action-audio.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['trigger-action-audio.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggerActionAudioComponent implements OnInit {
     

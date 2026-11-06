@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute } from '@angular/router';
@@ -8,7 +8,9 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'settings-window',
     templateUrl: 'settings-window.component.html',
-    styleUrls: [ 'settings-window.component.scss', '../../core.scss', '../../modal.scss' ],
+    styleUrls: ['settings-window.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class SettingsWindowComponent implements OnInit {
 

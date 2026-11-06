@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { DialogService } from 'src/app/dialogs/dialog.service';
 import { IpcService } from 'src/app/ipc.service';
 import { MatTable } from '@angular/material/table';
@@ -22,8 +22,10 @@ interface IPhoneticTransform {
 
 @Component( {
     selector: 'app-settings',
-    templateUrl: 'settings.component.html', 
-    styleUrls: [ 'settings.component.scss', '../../core.scss' ],
+    templateUrl: 'settings.component.html',
+    styleUrls: ['settings.component.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class SettingsComponent implements OnInit {
     

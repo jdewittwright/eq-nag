@@ -1,4 +1,4 @@
-import { Component, DoCheck, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, HostListener, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { IpcService } from '../ipc.service';
 import * as _ from 'lodash-es';
 import { ConsoleListComponent } from './console-list.component';
@@ -6,7 +6,9 @@ import { ConsoleListComponent } from './console-list.component';
 @Component( {
     selector: 'app-debug-console',
     templateUrl: 'debug-console.component.html',
-    styleUrls: [ 'debug-console.component.scss' ],
+    styleUrls: ['debug-console.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class DebugConsoleComponent implements OnInit, DoCheck {
 

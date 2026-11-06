@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatSliderChange } from '@angular/material/slider';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { StylePropertiesModel } from 'src/app/core.model';
 
 const availableFonts = {
@@ -15,7 +14,9 @@ const availableFonts = {
 @Component( {
     selector: 'app-style-properties',
     templateUrl: 'style-properties.component.html',
-    styleUrls: [ 'style-properties.component.scss' ],
+    styleUrls: ['style-properties.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class StylePropertiesComponent implements OnInit {
     
@@ -180,17 +181,17 @@ export class StylePropertiesComponent implements OnInit {
      * Saves changes to the style element.
      * 
      * @param propertyName The name of the property to update.
-     * @param e The mat slider change event.
+     * @param value The slider's current value.
      */
-    updateStyleElement( propertyName: 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom' | 'glowSize' | 'glowIntensity' | 'borderIntensity' | 'fontWeight' | 'fontSize', e: MatSliderChange ) {
+    updateStyleElement( propertyName: 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom' | 'glowSize' | 'glowIntensity' | 'borderIntensity' | 'fontWeight' | 'fontSize', value: number ) {
         if ( this.styleElement?.length > 0 ) {
             let x = Object.assign( new StylePropertiesModel(), this.model );
             if ( propertyName == 'fontWeight' ) {
-                x.fontWeight = availableFonts[ this.model.fontFamily ][ e.value ];
+                x.fontWeight = availableFonts[ this.model.fontFamily ][ value ];
             } else if ( propertyName === 'glowIntensity' || propertyName === 'borderIntensity' ) {
-                x[ propertyName ] = e.value / 100;
+                x[ propertyName ] = value / 100;
             } else {
-                x[ propertyName ] = e.value;
+                x[ propertyName ] = value;
             }
             this.styleElement.forEach( e => StylePropertiesModel.applyStyles( e, x ) );
         }

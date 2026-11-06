@@ -1,17 +1,19 @@
-import { Component, OnInit, forwardRef, Input } from '@angular/core';
+import { Component, OnInit, forwardRef, Input, ChangeDetectionStrategy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component( {
     selector: 'app-duration',
     templateUrl: 'duration.component.html',
-    styleUrls: [ 'duration.component.scss' ],
+    styleUrls: ['duration.component.scss'],
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef( () => DurationComponent ),
+            useExisting: forwardRef(() => DurationComponent),
             multi: true
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class DurationComponent implements OnInit, ControlValueAccessor {
 

@@ -3,14 +3,14 @@
 const { sleep } = require( './app.cjs' );
 
 const selectors = {
-    tab: '.mat-tab-label',
+    tab: '.mdc-tab',
     triggersMenuButton: 'app-triggers button[aria-label="Example icon-button with a menu"]',
     folderName: '.tree-click-target',
     dialog: 'mat-dialog-container',
     selectedStep: '.mat-step-header[aria-selected="true"]',
-    selectBox: 'mat-select .mat-select-trigger',
+    selectBox: 'mat-select .mat-mdc-select-trigger',
     selectOption: 'mat-option',
-    clickable: 'button, [role="menuitem"], .mat-select-trigger, mat-option',
+    clickable: 'button, [role="menuitem"], .mat-mdc-select-trigger, mat-option',
 };
 
 const topDialog = `[ ...document.querySelectorAll( '${selectors.dialog}' ) ].pop()`;

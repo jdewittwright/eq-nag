@@ -1,11 +1,13 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { LogTypes, ProgressModel } from 'src/app/core.model';
 import { replaceAt } from 'src/app/utilities/string.utilities';
 
 @Component( {
     selector: 'console-progress',
     templateUrl: 'console-progress.component.html',
-    styleUrls: [ 'console-progress.component.scss' ],
+    styleUrls: ['console-progress.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class ConsoleProgressComponent implements OnInit {
 

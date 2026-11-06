@@ -15,7 +15,7 @@ mat-form-field {
 // TODO: Move this to a global style sheet
 :host ::ng-deep {
     mat-checkbox.break-spaces {
-        span.mat-checkbox-label {
+        .mdc-form-field > label {
             white-space: break-spaces;
         }
     }

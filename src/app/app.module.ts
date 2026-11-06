@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MainComponent } from './main.component';
 import { RouterModule, Routes } from '@angular/router';
 import { appRoutes } from './ng.routes';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { CharactersListComponent } from './characters-list/characters-list.component';
 import { ContextMenuModule } from './context-menu/context-menu.module';
 import { TriggersComponent } from './triggers/triggers.component';
@@ -34,6 +34,7 @@ import { SettingsModule } from './settings/settings.module';
 import { ConsoleProgressComponent } from './debug-console/console-lines/console-progress.component';
 import { CombatStatisticsComponent } from './combat-statistics/combat-statistics.component';
 import { QuickActionsComponent } from './quick-actions/quick-actions.component';
+import { MAT_TABS_CONFIG } from '@angular/material/tabs';
 
 @NgModule( {
     imports: [
@@ -42,8 +43,7 @@ import { QuickActionsComponent } from './quick-actions/quick-actions.component';
         MaterialModule,
         DialogModule,
         BrowserAnimationsModule,
-        RouterModule.forRoot( appRoutes, { enableTracing: false, useHash: true, relativeLinkResolution: 'legacy' } ),
-        HttpClientModule,
+        RouterModule.forRoot( appRoutes, { enableTracing: false, useHash: true } ),
         CoreModule,
         ContextMenuModule,
         WindowsModule,
@@ -74,6 +74,9 @@ import { QuickActionsComponent } from './quick-actions/quick-actions.component';
     providers: [
         IpcService,
         SetupService,
+        // The legacy tabs sized each tab to its label; keep that look.
+        { provide: MAT_TABS_CONFIG, useValue: { stretchTabs: false } },
+        provideHttpClient(withXhr(),  withInterceptorsFromDi() ),
     ],
     bootstrap: [ AppComponent ],
 } )

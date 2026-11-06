@@ -1,5 +1,5 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, ElementRef, HostListener, NgZone, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, NgZone, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { DeathRecapPreferences, ExternalDataSources, QuickShareMetaModel, Tag, TriggerAction, TriggerFolder, TriggerModel } from '../core.model';
@@ -27,7 +27,9 @@ interface FolderTreeNode {
 @Component( {
     selector: 'app-triggers',
     templateUrl: 'triggers.component.html',
-    styleUrls: [ 'triggers.component.scss', '../core.scss' ],
+    styleUrls: ['triggers.component.scss', '../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggersComponent implements OnInit {
 

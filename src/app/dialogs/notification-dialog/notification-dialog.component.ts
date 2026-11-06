@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ColoredString, CustomButton } from '../dialog.model';
 import { NotificationDialogModel, NotificationTypes } from './notification-dialog.model';
@@ -6,7 +6,9 @@ import { NotificationDialogModel, NotificationTypes } from './notification-dialo
 @Component( {
     selector: 'app-notification-dialog',
     templateUrl: 'notification-dialog.component.html',
-    styleUrls: [ 'notification-dialog.component.scss', '../dialog.styles.scss' ],
+    styleUrls: ['notification-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class NotificationDialogComponent implements OnInit {
 

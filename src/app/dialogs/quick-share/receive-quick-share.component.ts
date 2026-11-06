@@ -1,6 +1,6 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { PackageFolder, PackageTrigger, QuickShareFileModel, QuickShareMetaModel, QuickShareModel, TriggerFolder, TriggerModel } from 'src/app/core.model';
@@ -44,14 +44,16 @@ class QuickShareTreeObject {
 @Component( {
     selector: 'app-receive-quick-share-dialog',
     templateUrl: 'receive-quick-share.component.html',
-    styleUrls: [ 'receive-quick-share.component.scss', '../dialog.styles.scss', '../../core.scss' ], 
+    styleUrls: ['receive-quick-share.component.scss', '../dialog.styles.scss', '../../core.scss'],
     animations: [
-        trigger( 'detailExpand', [
-            state( 'collapsed', style( { height: '0px', minHeight: '0' } ) ),
-            state( 'expanded', style( { height: '*' } ) ),
-            transition( 'expanded <=> collapsed', animate( '225ms cubic-bezier(0.4, 0.0, 0.2, 1)' ) ),
-        ] ),
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class ReceiveQuickShareDialogComponent implements OnInit {
 

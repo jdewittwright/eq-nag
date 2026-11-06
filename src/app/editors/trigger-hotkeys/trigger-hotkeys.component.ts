@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { concat, forkJoin, Observable, of } from 'rxjs';
@@ -13,7 +13,9 @@ import { StringUtility } from 'src/app/utilities';
 @Component( {
     selector: 'app-trigger-hotkeys',
     templateUrl: './trigger-hotkeys.component.html',
-    styleUrls: [ './trigger-hotkeys.component.scss', '../../core.scss' ]
+    styleUrls: ['./trigger-hotkeys.component.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggerHotkeysComponent implements OnInit {
 

@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { Size } from 'electron';
+import type { Size } from 'electron';
 import { CharactersListComponent } from 'src/app/characters-list/characters-list.component';
 import { DpsMeterSettings, OverlayWindowModel, Point, Rectangle, SettingsKeys } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
@@ -15,7 +15,9 @@ const setupStepTimeoutMs = 10000;
 @Component( {
     selector: 'app-setup-wizard',
     templateUrl: 'setup-wizard.component.html',
-    styleUrls: [ 'setup-wizard.component.scss' ]
+    styleUrls: ['setup-wizard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class SetupWizardComponent implements OnInit {
 

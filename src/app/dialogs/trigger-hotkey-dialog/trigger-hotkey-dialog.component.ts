@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { TriggerHotkey } from 'src/app/core.model';
@@ -16,7 +16,9 @@ export interface ITriggerHotkeyDialogData {
 @Component( {
     selector: 'app-trigger-hotkey-dialog',
     templateUrl: './trigger-hotkey-dialog.component.html',
-    styleUrls: [ './trigger-hotkey-dialog.component.scss', '../dialog.styles.scss' ]
+    styleUrls: ['./trigger-hotkey-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggerHotkeyDialogComponent implements OnInit {
 

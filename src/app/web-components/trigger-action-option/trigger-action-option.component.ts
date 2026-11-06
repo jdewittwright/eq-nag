@@ -1,10 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActionTypeIcons, ActionTypeLabels, TriggerAction } from 'src/app/core.model';
 
 @Component( {
     selector: 'app-trigger-action-option',
     templateUrl: 'trigger-action-option.component.html',
-    styleUrls: [ './trigger-action-option.component.scss' ]
+    styleUrls: ['./trigger-action-option.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggerActionOptionComponent implements OnInit {
 

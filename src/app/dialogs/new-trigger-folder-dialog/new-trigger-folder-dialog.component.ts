@@ -1,11 +1,13 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TriggerFolder } from '../../core.model';
 
 @Component( {
     selector: 'app-new-trigger-dialog',
     templateUrl: 'new-trigger-folder-dialog.component.html',
-    styleUrls: [ 'new-trigger-folder-dialog.component.scss', '../dialog.styles.scss', '../../core.scss' ]
+    styleUrls: ['new-trigger-folder-dialog.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class NewTriggerFolderDialogComponent implements OnInit {
 

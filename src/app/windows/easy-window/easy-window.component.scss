@@ -16,7 +16,6 @@ section {
             div.progress-wrapper {
                 position: relative;
                 width: 100%;
-                
                 mat-progress-bar {
                     height: 25px;
                 }
@@ -46,11 +45,9 @@ section {
         .step-options {
             > mat-card {
                 margin: 25px 100px;
-
                 mat-card-title {
                     color: #e7e7e7;
                 }
-
                 mat-card-content {
                     color: #d5d5d5;
                     padding-top: 20px;

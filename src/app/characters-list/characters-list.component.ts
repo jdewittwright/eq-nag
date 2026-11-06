@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CharacterModel, TriggerFolder, TriggerModel, TriggersProfileModel } from '../core.model';
 import { DialogService } from '../dialogs/dialog.service';
@@ -37,7 +37,9 @@ interface CharacterTriggerData {
 @Component( {
     selector: 'app-characters-list',
     templateUrl: 'characters-list.component.html',
-    styleUrls: [ 'characters-list.component.scss' ]
+    styleUrls: ['characters-list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class CharactersListComponent implements OnInit {
 

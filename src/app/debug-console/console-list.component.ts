@@ -7,8 +7,9 @@ import { IpcService } from '../ipc.service';
 @Component( {
     selector: 'console-list',
     templateUrl: 'console-list.component.html',
-    styleUrls: [ 'console-list.component.scss' ],
+    styleUrls: ['console-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 } )
 export class ConsoleListComponent implements OnInit {
 

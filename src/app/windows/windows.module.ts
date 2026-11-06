@@ -11,7 +11,6 @@ import { DialogModule } from '../dialogs/dialog.module';
 import { EditorsModule } from '../editors/editors.module';
 import { GinaImportStepperComponent } from './gina-import-window/gina-import-stepper.component';
 import { WebComponentsModule } from '../web-components/web-components.module';
-import { HttpClientModule } from '@angular/common/http';
 import { MarkdownModule } from 'ngx-markdown';
 import { UpdateNotesWindowComponent } from './update-notes-window/update-notes-window.component';
 import { TriggerReviewsComponent } from './gina-import-window/trigger-reviews/trigger-reviews.component';
@@ -34,7 +33,6 @@ import { SettingsWindowComponent } from './settings-window/settings-window.compo
         DialogModule,
         EditorsModule,
         WebComponentsModule,
-        HttpClientModule,
         SettingsModule,
         MarkdownModule.forRoot(),
     ],

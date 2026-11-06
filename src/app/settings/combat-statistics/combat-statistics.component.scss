@@ -51,8 +51,7 @@
 }
 
 :host ::ng-deep {
-
-    .mat-tab-label-content {
+    .mdc-tab__text-label {
         text-transform: capitalize;
     }
     
@@ -65,10 +64,10 @@
                     background-color: #1a1a1a;
                     color: #bdbdbd;
                 }
-                .mat-paginator-outer-container {
+                .mat-mdc-paginator-outer-container {
                     height: 35px;
 
-                    .mat-paginator-container {
+                    .mat-mdc-paginator-container {
                         // margin-top: -21px;
                         min-height: unset;
                     }
@@ -76,8 +75,7 @@
             }
         }
     }
-
-    .mat-form-field-label-wrapper {
+    .mat-mdc-floating-label {
         mat-label {
             margin-left: 4px;
         }

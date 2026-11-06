@@ -1,27 +1,28 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-      "baseUrl": "./",
-      "downlevelIteration": true,
+      // Lets the app import from 'src/...' (TypeScript 6 deprecates baseUrl).
+      "paths": {
+        "src/*": [ "./src/*" ]
+      },
+      // TypeScript 6 is strict by default; Nag never was.
+      "strict": false,
+      // TypeScript 6 no longer infers it.
+      "rootDir": "./src",
       "outDir": "./out-tsc/app",
       "sourceMap": true,
       "declaration": false,
       "module": "es2020",
-      "moduleResolution": "node",
+      "moduleResolution": "bundler",
       "experimentalDecorators": true,
       "importHelpers": true,
-      "target": "es2020",
+      "target": "ES2022",
       "typeRoots": [
         "node_modules/@types"
       ],
-      "lib": [
-        "es2020.string",
-        "es2018",
-        "dom"
-      ]
+      "useDefineForClassFields": false
     },
     "angularCompilerOptions": {
-      "fullTemplateTypeCheck": true,
       "strictTemplates": true
     }
 }

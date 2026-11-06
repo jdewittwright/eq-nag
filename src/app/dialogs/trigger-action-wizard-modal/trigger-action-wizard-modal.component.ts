@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IpcService } from 'src/app/ipc.service';
 import { TriggerAction, ActionTypes, OverlayWindowModel } from 'src/app/core.model';
@@ -6,7 +6,9 @@ import { TriggerAction, ActionTypes, OverlayWindowModel } from 'src/app/core.mod
 @Component( {
     selector: 'app-confirm-dialog',
     templateUrl: 'trigger-action-wizard-modal.component.html',
-    styleUrls: [ 'trigger-action-wizard-modal.component.scss', '../dialog.styles.scss', '../../core.scss' ]
+    styleUrls: ['trigger-action-wizard-modal.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggerActionWizardModalComponent implements OnInit, OnDestroy {
 

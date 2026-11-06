@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FileReadDelays } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
@@ -6,7 +6,9 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'app-log-file',
     templateUrl: './log-file.component.html',
-    styleUrls: [ './log-file.component.scss' ]
+    styleUrls: ['./log-file.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class LogFileComponent implements OnInit {
 

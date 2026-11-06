@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ContextMenuModel } from 'src/app/context-menu/context-menu.model';
 import { ContextService } from 'src/app/context-menu/context.service';
 import { ActionTypeIcons, ActionTypeLabels, ActionTypes, FileModel, OverlayWindowModel, Phrase, TimerRestartBehaviors, TriggerAction, TriggerSubAction } from 'src/app/core.model';
@@ -9,7 +9,9 @@ import { ImageUtility } from 'src/app/utilities';
 @Component( {
     selector: 'app-trigger-action-stopwatch',
     templateUrl: 'trigger-action-stopwatch.component.html',
-    styleUrls: [ 'trigger-action-stopwatch.component.scss' ],
+    styleUrls: ['trigger-action-stopwatch.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggerActionStopwatchComponent implements OnInit {
     

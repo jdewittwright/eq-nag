@@ -1,11 +1,13 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OverlayWindowModel } from 'src/app/core.model';
 
 @Component( {
     selector: 'app-overlay-details-dialog',
     templateUrl: 'overlay-details-dialog.component.html',
-    styleUrls: [ 'overlay-details-dialog.component.scss', '../dialog.styles.scss' ]
+    styleUrls: ['overlay-details-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class OverlayDetailsDialogComponent implements OnInit {
 

@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { SettingsKeys, TriggerAction } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
 
 @Component( {
     selector: 'app-trigger-action-speak',
     templateUrl: 'trigger-action-speak.component.html',
-    styleUrls: ['trigger-action-speak.component.scss']
+    styleUrls: ['trigger-action-speak.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class TriggerActionSpeakComponent implements OnInit {
 

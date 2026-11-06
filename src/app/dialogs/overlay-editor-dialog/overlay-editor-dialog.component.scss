@@ -27,11 +27,11 @@ legend.full-width {
     
 }
 
-.mat-select-panel mat-option.mat-option {
+.mat-select-panel mat-option.mat-mdc-option {
     height: unset;
 }
 
-.mat-option-text.mat-option-text {
+.mdc-list-item__primary-text {
     white-space: normal;
 }
 
@@ -52,7 +52,13 @@ span.place-holder {
     position: relative;
 }
 
-::ng-deep mat-option.font-option span.mat-option-text::before {
+// The legacy options had a 48px line, which the font name's negative margin
+// counts on to sit under the preview text.
+::ng-deep mat-option.font-option span.mdc-list-item__primary-text {
+    line-height: 48px;
+}
+
+::ng-deep mat-option.font-option span.mdc-list-item__primary-text::before {
     content: "The quick brown fox jumped over the lazy dog."
 }
 
@@ -68,7 +74,6 @@ mat-radio-group.horizontal {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-
     mat-radio-button {
         margin: 0 10px;
     }

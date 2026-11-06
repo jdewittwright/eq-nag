@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActionTypes, CapturePhrase, Phrase, OperatorTypes, OverlayWindowModel, TriggerAction, TriggerCondition, TriggerConditionTypes, TriggerModel, ImportTypes, TimerRestartBehaviors, ScrapedSpell, ScrapedClickEffect } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
@@ -14,7 +14,9 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component( {
     selector: 'app-new-trigger-dialog',
     templateUrl: 'new-trigger-dialog.component.html',
-    styleUrls: [ 'new-trigger-dialog.component.scss', '../dialog.styles.scss', '../../core.scss' ]
+    styleUrls: ['new-trigger-dialog.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class NewTriggerDialogComponent implements OnInit {
 

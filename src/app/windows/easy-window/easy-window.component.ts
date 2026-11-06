@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper } from '@angular/material/stepper';
 import { DialogService } from 'src/app/dialogs/dialog.service';
@@ -7,7 +7,9 @@ import { IpcService } from 'src/app/ipc.service';
 @Component( {
     selector: 'easy-window',
     templateUrl: 'easy-window.component.html',
-    styleUrls: [ 'easy-window.component.scss', '../../core.scss', '../../modal.scss' ],
+    styleUrls: ['easy-window.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class EasyWindowComponent implements OnInit {
 

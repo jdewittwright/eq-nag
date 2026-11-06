@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SettingsComponent } from './settings-component/settings.component';
 import { DialogModule } from '@angular/cdk/dialog';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -28,7 +27,6 @@ import { LogFileComponent } from './log-file/log-file.component';
         DialogModule,
         EditorsModule,
         WebComponentsModule,
-        HttpClientModule,
         NgxMatTimepickerModule,
     ],
     declarations: [

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { CapturePhrase } from 'src/app/core.model';
 import { DialogService } from 'src/app/dialogs/dialog.service';
@@ -26,7 +26,9 @@ const nanoid = customAlphabet( alphabet, 16 );
 @Component( {
     selector: 'app-capture-phrases',
     templateUrl: 'capture-phrases.component.html',
-    styleUrls: [ 'capture-phrases.component.scss', '../../core.scss', '../../modal.scss' ]
+    styleUrls: ['capture-phrases.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 } )
 export class CapturePhrasesComponent implements OnInit {
 

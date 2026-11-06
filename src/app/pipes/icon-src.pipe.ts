@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Pipe( {
-    name: 'iconSrc'
+    name: 'iconSrc',
+    standalone: false
 } )
 export class IconSrcPipe implements PipeTransform {
 

@@ -2,20 +2,24 @@
 
 <mat-dialog-content>
 
-    <p>This trigger was made from Allakhazam, which Nag no longer uses. To re-import it, find the spell on <a class="color-blue" href="https://spells.eqresource.com/spellsearch.php" target="_blank">EQ Spell Resources</a> and paste the address of its page below.</p>
+  <p>This trigger was made from Allakhazam, which Nag no longer uses. To re-import it, find the spell on <a class="color-blue" href="https://spells.eqresource.com/spellsearch.php" target="_blank">EQ Spell Resources</a> and paste the address of its page below.</p>
 
-    <mat-form-field>
-        <mat-label>EQ Spell Resources address</mat-label>
-        <input matInput [(ngModel)]="url" placeholder="https://spells.eqresource.com/spells.php?id=1447" />
-        <mat-hint *ngIf="!url || urlValid">Copy it from your browser's address bar.</mat-hint>
-        <mat-hint *ngIf="url && !urlValid" class="color-red">That isn't an EQ Spell Resources spell page. It should look like https://spells.eqresource.com/spells.php?id=1447</mat-hint>
-    </mat-form-field>
+  <mat-form-field>
+    <mat-label>EQ Spell Resources address</mat-label>
+    <input matInput [(ngModel)]="url" placeholder="https://spells.eqresource.com/spells.php?id=1447" />
+    @if (!url || urlValid) {
+      <mat-hint>Copy it from your browser's address bar.</mat-hint>
+    }
+    @if (url && !urlValid) {
+      <mat-hint class="color-red">That isn't an EQ Spell Resources spell page. It should look like https://spells.eqresource.com/spells.php?id=1447</mat-hint>
+    }
+  </mat-form-field>
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
 
-    <button mat-button (click)="cancel()" color="warn">Cancel</button>
-    <button mat-button (click)="accept()" [disabled]="!urlValid">Re-import</button>
+  <button mat-button (click)="cancel()" color="warn">Cancel</button>
+  <button mat-button (click)="accept()" [disabled]="!urlValid">Re-import</button>
 
 </mat-dialog-actions>

@@ -32,17 +32,15 @@ small {
     font-weight: 100;
 }
 
-::ng-deep .mat-radio-button.picture-radio {
+::ng-deep .mat-mdc-radio-button.picture-radio {
 
     &:last-child {
         margin-top: 10px;
     }
-
-    .mat-radio-container {
+    .mdc-radio {
         margin-right: 50px;
     }
-
-    .mat-radio-label-content {
+    .mdc-form-field > label {
         div:first-of-type {
             padding: 10px;
         }
