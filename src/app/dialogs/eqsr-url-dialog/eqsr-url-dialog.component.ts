@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 
 /** Accepts EQ Spell Resources spell pages, e.g. https://spells.eqresource.com/spells.php?id=1447 */
@@ -8,6 +8,7 @@ const eqsrSpellUrlRegex = /^https?:\/\/spells\.eqresource\.com\/spells\.php\?id=
     selector: 'app-eqsr-url-dialog',
     templateUrl: 'eqsr-url-dialog.component.html',
     styleUrls: ['eqsr-url-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class EqsrUrlDialogComponent {

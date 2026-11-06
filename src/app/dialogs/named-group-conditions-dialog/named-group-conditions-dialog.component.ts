@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContextMenuModel } from 'src/app/context-menu/context-menu.model';
 import { OperatorTypes, TriggerCondition, TriggerConditionTypes } from 'src/app/core.model';
@@ -9,6 +9,7 @@ import { NamedGroupConditionsModel } from './named-group-conditions.model';
     selector: 'app-input-dialog',
     templateUrl: 'named-group-conditions-dialog.component.html',
     styleUrls: ['named-group-conditions-dialog.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class NamedGroupConditionsDialogComponent implements OnInit {

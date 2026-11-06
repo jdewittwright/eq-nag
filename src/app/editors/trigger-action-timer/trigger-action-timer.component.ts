@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ContextMenuModel } from 'src/app/context-menu/context-menu.model';
 import { ContextService } from 'src/app/context-menu/context.service';
 import { ActionTypeIcons, ActionTypeLabels, ActionTypes, FileModel, OverlayWindowModel, Phrase, TimerRestartBehaviors, TriggerAction, TriggerSubAction } from 'src/app/core.model';
@@ -11,6 +11,7 @@ import * as _ from 'lodash-es';
     selector: 'app-trigger-action-timer',
     templateUrl: 'trigger-action-timer.component.html',
     styleUrls: ['trigger-action-timer.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class TriggerActionTimerComponent implements OnInit {

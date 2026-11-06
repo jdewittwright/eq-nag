@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
@@ -14,6 +14,7 @@ import * as _ from 'lodash-es';
     selector: 'app-autocomplete-dialog',
     templateUrl: 'autocomplete-dialog.component.html',
     styleUrls: ['autocomplete-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class AutoCompleteDialogComponent implements OnInit {

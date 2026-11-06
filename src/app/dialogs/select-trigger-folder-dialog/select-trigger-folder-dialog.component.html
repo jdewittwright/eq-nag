@@ -8,7 +8,7 @@
 
   @if (this.data?.folderId != null) {
     <div class="well">
-      <div><button mat-button color="accent" [mat-dialog-close]="this.data?.folderId">No parent</button></div>
+      <div><button mat-button color="accent" [mat-dialog-close]="this.data == null ? null : this.data.folderId">No parent</button></div>
       <div style="margin-left: 15px;"><small>Choose "No parent" if you want this folder to be a root level folder.</small></div>
     </div>
   }

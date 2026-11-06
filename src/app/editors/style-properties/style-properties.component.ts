@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { StylePropertiesModel } from 'src/app/core.model';
 
 const availableFonts = {
@@ -15,6 +15,7 @@ const availableFonts = {
     selector: 'app-style-properties',
     templateUrl: 'style-properties.component.html',
     styleUrls: ['style-properties.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class StylePropertiesComponent implements OnInit {

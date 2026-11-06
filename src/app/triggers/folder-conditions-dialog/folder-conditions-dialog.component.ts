@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TriggerCondition, TriggerFolder } from 'src/app/core.model';
 import { DialogService } from 'src/app/dialogs/dialog.service';
@@ -8,6 +8,7 @@ import { IpcService } from 'src/app/ipc.service';
     selector: 'app-folder-conditions-dialog',
     templateUrl: 'folder-conditions-dialog.component.html',
     styleUrls: ['folder-conditions-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class FolderConditionsDialogComponent implements OnInit {

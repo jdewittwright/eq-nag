@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OverlayWindowModel } from 'src/app/core.model';
 import { nagId } from 'src/app/core/nag-id.util';
@@ -11,6 +11,7 @@ import { NotificationDialogModel, NotificationTypes } from '../notification-dial
     selector: 'app-map-package-overlay-dialog',
     templateUrl: 'map-package-overlay-dialog.component.html',
     styleUrls: ['./map-package-overlay-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class MapPackageOverlayDialogComponent implements OnInit, OnDestroy {

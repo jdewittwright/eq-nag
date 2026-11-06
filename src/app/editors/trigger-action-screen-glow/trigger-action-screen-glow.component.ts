@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ContextMenuModel } from 'src/app/context-menu/context-menu.model';
 import { ContextService } from 'src/app/context-menu/context.service';
 import { TriggerAction } from 'src/app/core.model';
@@ -8,6 +8,7 @@ import { IpcService } from 'src/app/ipc.service';
     selector: 'app-trigger-action-screen-glow',
     templateUrl: 'trigger-action-screen-glow.component.html',
     styleUrls: ['trigger-action-screen-glow.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class TriggerActionScreenGlowComponent implements OnInit {

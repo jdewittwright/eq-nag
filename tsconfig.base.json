@@ -2,11 +2,15 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    // Lets the app import from 'src/...' (TypeScript 6 deprecates baseUrl).
+    "paths": {
+      "src/*": [ "./src/*" ]
+    },
+    // TypeScript 6 is strict by default; Nag never was.
+    "strict": false,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
@@ -24,7 +28,6 @@
     ]
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
     "preserveWhitespaces": false,
     "strictTemplates": true
   }

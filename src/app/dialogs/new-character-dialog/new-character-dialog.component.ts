@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ElementRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CharacterModel, NewCharacterOptionModel } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
@@ -14,6 +14,7 @@ const nanoid = customAlphabet( alphabet, 16 );
     selector: 'app-new-character-dialog',
     templateUrl: 'new-character-dialog.component.html',
     styleUrls: ['../dialog.styles.scss', '../../core.scss', '../../modal.scss', 'new-character-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class NewCharacterDialogComponent implements OnInit {

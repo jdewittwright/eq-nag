@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, forwardRef, HostListener, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, forwardRef, HostListener, EventEmitter, Output, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Color, ColorUtility } from 'src/app/utilities';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IpcService } from 'src/app/ipc.service';
@@ -15,6 +15,7 @@ import * as Palettes from './color-picker.palettes';
             multi: true
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 

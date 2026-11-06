@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { IpcService } from 'src/app/ipc.service';
 
 @Component( {
     selector: 'app-display-selector',
     templateUrl: 'display-selector.component.html',
     styleUrls: ['./display-selector.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class DisplaySelectorComponent implements OnInit {

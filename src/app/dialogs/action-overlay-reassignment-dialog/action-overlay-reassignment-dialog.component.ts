@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { actionOverlayMap, ActionTypes, OverlayWindowModel, TriggerFolder } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
@@ -8,6 +8,7 @@ import { ActionOverlayReviewModel, OverlayReassignments } from './action-overlay
     selector: 'app-action-overlay-reassignment-dialog',
     templateUrl: 'action-overlay-reassignment-dialog.component.html',
     styleUrls: ['./action-overlay-reassignment-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class ActionOverlayReassignmentDialogComponent implements OnInit {

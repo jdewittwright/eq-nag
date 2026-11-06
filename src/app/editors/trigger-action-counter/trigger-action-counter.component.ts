@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { ContextService } from 'src/app/context-menu/context.service';
 import { OverlayWindowModel, Phrase, TriggerAction } from 'src/app/core.model';
@@ -11,6 +11,7 @@ const nanoid = customAlphabet( alphabet, 16 );
     selector: 'app-trigger-action-counter',
     templateUrl: 'trigger-action-counter.component.html',
     styleUrls: ['trigger-action-counter.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class TriggerActionCounterComponent implements OnInit {

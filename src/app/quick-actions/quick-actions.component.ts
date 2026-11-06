@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { IpcService } from '../ipc.service';
 import { TriggerHotkey, TriggerModel } from '../core.model';
 import { QuickActionService } from '../services/quick-action.service';
@@ -7,6 +7,7 @@ import { QuickActionService } from '../services/quick-action.service';
     selector: 'app-quick-actions',
     templateUrl: 'quick-actions.component.html',
     styleUrls: ['quick-actions.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class QuickActionsComponent implements OnInit {

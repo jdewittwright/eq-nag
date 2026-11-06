@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import type { Size } from 'electron';
@@ -16,6 +16,7 @@ const setupStepTimeoutMs = 10000;
     selector: 'app-setup-wizard',
     templateUrl: 'setup-wizard.component.html',
     styleUrls: ['setup-wizard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class SetupWizardComponent implements OnInit {

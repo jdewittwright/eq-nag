@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { ContextMenuModel } from 'src/app/context-menu/context-menu.model';
 import { ContextService } from 'src/app/context-menu/context.service';
 import { availableFonts, OverlayWindowModel, TriggerAction } from 'src/app/core.model';
@@ -18,6 +18,7 @@ function componentToHex( c ) {
     selector: 'app-trigger-action-display-text',
     templateUrl: 'trigger-action-displayText.component.html',
     styleUrls: ['trigger-action-displayText.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class TriggerActionDisplayTextComponent implements OnInit {

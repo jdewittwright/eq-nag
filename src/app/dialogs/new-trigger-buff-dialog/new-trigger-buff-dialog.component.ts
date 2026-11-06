@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActionTypes, CapturePhrase, ImportTypes, OperatorTypes, OverlayWindowModel, Phrase, ScrapedClickEffect, ScrapedSpell, TimerRestartBehaviors, TriggerAction, TriggerCondition, TriggerConditionTypes, TriggerModel } from 'src/app/core.model';
@@ -18,6 +18,7 @@ import { forkJoin, Observable } from 'rxjs';
     selector: 'app-new-trigger-buff-dialog',
     templateUrl: 'new-trigger-buff-dialog.component.html',
     styleUrls: ['new-trigger-buff-dialog.component.scss', '../dialog.styles.scss', '../../modal.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class NewTriggerBuffDialogComponent implements OnInit {

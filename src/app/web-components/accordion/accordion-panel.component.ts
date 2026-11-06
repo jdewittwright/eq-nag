@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { nagId } from 'src/app/core/nag-id.util';
 
 @Component( {
@@ -6,6 +6,7 @@ import { nagId } from 'src/app/core/nag-id.util';
     templateUrl: 'accordion-panel.component.html',
     styleUrls: ['accordion-panel.component.scss'],
     host: { 'class': 'accordion-panel' },
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class AccordionPanelComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 
 import * as _ from 'lodash-es';
@@ -11,6 +11,7 @@ import { IpcService } from 'src/app/ipc.service';
     selector: 'app-gina-import-stepper',
     templateUrl: 'gina-import-stepper.component.html',
     styleUrls: ['gina-import-stepper.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class GinaImportStepperComponent implements OnInit {

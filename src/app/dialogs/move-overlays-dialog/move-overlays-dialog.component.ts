@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { OverlayWindowModel } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
 import * as _ from 'lodash-es';
@@ -8,6 +8,7 @@ import { forkJoin, Observable } from 'rxjs';
     selector: 'app-move-overlays-dialog',
     templateUrl: 'move-overlays-dialog.component.html',
     styleUrls: ['move-overlays-dialog.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class MoveOverlaysDialogComponent implements OnInit {

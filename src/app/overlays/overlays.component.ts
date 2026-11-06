@@ -1,4 +1,4 @@
-import { Component, Input, NgZone, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { getPackageImportProperties, getTriggerOverlayDescriptors } from '../core.decorators';
@@ -14,6 +14,7 @@ import { IpcService } from '../ipc.service';
     selector: 'app-overlays',
     templateUrl: 'overlays.component.html',
     styleUrls: ['./overlays.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class OverlaysComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { CharacterClasses, CharacterClassLevel, CharacterClassNames, SelectableClassLevel } from 'src/app/core.model';
 import * as _ from 'lodash-es';
 import { DialogService } from 'src/app/dialogs/dialog.service';
@@ -9,6 +9,7 @@ import { MatTable } from '@angular/material/table';
     selector: 'app-trigger-classes',
     templateUrl: 'trigger-classes.component.html',
     styleUrls: ['trigger-classes.component.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class TriggerClassesComponent implements OnInit {

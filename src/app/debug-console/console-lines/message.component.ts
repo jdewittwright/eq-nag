@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ConsoleMessageModel, LogTypes } from 'src/app/core.model';
 import { escapeHtml, sanitizeHtml } from 'src/app/utilities/html.utilities';
@@ -7,6 +7,7 @@ import { escapeHtml, sanitizeHtml } from 'src/app/utilities/html.utilities';
     selector: 'console-message',
     templateUrl: 'message.component.html',
     styleUrls: ['message.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class ConsoleMessageComponent implements OnInit {

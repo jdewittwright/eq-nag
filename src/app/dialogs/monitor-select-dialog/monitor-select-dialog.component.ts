@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { IpcService } from 'src/app/ipc.service';
 import { ColoredString } from '../dialog.model';
@@ -8,6 +8,7 @@ import { ColoredString } from '../dialog.model';
     selector: 'app-monitor-select-dialog',
     templateUrl: 'monitor-select-dialog.component.html',
     styleUrls: ['monitor-select-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class MonitorSelectDialogComponent implements OnInit {

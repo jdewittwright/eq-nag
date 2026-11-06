@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from '@angular/core';
 import { TriggerAction } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
 
@@ -6,6 +6,7 @@ import { IpcService } from 'src/app/ipc.service';
     selector: 'app-trigger-action-clear-variable',
     templateUrl: 'trigger-action-clearVariable.component.html',
     styleUrls: ['trigger-action-clearVariable.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class TriggerActionClearVariableComponent implements OnInit {

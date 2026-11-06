@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 // 'https://api.github.com/repos/guildantix/eq-nag/releases/79376270';
@@ -20,6 +20,7 @@ interface IReleaseInfo {
     selector: 'app-update-notes-window',
     templateUrl: 'update-notes-window.component.html',
     styleUrls: ['./update-notes-window.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class UpdateNotesWindowComponent implements OnInit {

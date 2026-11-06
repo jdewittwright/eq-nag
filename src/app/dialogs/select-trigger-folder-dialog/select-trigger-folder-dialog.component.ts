@@ -1,5 +1,5 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
 import { IpcService } from 'src/app/ipc.service';
@@ -15,6 +15,7 @@ interface ExampleFlatNode {
     selector: 'app-select-trigger-folder-dialog',
     templateUrl: 'select-trigger-folder-dialog.component.html',
     styleUrls: ['select-trigger-folder-dialog.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class SelectTriggerFolderDialogComponent implements OnInit {

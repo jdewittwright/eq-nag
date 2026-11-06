@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectionStrategy } from '@angular/core';
 import { IpcService } from 'src/app/ipc.service';
 import { OverlayWindowModel, ActionTypes, TriggerAction, TimerSortTypes, TimerRestartBehaviors, StylePropertiesModel } from 'src/app/core.model';
 import { ActivatedRoute } from '@angular/router';
@@ -34,6 +34,7 @@ const availableFonts = {
     selector: 'app-overlay-editor-dialog',
     templateUrl: 'overlay-editor-dialog.component.html',
     styleUrls: ['overlay-editor-dialog.component.scss', '../../core.scss', '../../modal.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class OverlayEditorDialogComponent implements OnInit {

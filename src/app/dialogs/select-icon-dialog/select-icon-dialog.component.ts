@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild, ChangeDetectorRef  } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { BasicError, ErrorCodes } from 'src/app/core.model';
@@ -8,6 +8,7 @@ import { IpcService } from 'src/app/ipc.service';
     selector: 'app-select-icon-dialog',
     templateUrl: 'select-icon-dialog.component.html',
     styleUrls: ['select-icon-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class SelectIconDialogComponent implements OnInit {

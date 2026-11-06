@@ -1,4 +1,4 @@
-import { Component, HostListener, Inject, OnInit } from '@angular/core';
+import { Component, HostListener, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IpcService } from 'src/app/ipc.service';
 import { InputDialogModel } from './input-dialog.model';
@@ -7,6 +7,7 @@ import { InputDialogModel } from './input-dialog.model';
     selector: 'app-input-dialog',
     templateUrl: 'input-dialog.component.html',
     styleUrls: ['input-dialog.component.scss', '../dialog.styles.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class InputDialogComponent implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { MatStepper } from '@angular/material/stepper';
@@ -10,6 +10,7 @@ import { ColoredString } from '../dialog.model';
     selector: 'app-death-recap-dialog',
     templateUrl: 'death-recap-dialog.component.html',
     styleUrls: ['death-recap-dialog.component.scss', '../dialog.styles.scss', '../../core.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 } )
 export class DeathRecapDialogComponent implements OnInit {
