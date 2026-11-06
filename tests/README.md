@@ -6,7 +6,8 @@ websites, turn off Nag's update check, and mark the update notes as already
 seen, so the Update Notes window (which loads from GitHub) doesn't open.
 Nag's windows still open during a run, but without taking focus.
 
-You need Node 22 or newer, the same version the builds use.
+You need Node 22.22.3 or newer (or Node 24.15 or newer), which Angular 22
+requires. The builds use the latest Node 22.
 
 ## Unit tests
 
