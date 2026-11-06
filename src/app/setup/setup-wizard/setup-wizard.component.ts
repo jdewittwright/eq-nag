@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
-import { Size } from 'electron';
+import type { Size } from 'electron';
 import { CharactersListComponent } from 'src/app/characters-list/characters-list.component';
 import { DpsMeterSettings, OverlayWindowModel, Point, Rectangle, SettingsKeys } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';

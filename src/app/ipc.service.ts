@@ -1,6 +1,6 @@
 import { Injectable, NgZone } from '@angular/core';
-import * as Electron from 'electron';
-import { UpdateInfo } from 'electron-updater';
+import type * as Electron from 'electron';
+import type { UpdateInfo } from 'electron-updater';
 import { Observable, Observer, Subject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { DataTickModel, DkpEntryModel, TriggerModel, OverlayWindowModel, ActionTypes, FocusEffectSettings, CharacterModel, BasicError, TriggerFolder, FileModel, Tag, PackageFileModel, FctStylesModel, OverlayBoundsChangedEventArgs, DialogEventArgs, QuickShareMetaModel, ShareFileExportResult, ShareFileImportResult, ShareFileType, LogFileLocation, IpcMessage, DeathRecapPreferences, Progress, QuitFailureData, DuplicateTriggerAction, ScrapedSpell, ScrapedClickEffect, TriggerParseHistoryModel, SimulationProgress, FctCombatGroup, CombatTypes, StylePropertiesModel, CombatAnimations, TriggersProfileModel, ConsoleMessageModel, LogTypes, ServerCombatModel, ProgressModel, RenderTokenModel, TokenChangeModel } from './core.model';

@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Observable, Observer } from 'rxjs';
 import { Phrase, PhraseProperties, TriggerAction, TriggerActionProperties, TriggerCondition, TriggerConditionProperties } from '../core.model';
 import { TriggerEndedProperties } from './context-menu.model';
-import { IpcRenderer } from 'electron';
+import type { IpcRenderer } from 'electron';
 import { ContextMenuComponent } from './context-menu.component';
 import * as _ from 'lodash-es';
 import { nagId } from '../core/nag-id.util';

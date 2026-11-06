@@ -230,9 +230,9 @@ export class TriggerReviewsComponent implements OnInit {
     /**
      * Generates the nag triggers from the selected gina triggers.
      */
-    public generateTriggerModels(): Observable<any> {
+    public generateTriggerModels(): Observable<void> {
         
-        let obs = new Observable<any>( subscriber => {
+        let obs = new Observable<void>( subscriber => {
             
             if ( this.selectedGinaTriggers?.length > 0 ) {
 
