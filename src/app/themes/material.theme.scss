@@ -104,6 +104,16 @@ html {
         --mat-card-subtitle-text-weight: 400;
     }
 
+    // Legacy sliders showed their tick marks only while hovered or focused.
+    .mat-mdc-slider .mdc-slider__tick-marks {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+    .mat-mdc-slider:hover .mdc-slider__tick-marks,
+    .mat-mdc-slider:focus-within .mdc-slider__tick-marks {
+        opacity: 1;
+    }
+
     // Like the form fields, legacy checkbox and radio labels used the
     // surrounding font.
     .mat-mdc-checkbox .mdc-form-field,

@@ -26,17 +26,17 @@
       <td><app-color-picker [(ngModel)]="model.fontColor" (change)="emitChange()" [inline]="true"></app-color-picker></td>
       <td>Weight</td>
       <td>
-        <mat-slider discrete color="accent" step="1" min="0" [max]="maxFontWeightIndex" style="width: 100%;"><input matSliderThumb [(ngModel)]="fontWeightIndex" name="sldrFontWeight" (change)="emitChange()" (input)="updateStyleElement('fontWeight', $any($event.target).valueAsNumber)" /></mat-slider></td>
+        <mat-slider discrete showTickMarks color="accent" step="1" min="0" [max]="maxFontWeightIndex" style="width: 100%;"><input matSliderThumb [(ngModel)]="fontWeightIndex" name="sldrFontWeight" (change)="emitChange()" (input)="updateStyleElement('fontWeight', $any($event.target).valueAsNumber)" /></mat-slider></td>
         <td>Size</td>
         <td>
-          <mat-slider discrete color="accent" min="1" max="64" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.fontSize" name="sldrFontSize" (change)="emitChange()" (input)="updateStyleElement('fontSize', $any($event.target).valueAsNumber)" /></mat-slider></td>
+          <mat-slider discrete showTickMarks color="accent" min="1" max="64" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.fontSize" name="sldrFontSize" (change)="emitChange()" (input)="updateStyleElement('fontSize', $any($event.target).valueAsNumber)" /></mat-slider></td>
         </tr>
         <tr>
           <td><mat-checkbox [(ngModel)]="model.showBorder" (change)="emitChange()">Border</mat-checkbox></td>
           <td><app-color-picker [(ngModel)]="model.borderColor" (change)="emitChange()" [inline]="true"></app-color-picker></td>
           <td>Intensity</td>
           <td>
-            <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="borderIntensity" name="sldrBorderIntensity" (change)="onChangeBorderTransparency()" (input)="updateStyleElement('borderIntensity', $any($event.target).valueAsNumber)" /></mat-slider></td>
+            <mat-slider discrete showTickMarks color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="borderIntensity" name="sldrBorderIntensity" (change)="onChangeBorderTransparency()" (input)="updateStyleElement('borderIntensity', $any($event.target).valueAsNumber)" /></mat-slider></td>
             <td></td>
             <td></td>
           </tr>
@@ -45,10 +45,10 @@
             <td><app-color-picker [(ngModel)]="model.glowColor" (change)="emitChange()" [inline]="true"></app-color-picker></td>
             <td>Intensity</td>
             <td>
-              <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="glowIntensity" name="sldrGlowIntensity" (change)="onChangeGlowTransparency()" (input)="updateStyleElement('glowIntensity', $any($event.target).valueAsNumber)" /></mat-slider></td>
+              <mat-slider discrete showTickMarks color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="glowIntensity" name="sldrGlowIntensity" (change)="onChangeGlowTransparency()" (input)="updateStyleElement('glowIntensity', $any($event.target).valueAsNumber)" /></mat-slider></td>
               <td>Size</td>
               <td>
-                <mat-slider discrete color="accent" min="0" max="10" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.glowSize" name="sldrTextGlowSize" (change)="emitChange()" (input)="updateStyleElement('glowSize', $any($event.target).valueAsNumber)" /></mat-slider></td>
+                <mat-slider discrete showTickMarks color="accent" min="0" max="10" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.glowSize" name="sldrTextGlowSize" (change)="emitChange()" (input)="updateStyleElement('glowSize', $any($event.target).valueAsNumber)" /></mat-slider></td>
               </tr>
               @if (enablePaddingHorizontal || enablePaddingVertical) {
                 <tr>
@@ -57,21 +57,21 @@
                   <td colspan="2" style="padding-left: 10px; padding-top: 13px;">
                     @if (enablePaddingHorizontal) {
                       <span style="padding-left: 11px;">Left</span>
-                      <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.paddingLeft" name="sldrPaddingLeft" (change)="emitChange()" (input)="updateStyleElement('paddingLeft', $any($event.target).valueAsNumber)" /></mat-slider>
+                      <mat-slider discrete showTickMarks color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.paddingLeft" name="sldrPaddingLeft" (change)="emitChange()" (input)="updateStyleElement('paddingLeft', $any($event.target).valueAsNumber)" /></mat-slider>
                     }
                     @if (enablePaddingVertical) {
                       <span style="padding-left: 11px;">Top</span>
-                      <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.paddingTop" name="sldrPaddingTop" (change)="emitChange()" (input)="updateStyleElement('paddingTop', $any($event.target).valueAsNumber)" /></mat-slider>
+                      <mat-slider discrete showTickMarks color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.paddingTop" name="sldrPaddingTop" (change)="emitChange()" (input)="updateStyleElement('paddingTop', $any($event.target).valueAsNumber)" /></mat-slider>
                     }
                   </td>
                   <td colspan="2" style="padding-left: 10px; padding-top: 13px;">
                     @if (enablePaddingHorizontal) {
                       <span style="padding-left: 11px;">Right</span>
-                      <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.paddingRight" name="sldrPaddingRight" (change)="emitChange()" (input)="updateStyleElement('paddingRight', $any($event.target).valueAsNumber)" /></mat-slider>
+                      <mat-slider discrete showTickMarks color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.paddingRight" name="sldrPaddingRight" (change)="emitChange()" (input)="updateStyleElement('paddingRight', $any($event.target).valueAsNumber)" /></mat-slider>
                     }
                     @if (enablePaddingVertical) {
                       <span style="padding-left: 11px;">Bottom</span>
-                      <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.paddingBottom" name="sldrPaddingBottom" (change)="emitChange()" (input)="updateStyleElement('paddingBottom', $any($event.target).valueAsNumber)" /></mat-slider>
+                      <mat-slider discrete showTickMarks color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.paddingBottom" name="sldrPaddingBottom" (change)="emitChange()" (input)="updateStyleElement('paddingBottom', $any($event.target).valueAsNumber)" /></mat-slider>
                     }
                   </td>
                 </tr>
