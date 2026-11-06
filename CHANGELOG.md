@@ -2,7 +2,14 @@
 
 Each version's section is written to be pasted into its GitHub release
 description, which Nag shows in the Update Notes window.
-## v0.3.3 (unreleased)
+
+## v0.3.4 (unreleased)
+
+### Changes
+- **Nag's windows are built on a current version of Angular.** Angular is the framework behind everything you see in Nag, and the version it used (14) stopped getting security fixes in late 2023. Nag now uses Angular 22. Your triggers, overlays and settings are unchanged, and nothing needs to be set up again.
+- **Buttons, tabs, dropdowns, sliders and checkboxes have been updated.** They now use the current Angular Material design, adjusted to keep Nag's compact layout and colors. Most screens look the same as before, but you may notice small differences in spacing and animations. If anything looks out of place or doesn't work as it used to, please report it.
+
+## v0.3.3
 
 ### Changes
 - **Closing Nag's window now sends it to the system tray.** Nag keeps running your triggers and overlays, like other tray apps on Windows. To quit, right-click the tray icon and choose Exit. The separate minimize-to-tray button is gone, since the close button now does the same thing. If a log archive is in progress when you choose Exit, Nag asks whether to wait for it first.
