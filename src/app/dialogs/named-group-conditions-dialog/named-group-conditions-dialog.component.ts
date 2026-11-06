@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ContextMenuModel } from 'src/app/context-menu/context-menu.model';
 import { OperatorTypes, TriggerCondition, TriggerConditionTypes } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';

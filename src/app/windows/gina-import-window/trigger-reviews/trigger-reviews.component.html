@@ -8,7 +8,7 @@
 
 <ng-template [ngIf]="panel === 'zoneNameCheck'">
     <form #mappingForm="ngForm">
-        <mat-card class="card action-card" style="margin: 20px; width: 550px;">
+        <mat-card appearance="outlined" class="card action-card" style="margin: 20px; width: 550px;">
             <mat-card-header>
                 <mat-card-title>Restrict by Zone</mat-card-title>
                 <mat-card-subtitle>Restrict the execution of capture phrases by zone names.</mat-card-subtitle>
@@ -54,7 +54,7 @@
 
 <ng-template [ngIf]="panel === 'foldersCheck'">
     <form #mappingForm="ngForm">
-        <mat-card class="card action-card" style="margin: 20px; width: 550px;">
+        <mat-card appearance="outlined" class="card action-card" style="margin: 20px; width: 550px;">
             <mat-card-header>
                 <mat-card-title>Map Gina Folders</mat-card-title>
                 <mat-card-subtitle>Map your GINA folders to their equivalent folder in Nag.</mat-card-subtitle>
@@ -105,7 +105,7 @@
 
 <ng-template [ngIf]="panel === 'duplicatesCheck'">
 
-    <mat-card class="card action-card" style="margin: 20px; width: 550px;">
+    <mat-card appearance="outlined" class="card action-card" style="margin: 20px; width: 550px;">
         <mat-card-header>
             <mat-card-title>Duplicate Triggers<button mat-button color="warn" (click)="resetDuplicates()" style="float: right;">Reset</button></mat-card-title>
             <mat-card-subtitle>Check for trigger duplicates.</mat-card-subtitle>

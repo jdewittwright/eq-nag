@@ -12,8 +12,7 @@ div.loading-gina {
 
 :host ::ng-deep mat-tab-group {
     height: 100%;
-
-    .mat-tab-body-wrapper {
+    .mat-mdc-tab-body-wrapper {
         height: 100%;
     }
 }

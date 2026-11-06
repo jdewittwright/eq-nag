@@ -11,10 +11,10 @@ div.tab-content {
     }
 }
 
-:host ::ng-deep .mat-progress-bar.mat-accent .mat-progress-bar-fill::after {
+:host ::ng-deep .mat-mdc-progress-bar.mat-accent .mdc-linear-progress__bar-inner {
     background-color: #69f0ae78 !important;
 }
-:host ::ng-deep .mat-progress-bar.mat-accent .mat-progress-bar-buffer {
+:host ::ng-deep .mat-mdc-progress-bar.mat-accent .mdc-linear-progress__buffer-bar {
     background-color: #503d5c !important;
 }
 
@@ -30,7 +30,6 @@ div.progress-bars {
         margin-right: 25px;
         height: 18px;
         margin-top: 1px;
-    
         mat-progress-bar {
             height: 18px;
         }
@@ -127,7 +126,7 @@ fieldset p mat-form-field {
     padding-right: 15px;
 }
 
-tr.mat-row {
+tr.mat-mdc-row {
     height: 27px !important;
 }
 
@@ -175,7 +174,7 @@ tr.mat-row {
     padding-right: 15px;
 }
 
-button.mat-icon-button.small {
+button.mat-mdc-icon-button.small {
     mat-icon {
         margin-top: -16.5px;
         // margin-right: -1px;

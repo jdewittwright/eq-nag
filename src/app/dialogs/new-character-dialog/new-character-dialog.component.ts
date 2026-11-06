@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject, ElementRef, ViewChild } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CharacterModel, NewCharacterOptionModel } from 'src/app/core.model';
 import { IpcService } from 'src/app/ipc.service';
 import { customAlphabet } from 'nanoid';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSelectChange } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as _ from 'lodash-es';
 
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';

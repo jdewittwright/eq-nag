@@ -1,7 +1,5 @@
 @import 'app/utilities/regex-highlighter.styles.scss';
 
-/* Temporary fix for tooltip show delay: https://github.com/angular/components/issues/24614#issuecomment-1190286647 */
-.mat-tooltip-hide { display: none!important; }
 
 
 .resize-handle {
@@ -48,17 +46,14 @@
 mat-button-toggle-group.vertical {
     flex-direction: column;
     border: none !important;
-
     .mat-button-toggle {
         border: none !important;
-        
         &.mat-button-toggle-appearance-standard {
             background: #424242;
 
             &:nth-of-type(even) {
                 background-color: #3c3c3c;
             }
-
             &.mat-button-toggle-checked {
                 background-color: #212121;
 
@@ -113,7 +108,7 @@ div.flex-row {
 // Multi-column action type picker (trigger-actions.component.html). These
 // styles must be global: the menu is rendered in the CDK overlay container,
 // outside the component.
-.multi-column-menu-panel.mat-menu-panel {
+.multi-column-menu-panel.mat-mdc-menu-panel {
     max-width: none !important; /* Override Material's default max-width to allow horizontal expansion */
     width: auto !important;     /* Let content dictate the width */
     padding: 0;                 /* Padding is managed by .multi-column-container */
@@ -134,7 +129,7 @@ div.flex-row {
         border-right: none;
     }
 
-    button.mat-menu-item {
+    button.mat-mdc-menu-item {
         width: 100%;
         height: 48px;
         padding: 0 16px;

@@ -40,17 +40,14 @@
     font-size: 12px;
     border: none;
     margin: 4px 0;
-
-    .mat-select-placeholder {
+    .mat-mdc-select-placeholder {
         color: #ffffff80 !important;
         -webkit-text-fill-color: unset !important;
     }
-
-    .mat-form-field-underline {
+    .mdc-line-ripple {
         display: none;
     }
-
-    .mat-form-field-wrapper {
+    .mat-mdc-text-field-wrapper {
         padding-bottom: 0;
     }
 

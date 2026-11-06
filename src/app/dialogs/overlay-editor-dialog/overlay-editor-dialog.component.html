@@ -65,9 +65,12 @@
                                 <div class="f-sm-4 al-center"><mat-label>Weight</mat-label></div>
                             </div>
                             <div class="f-row">
-                                <div class="f-sm-4"><mat-slider thumbLabel tickInterval="1" min="1" max="64" style="width: 100%;" [(ngModel)]="model.fontSize" name="sldrFontSize" (change)="broadcastModel()"></mat-slider></div>
-                                <div class="f-sm-4"><mat-slider thumbLabel tickInterval="1" step="5" min="10" max="300" style="width: 100%;" [(ngModel)]="model.lineHeight" name="sldrLineHeight" (change)="broadcastModel()"></mat-slider></div>
-                                <div class="f-sm-4"><mat-slider thumbLabel tickInterval="1" step="1" min="0" [max]="maxFontWeightIndex" style="width: 100%;" [(ngModel)]="fontWeightIndex" name="sldrFontWeight" (change)="broadcastModel()"></mat-slider></div>
+                                <div class="f-sm-4">
+                                <mat-slider discrete color="accent" min="1" max="64" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.fontSize" name="sldrFontSize" (change)="broadcastModel()" /></mat-slider></div>
+                                <div class="f-sm-4">
+                                <mat-slider discrete color="accent" step="5" min="10" max="300" style="width: 100%;"><input matSliderThumb [(ngModel)]="model.lineHeight" name="sldrLineHeight" (change)="broadcastModel()" /></mat-slider></div>
+                                <div class="f-sm-4">
+                                <mat-slider discrete color="accent" step="1" min="0" [max]="maxFontWeightIndex" style="width: 100%;"><input matSliderThumb [(ngModel)]="fontWeightIndex" name="sldrFontWeight" (change)="broadcastModel()" /></mat-slider></div>
                             </div>
     
                             <div class="f-row">
@@ -81,9 +84,12 @@
                                 <div class="f-sm-4 al-center"><app-color-picker [(ngModel)]="model.borderColor" (change)="broadcastModel()"></app-color-picker></div>
                             </div>
                             <div class="f-row">
-                                <div class="f-sm-4"><mat-slider thumbLabel tickInterval="1" min="0" max="100" style="width: 100%;" [(ngModel)]="fontTransparency" name="sldrFontSize" (change)="onChangeFontTransparency()"></mat-slider></div>
-                                <div class="f-sm-4"><mat-slider thumbLabel tickInterval="1" min="0" max="100" style="width: 100%;" [(ngModel)]="backgroundTransparency" name="sldrFontSize" (change)="onChangeBackgroundTransparency()"></mat-slider></div>
-                                <div class="f-sm-4"><mat-slider thumbLabel tickInterval="1" min="0" max="100" style="width: 100%;" [(ngModel)]="borderTransparency" name="sldrFontSize" (change)="onChangeBorderTransparency()"></mat-slider></div>
+                                <div class="f-sm-4">
+                                <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="fontTransparency" name="sldrFontSize" (change)="onChangeFontTransparency()" /></mat-slider></div>
+                                <div class="f-sm-4">
+                                <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="backgroundTransparency" name="sldrFontSize" (change)="onChangeBackgroundTransparency()" /></mat-slider></div>
+                                <div class="f-sm-4">
+                                <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="borderTransparency" name="sldrFontSize" (change)="onChangeBorderTransparency()" /></mat-slider></div>
                             </div>
                         </ng-template>
                         <ng-template [ngIf]="model.overlayType === 'FCT'">
@@ -183,8 +189,10 @@
                             <div class="f-sm-4 al-center"></div>
                         </div>
                         <div class="f-row">
-                            <div class="f-sm-4"><mat-slider thumbLabel tickInterval="1" min="0" max="100" style="width: 100%;" [(ngModel)]="textBorderIntensity" name="sldrTextBorderIntensity" (change)="onChangeTextBorderIntensity()" *ngIf="model.showTextBorder"></mat-slider></div>
-                            <div class="f-sm-4"><mat-slider thumbLabel tickInterval="1" min="0" max="100" style="width: 100%;" [(ngModel)]="textGlowIntensity" name="sldrTextGlowIntensity" (change)="onChangeTextGlowIntensity()" *ngIf="model.showTextGlow"></mat-slider></div>
+                            <div class="f-sm-4">
+                            <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;" *ngIf="model.showTextBorder"><input matSliderThumb [(ngModel)]="textBorderIntensity" name="sldrTextBorderIntensity" (change)="onChangeTextBorderIntensity()" /></mat-slider></div>
+                            <div class="f-sm-4">
+                            <mat-slider discrete color="accent" min="0" max="100" style="width: 100%;" *ngIf="model.showTextGlow"><input matSliderThumb [(ngModel)]="textGlowIntensity" name="sldrTextGlowIntensity" (change)="onChangeTextGlowIntensity()" /></mat-slider></div>
                             <div class="f-sm-4"></div>
                         </div>
                         <div class="f-row">
@@ -194,7 +202,8 @@
                         </div>
                         <div class="f-row">
                             <div class="f-sm-4 al-center"></div>
-                            <div class="f-sm-4 al-center"><mat-slider thumbLabel tickInterval="1" min="0" max="10" style="width: 100%;" [(ngModel)]="model.textGlowSize" name="sldrTextGlowSize" (change)="broadcastModel()" *ngIf="model.showTextGlow"></mat-slider></div>
+                            <div class="f-sm-4 al-center">
+                            <mat-slider discrete color="accent" min="0" max="10" style="width: 100%;" *ngIf="model.showTextGlow"><input matSliderThumb [(ngModel)]="model.textGlowSize" name="sldrTextGlowSize" (change)="broadcastModel()" /></mat-slider></div>
                             <div class="f-sm-4 al-center"></div>
                         </div>
 
@@ -251,12 +260,14 @@
                         <div class="f-row">
                             <div class="f-sm-4 al-left"><mat-label *ngIf="model.groupByTarget">Header</mat-label></div>
                             <div class="f-sm-4 al-right"><mat-label *ngIf="model.groupByTarget">Size</mat-label></div>
-                            <div class="f-sm-4 al-center"><mat-slider thumbLabel tickInterval="1" min="1" max="64" style="width: 100%;" [(ngModel)]="model.groupHeaderSize" name="groupHeaderSize" (change)="broadcastModel()" *ngIf="model.groupByTarget"></mat-slider></div>
+                            <div class="f-sm-4 al-center">
+                            <mat-slider discrete color="accent" min="1" max="64" style="width: 100%;" *ngIf="model.groupByTarget"><input matSliderThumb [(ngModel)]="model.groupHeaderSize" name="groupHeaderSize" (change)="broadcastModel()" /></mat-slider></div>
                         </div>
                         <div class="f-row">
                             <div class="f-sm-4 al-left"></div>
                             <div class="f-sm-4 al-right"><mat-label *ngIf="model.groupByTarget">Weight</mat-label></div>
-                            <div class="f-sm-4 al-left"><mat-slider thumbLabel tickInterval="1" step="1" min="0" [max]="maxFontWeightIndex" style="width: 100%;" [(ngModel)]="dotGroupHeaderWeightIndex" name="sldrFontWeight" (change)="broadcastModel()" *ngIf="model.groupByTarget"></mat-slider></div>
+                            <div class="f-sm-4 al-left">
+                            <mat-slider discrete color="accent" step="1" min="0" [max]="maxFontWeightIndex" style="width: 100%;" *ngIf="model.groupByTarget"><input matSliderThumb [(ngModel)]="dotGroupHeaderWeightIndex" name="sldrFontWeight" (change)="broadcastModel()" /></mat-slider></div>
                         </div>
                         <div class="f-row">
                             <div class="f-sm-4 al-center"></div>
@@ -268,7 +279,8 @@
                         <div class="f-row">
                             <div class="f-sm-4 al-left"><mat-label *ngIf="model.groupByTarget">Item</mat-label></div>
                             <div class="f-sm-4 al-right"><mat-label *ngIf="model.groupByTarget">Min Width</mat-label></div>
-                            <div class="f-sm-4 al-center"><mat-slider thumbLabel tickInterval="1" step="10" min="50" max="500" style="width: 100%;" [(ngModel)]="model.groupMinWidth" name="groupMinWidth" (change)="broadcastModel()" *ngIf="model.groupByTarget"></mat-slider></div>
+                            <div class="f-sm-4 al-center">
+                            <mat-slider discrete color="accent" step="10" min="50" max="500" style="width: 100%;" *ngIf="model.groupByTarget"><input matSliderThumb [(ngModel)]="model.groupMinWidth" name="groupMinWidth" (change)="broadcastModel()" /></mat-slider></div>
                         </div>
 
                     </fieldset>

@@ -35,9 +35,9 @@
                 <div class="content-middle"><mat-checkbox [(ngModel)]="action.textUseCustomSize" name="cbxUseCustomSize">Custom size</mat-checkbox></div>
                 <div class="content-middle content-right">
                     <label *ngIf="action.textUseCustomSize">Size</label>
-                    <mat-slider thumbLabel tickInterval="1" min="1" max="64" style="width: 100%;" [(ngModel)]="action.textSize" name="sldrFontSize" *ngIf="action.textUseCustomSize"></mat-slider>
+                    <mat-slider discrete color="accent" min="1" max="64" style="width: 100%;" *ngIf="action.textUseCustomSize"><input matSliderThumb [(ngModel)]="action.textSize" name="sldrFontSize" /></mat-slider>
                     <label *ngIf="action.textUseCustomSize">Spacing</label>
-                    <mat-slider thumbLabel tickInterval="1" step="5" min="10" max="300" style="width: 100%;" [(ngModel)]="action.textSpacing" name="sldrFontSpacing" *ngIf="action.textUseCustomSize"></mat-slider>
+                    <mat-slider discrete color="accent" step="5" min="10" max="300" style="width: 100%;" *ngIf="action.textUseCustomSize"><input matSliderThumb [(ngModel)]="action.textSpacing" name="sldrFontSpacing" /></mat-slider>
                 </div>
             </div>
 
@@ -52,7 +52,7 @@
                 <div class="content-middle"><mat-checkbox [(ngModel)]="action.textUseCustomGlow" name="textUseCustomGlow">Custom glow</mat-checkbox></div>
                 <div class="content-middle content-right">
                     <app-color-picker [(ngModel)]="action.textGlowColor" *ngIf="action.textUseCustomGlow"></app-color-picker>
-                    <mat-slider thumbLabel tickInterval="1" min="0" max="10" style="width: 100%;" [(ngModel)]="action.textGlowSize" name="sldrTextGlowSize" *ngIf="action.textUseCustomGlow"></mat-slider>
+                    <mat-slider discrete color="accent" min="0" max="10" style="width: 100%;" *ngIf="action.textUseCustomGlow"><input matSliderThumb [(ngModel)]="action.textGlowSize" name="sldrTextGlowSize" /></mat-slider>
                 </div>
             </div>
 
@@ -72,7 +72,7 @@
                         </mat-select>
                         <mat-hint>Font</mat-hint>
                     </mat-form-field>
-                    <mat-slider thumbLabel tickInterval="1" step="1" min="0" [max]="maxFontWeightIndex" style="width: 100%;" [(ngModel)]="fontWeightIndex" name="sldrFontWeight" (change)="onFontWeightChange()" *ngIf="action.textUseCustomFont"></mat-slider>
+                    <mat-slider discrete color="accent" step="1" min="0" [max]="maxFontWeightIndex" style="width: 100%;" *ngIf="action.textUseCustomFont"><input matSliderThumb [(ngModel)]="fontWeightIndex" name="sldrFontWeight" (change)="onFontWeightChange()" /></mat-slider>
                 </div>
             </div>
 

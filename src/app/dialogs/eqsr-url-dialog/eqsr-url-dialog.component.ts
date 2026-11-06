@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 
 /** Accepts EQ Spell Resources spell pages, e.g. https://spells.eqresource.com/spells.php?id=1447 */
 const eqsrSpellUrlRegex = /^https?:\/\/spells\.eqresource\.com\/spells\.php\?id=\d+$/i;

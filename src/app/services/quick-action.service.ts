@@ -3,7 +3,7 @@ import { TriggerHotkey } from '../core.model';
 import { StringUtility } from '../utilities';
 import { DialogService } from '../dialogs/dialog.service';
 import { IpcService } from '../ipc.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable( { providedIn: 'root' } )
 export class QuickActionService {

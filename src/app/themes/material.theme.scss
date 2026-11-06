@@ -1,0 +1,110 @@
+// Nag's Angular Material theme.
+//
+// The same palettes as the prebuilt purple-green theme Nag used before, built
+// from SCSS so the MDC components can be tuned to keep Nag's compact look.
+@use '@angular/material' as mat;
+
+$nag-primary: mat.define-palette(mat.$purple-palette, 700, 500, 800);
+$nag-accent: mat.define-palette(mat.$green-palette, A200, A100, A400);
+$nag-warn: mat.define-palette(mat.$red-palette);
+
+// MDC buttons and tabs space their letters out; Nag's labels never did.
+$nag-typography: mat.define-typography-config(
+    $button: mat.define-typography-level(14px, 14px, 500, $letter-spacing: normal),
+);
+
+$nag-theme: mat.define-dark-theme((
+    color: (
+        primary: $nag-primary,
+        accent: $nag-accent,
+        warn: $nag-warn,
+    ),
+    typography: $nag-typography,
+    density: 0,
+));
+
+@include mat.core();
+@include mat.all-component-themes($nag-theme);
+
+// Nag's form fields are short: the caption is a hint under the box, and the
+// floating label is empty.
+@include mat.form-field-density(-5);
+
+// The legacy checkboxes and radio buttons had no touch target around them.
+@include mat.checkbox-density(-3);
+@include mat.radio-density(-3);
+
+// Legacy icon buttons were 40px; MDC's are 48px.
+@include mat.icon-button-density(-2);
+
+html {
+    // The legacy tabs kept the selected label white; MDC colors it primary.
+    .mat-mdc-tab-group,
+    .mat-mdc-tab-nav-bar {
+        --mat-tab-header-active-label-text-color: #fff;
+        --mat-tab-header-active-focus-label-text-color: #fff;
+        --mat-tab-header-active-hover-label-text-color: #fff;
+        --mat-tab-header-label-text-tracking: normal;
+    }
+
+    // The legacy tabs were at least 160px wide.
+    .mat-mdc-tab {
+        min-width: 160px;
+    }
+
+    // Nag draws its own box around form fields (see dark.theme.scss), so the
+    // MDC fill would only paint a lighter box inside it.
+    .mat-mdc-form-field {
+        --mdc-filled-text-field-container-color: transparent;
+        --mdc-filled-text-field-disabled-container-color: transparent;
+    }
+
+    // The legacy fields took the font size of the text around them; MDC sets
+    // 16px.
+    .mat-mdc-form-field,
+    .mat-mdc-select {
+        font-size: inherit;
+        line-height: inherit;
+        letter-spacing: inherit;
+    }
+
+    // The legacy spacing: a 30px box with little side padding, and the hint
+    // in an 18px strip right under it.
+    .mat-mdc-form-field {
+        .mat-mdc-text-field-wrapper {
+            padding-left: 2px;
+            padding-right: 2px;
+        }
+        .mat-mdc-form-field-infix {
+            min-height: 30px;
+            padding-top: 6px !important;
+            padding-bottom: 6px !important;
+        }
+        .mat-mdc-form-field-hint-wrapper,
+        .mat-mdc-form-field-error-wrapper {
+            padding: 0 2px;
+        }
+        .mat-mdc-form-field-subscript-wrapper {
+            line-height: 18px;
+        }
+    }
+
+    .mat-mdc-table {
+        --mat-table-header-headline-color: rgba(255, 255, 255, 0.7);
+    }
+
+    // The migration made every card outlined to match the flat legacy card,
+    // which had no border.
+    .mat-mdc-card {
+        --mdc-outlined-card-outline-color: transparent;
+        --mat-card-subtitle-text-weight: 400;
+    }
+
+    // Like the form fields, legacy checkbox and radio labels used the
+    // surrounding font.
+    .mat-mdc-checkbox .mdc-form-field,
+    .mat-mdc-radio-button .mdc-form-field {
+        font-size: inherit;
+        letter-spacing: inherit;
+    }
+}

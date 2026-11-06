@@ -1,7 +1,7 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { Component, OnInit, Inject } from '@angular/core';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTreeFlattener, MatTreeFlatDataSource } from '@angular/material/tree';
 import { PackageFolder, PackageTrigger, QuickShareFileModel, QuickShareMetaModel, QuickShareModel, TriggerFolder, TriggerModel } from 'src/app/core.model';
 import * as _ from 'lodash-es';
@@ -11,7 +11,7 @@ import { nagId } from 'src/app/core/nag-id.util';
 import { NotificationDialogModel, NotificationTypes } from '../notification-dialog/notification-dialog.model';
 import { NotificationDialogComponent } from '../notification-dialog/notification-dialog.component';
 import { ColoredString } from '../dialog.model';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface QuickShareTreeNode {
     expandable: boolean;

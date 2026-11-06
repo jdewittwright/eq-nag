@@ -181,9 +181,8 @@
                                     </mat-radio-group>
 
                                     <div style="flex: 1 1 auto;">
-                                        <mat-slider thumbLabel min="0" max="100" step="1" value="0" style="width: 100%;" 
-                                            [(ngModel)]="group.thresholdPercent" name="thresholdPercent_{{i}}" 
-                                            *ngIf="group.thresholdType === 'percent' || group.thresholdType == undefined">
+                                        <mat-slider discrete color="accent" min="0" max="100" step="1" style="width: 100%;"
+                                            *ngIf="group.thresholdType === 'percent' || group.thresholdType == undefined"><input matSliderThumb [(ngModel)]="group.thresholdPercent" name="thresholdPercent_{{i}}" />
                                         </mat-slider>
 
                                         <mat-form-field style="width: 192px; margin-left: 15px; width: 100%;" *ngIf="group.thresholdType === 'value'">
@@ -220,9 +219,8 @@
                                     </mat-radio-group>
 
                                     <div style="flex: 1 1 auto;">
-                                        <mat-slider thumbLabel min="0" max="100" step="1" value="0" style="width: 100%;" 
-                                            [(ngModel)]="group.thresholdPercent" name="thresholdPercent_{{i}}" 
-                                            *ngIf="group.thresholdType === 'percent' || group.thresholdType == undefined">
+                                        <mat-slider discrete color="accent" min="0" max="100" step="1" style="width: 100%;"
+                                            *ngIf="group.thresholdType === 'percent' || group.thresholdType == undefined"><input matSliderThumb [(ngModel)]="group.thresholdPercent" name="thresholdPercent_{{i}}" />
                                         </mat-slider>
                                         
                                         <mat-form-field style="width: 192px; margin-left: 15px; width: 100%;" *ngIf="group.thresholdType === 'value'">

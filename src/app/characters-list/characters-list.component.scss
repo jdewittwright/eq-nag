@@ -8,7 +8,7 @@
   align-items: flex-end;
 }
 
-.example-headers-align .mat-form-field + .mat-form-field {
+.example-headers-align .mat-mdc-form-field + .mat-form-field {
   margin-left: 8px;
 }
 
@@ -28,9 +28,8 @@ div.character-tab-content {
 
 :host ::ng-deep .mat-content {
     overflow: visible;
-
-    .mat-button-ripple.mat-ripple, 
-    .mat-button-focus-overlay {
+    .mat-mdc-button-ripple, 
+    .mat-mdc-button-persistent-ripple {
         top: -5px;
         left: -5px;
         width: 34px;

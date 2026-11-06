@@ -1,6 +1,6 @@
 import { Component, Input, NgZone, OnInit } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { getPackageImportProperties, getTriggerOverlayDescriptors } from '../core.decorators';
 import { actionOverlayMap, ActionTypes, generateRenderToken, ListObjectModel, OverlayWindowModel, RenderTokenModel, TriggerAction, TriggerModel } from '../core.model';
 import { ActionOverlayUseModel } from '../dialogs/action-overlay-reassignment-dialog/action-overlay-reassignment.model';

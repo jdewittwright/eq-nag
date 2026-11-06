@@ -130,11 +130,11 @@
             <div>
                 <h2 class="sub-header full-width">Volume</h2>
                 <div>Master Volume</div>
-                <mat-slider [(ngModel)]="masterVolume" thumbLabel tickInterval="1" min="1" max="100" style="width: 100%;" (change)="onChangeMasterVolume()" ></mat-slider>
+                <mat-slider discrete color="accent" min="1" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="masterVolume" (change)="onChangeMasterVolume()" /></mat-slider>
                 <div>Text to Speech Volume</div>
-                <mat-slider [(ngModel)]="speechVolume" thumbLabel tickInterval="1" min="1" max="100" style="width: 100%;" (change)="updateSetting( settingsKeys.speechVolume, speechVolume, 500 )"></mat-slider>
+                <mat-slider discrete color="accent" min="1" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="speechVolume" (change)="updateSetting( settingsKeys.speechVolume, speechVolume, 500 )" /></mat-slider>
                 <div>Audio Volume</div>
-                <mat-slider [(ngModel)]="audioVolume" thumbLabel tickInterval="1" min="1" max="100" style="width: 100%;" (change)="updateSetting( settingsKeys.audioVolume, audioVolume, 500 )"></mat-slider>
+                <mat-slider discrete color="accent" min="1" max="100" style="width: 100%;"><input matSliderThumb [(ngModel)]="audioVolume" (change)="updateSetting( settingsKeys.audioVolume, audioVolume, 500 )" /></mat-slider>
             </div>
             <div>
                 <h2 class="sub-header full-width">Text to Speech</h2>
@@ -146,7 +146,7 @@
                     <mat-hint>Select the text to speech voice</mat-hint>
                 </mat-form-field>
                 <div style="margin-top: 15px;">Base Speaking Rate</div>
-                <mat-slider [(ngModel)]="baseSpeakingRate" thumbLabel tickInterval="0.25" step="0.25" min="0.25" max="4" style="width: 100%;" (change)="updateSetting( settingsKeys.baseSpeakingRate, baseSpeakingRate, 500 )"></mat-slider>
+                <mat-slider discrete color="accent" step="0.25" min="0.25" max="4" style="width: 100%;"><input matSliderThumb [(ngModel)]="baseSpeakingRate" (change)="updateSetting( settingsKeys.baseSpeakingRate, baseSpeakingRate, 500 )" /></mat-slider>
                 <div>
                     <h3 class="sub-header full-width">Examples</h3>
                     <div>

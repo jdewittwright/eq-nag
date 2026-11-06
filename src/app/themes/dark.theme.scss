@@ -289,7 +289,7 @@ $bg-extreme-dark: #191919;
             mat-radio-button {
                 label {
                     color: $color-red-dark;
-                    .mat-radio-outer-circle {
+                    .mdc-radio__outer-circle {
                         border-color: $color-red-dark;
                     }
                 }
@@ -297,7 +297,7 @@ $bg-extreme-dark: #191919;
         }
     }
 
-    .mat-select-panel {
+    .mat-mdc-select-panel {
         mat-option {
             &:nth-of-type(odd) {
                 background-color: $option-odd !important;
@@ -312,14 +312,13 @@ $bg-extreme-dark: #191919;
                 color: $option-small;
             }
         }
-        .mat-option.mat-selected:not(.mat-option-multiple) {
+        .mat-mdc-option.mat-mdc-selected:not(.mat-mdc-option-multiple) {
             background-color: $option-selected !important;
             color: $color-green;
             font-weight: bolder;
         }
         background-color: $option-panel;
     }
-
     mat-select {
         mat-select-trigger {
             color: $text;
@@ -330,7 +329,7 @@ $bg-extreme-dark: #191919;
         }
     }
 
-    .mat-menu-panel {
+    .mat-mdc-menu-panel {
         button:nth-of-type(odd) {
             background-color: $option-odd !important;
         }
@@ -399,8 +398,8 @@ $bg-extreme-dark: #191919;
         }
     }
     
-    .mat-card {
-        .mat-tab-group {
+    .mat-mdc-card {
+        .mat-mdc-tab-group {
             background-color: #252525;
         }
         background-color: #2a2a2a;
@@ -477,34 +476,35 @@ $bg-extreme-dark: #191919;
     }
 
     mat-form-field {
-        .mat-form-field-infix {
+        .mat-mdc-form-field-infix {
             border-top: none !important;
         }
-        .mat-form-field-underline {
-            background-color: #00000052 !important;
-            border-top: 2px solid transparent !important;
+        // The darker strip under the box, where the hint is.
+        .mat-mdc-form-field-subscript-wrapper {
+            background-color: #00000052;
         }
-        input.mat-input-element {
+        .mdc-line-ripple::before {
+            border-bottom-color: transparent !important;
+        }
+        input.mat-mdc-input-element {
             color: $text;
         }
         &.mat-form-field-disabled {
-            .mat-form-field-underline {
-                background-color: #4a4a4a52 !important;
-                background-image: unset !important;
+            .mat-mdc-form-field-subscript-wrapper {
+                background-color: #4a4a4a52;
             }
             border-color: #4848486b;
             background-color: #2222222e;
         }
         &.mat-form-field-invalid {
-            .mat-form-field-ripple, 
-            .mat-form-field-ripple.mat-accent {
-                background-color: unset !important;
+            .mdc-line-ripple::after {
+                border-bottom-color: transparent !important;
             }
-            .mat-select.mat-select-invalid .mat-select-arrow {
+            .mat-mdc-select.mat-mdc-select-invalid .mat-mdc-select-arrow {
                 color: unset !important;
             }
-            .mat-form-field-underline {
-                background-color: rgba($color-red-warn, 0.09) !important;
+            .mat-mdc-form-field-subscript-wrapper {
+                background-color: rgba($color-red-warn, 0.09);
             }
             border-color: rgba($color-red-warn, 0.4196078431);
         }
@@ -512,7 +512,7 @@ $bg-extreme-dark: #191919;
         background-color: #0000002e;
     }
 
-    .mat-table {
+    .mat-mdc-table {
         thead {
             tr {
                 th {
@@ -550,11 +550,11 @@ $bg-extreme-dark: #191919;
             box-shadow: 0 0 5px 1px $color-yellow;
             border: 1px solid $color-yellow;
         }
-        .mat-dialog-container {
+        .mat-mdc-dialog-container {
             background-color: #353535;
         }
-        .mat-dialog-content {
-            .mat-paginator-container {
+        .mat-mdc-dialog-content {
+            .mat-mdc-paginator-container {
                 background-color: #252525;
             }
             .mat-stepper-horizontal {
@@ -578,13 +578,12 @@ $bg-extreme-dark: #191919;
         }
 
         .modal-menu {
-            > .mat-tab-header {
-                > .mat-tab-label-container {
+            > .mat-mdc-tab-header {
+                > .mat-mdc-tab-label-container {
                     background-color: rgb(49, 49, 49);
                 }
             }
         }
-
         mat-card-content {
             mat-tab-group {
                 background-color: #333333; 
@@ -593,7 +592,7 @@ $bg-extreme-dark: #191919;
         }
 
         .card.action-card {
-            .mat-table tbody {
+            .mat-mdc-table tbody {
                 background-color: rgba($text, .03);
             }
         }
@@ -601,9 +600,8 @@ $bg-extreme-dark: #191919;
         .checkbox-hint {
             color: rgba($text, .60);
         }
-
-        .mat-tab-body-content {
-            .mat-tab-body-content {
+        .mat-mdc-tab-body-content {
+            .mat-mdc-tab-body-content {
                 background-color: unset;
             }
             background-color: #0000005e;
@@ -613,8 +611,8 @@ $bg-extreme-dark: #191919;
             background-color: #333333;
         }
     
-        .mat-card {
-            .mat-tab-group {
+        .mat-mdc-card {
+            .mat-mdc-tab-group {
                 background-color: #2a2a2a;
             }
             background-color: #333333;
@@ -832,7 +830,7 @@ p.notice {
     margin: 5px 25px;
 }
 
-.mat-tooltip {
+.mat-mdc-tooltip {
     font-size: 14px !important;
     background-color: $bg-tab-content;
     border: 3px solid rgba($color-grey-80, .20);
@@ -872,10 +870,8 @@ p.notice {
 
 mat-button-toggle-group {
     border-color: #ffffff17 !important;
-
     mat-button-toggle {
         border-color: #00000038 !important;
-    
         &.mat-button-toggle-checked {
             button {
                 color: #69f0ae;
@@ -988,7 +984,7 @@ button.connected-button {
 
 mat-tab-group {
     mat-tab-group.sub-tabs {
-        .mat-tab-header {
+        .mat-mdc-tab-header {
             background-color: #181818;
             padding-left: 5em;
         }

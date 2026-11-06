@@ -21,7 +21,7 @@
             <span class="spacer"></span>
             <small>How often should Nag check for new log entries.</small>
         </div>
-        <mat-slider [(ngModel)]="readDelay" thumbLabel step="10" tickInterval="1" min="50" max="1000" style="width: 100%;" (change)="onSettingsChanged()" ></mat-slider>
+        <mat-slider discrete color="accent" step="10" min="50" max="1000" style="width: 100%;"><input matSliderThumb [(ngModel)]="readDelay" (change)="onSettingsChanged()" /></mat-slider>
         <!-- <div class="flex-row">
             <span>Flush Delay</span>
             <span class="spacer"></span>
@@ -36,7 +36,7 @@
             <span class="spacer"></span>
             <small>How long to wait before retrying a read operation after an error.</small>
         </div>
-        <mat-slider [(ngModel)]="readErrorDelay" thumbLabel step="10" tickInterval="1" min="50" max="1000" style="width: 100%;" (change)="onSettingsChanged()" ></mat-slider>
+        <mat-slider discrete color="accent" step="10" min="50" max="1000" style="width: 100%;"><input matSliderThumb [(ngModel)]="readErrorDelay" (change)="onSettingsChanged()" /></mat-slider>
     </div>
 </div>
 <div style="text-align: right;" *ngIf="showSaveButton">

@@ -34,6 +34,7 @@ import { SettingsModule } from './settings/settings.module';
 import { ConsoleProgressComponent } from './debug-console/console-lines/console-progress.component';
 import { CombatStatisticsComponent } from './combat-statistics/combat-statistics.component';
 import { QuickActionsComponent } from './quick-actions/quick-actions.component';
+import { MAT_TABS_CONFIG } from '@angular/material/tabs';
 
 @NgModule( {
     imports: [
@@ -74,6 +75,8 @@ import { QuickActionsComponent } from './quick-actions/quick-actions.component';
     providers: [
         IpcService,
         SetupService,
+        // The legacy tabs sized each tab to its label; keep that look.
+        { provide: MAT_TABS_CONFIG, useValue: { stretchTabs: false } },
     ],
     bootstrap: [ AppComponent ],
 } )

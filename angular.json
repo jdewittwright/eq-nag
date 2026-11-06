@@ -23,7 +23,7 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/purple-green.css",
+              "src/app/themes/material.theme.scss",
               "src/styles.css",
               "src/styles.scss",
               "src/app/themes/dark.theme.scss"

@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ExternalDataSources, OverlayWindowModel, QuickShareFileModel, QuickShareMetaModel, ScrapedSpell, TriggerAction, TriggerCondition, TriggerFolder, TriggerHotkey, TriggerModel } from '../core.model';
 import { Observable, Observer } from 'rxjs';

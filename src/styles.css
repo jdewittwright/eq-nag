@@ -70,25 +70,15 @@ ol, p, ul {
     background-color: #ffffff40;
 }
 
-.mat-focused .mat-form-field-label {
+.mat-focused .mdc-floating-label {
     /*change color of label*/
     color: #ebebeb !important;
 }
 
-    /* change color of underline */
-/* .mat-form-field-underline {
-    background-color: green !important;
-}  */
-
-    /*change color of underline when focused*/
-/* .mat-form-field-ripple {
-    background-color: green !important;
-} */
-
-.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+.mat-primary .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
     color: #ebebeb;
 }
 
-.mat-input-element { 
+.mat-mdc-input-element { 
     caret-color: #ebebeb; 
 }

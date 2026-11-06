@@ -13,7 +13,7 @@
         <mat-stepper [linear]="true" #stepper>
             <mat-step label="Step 1">
                 <div class="step-options">
-                    <mat-card class="box-shadow-green hover-only cursor-pointer" (click)="setAction('addCharacter')">
+                    <mat-card appearance="outlined" class="box-shadow-green hover-only cursor-pointer" (click)="setAction('addCharacter')">
                         <mat-card-header>
                             <mat-card-title>Add a Character</mat-card-title>
                             <mat-card-subtitle>Add a character to Nag.</mat-card-subtitle>
@@ -22,7 +22,7 @@
                             <p>Add a new character to Nag.  This can be done through selecting a log file or choosing a character from the auto-generated lists.</p>
                         </mat-card-content>
                     </mat-card>
-                    <mat-card class="box-shadow-green hover-only cursor-pointer" (click)="setAction('triggerEdit')">
+                    <mat-card appearance="outlined" class="box-shadow-green hover-only cursor-pointer" (click)="setAction('triggerEdit')">
                         <mat-card-header>
                             <mat-card-title>Change a Trigger</mat-card-title>
                             <mat-card-subtitle>You would like to change something about a trigger.</mat-card-subtitle>
