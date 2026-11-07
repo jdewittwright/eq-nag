@@ -14,7 +14,8 @@
     <script type="text/javascript">
         const urlParams = new URLSearchParams(window.location.search);
         var LogWatcher = require('./log-watcher');
-        LogWatcher(JSON.parse(decodeURI(urlParams.get('character'))), +urlParams.get('logPosition'));
+        // URLSearchParams has already decoded the values; decoding them again would change any % in them.
+        LogWatcher(JSON.parse(urlParams.get('character')), +urlParams.get('logPosition'));
     </script>
     <h1>Header text</h1>
 </body>

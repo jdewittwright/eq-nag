@@ -21,6 +21,9 @@ const { RenderTokenModel } = require( "./data/models/renderer" );
  */
 let rendererOnTopId = null;
 
+/** How long an EQ Spell Resources scrape can take before it's abandoned. */
+const scrapeTimeoutMs = 30 * 1000;
+
 class WindowManager {
 
     /** @type {BrowserWindow} */
@@ -904,10 +907,14 @@ class WindowManager {
             renderer.webContents.openDevTools( { mode: 'undocked' } );
         }
 
-        renderer.webContents.once( 'dom-ready', () => {
+        // Sent on every load, so the overlay page has them again if it's
+        // reloaded (e.g. after its page process crashes).
+        renderer.webContents.on( 'dom-ready', () => {
             renderer.webContents.send( 'fct:change:fctShowCriticalsInline', this.#userPrefDb.fctShowCriticalsInline );
             renderer.webContents.send( 'renderer:combatGroups', this.#overlayDatabase.getCombatGroups() );
+        } );
 
+        renderer.webContents.once( 'dom-ready', () => {
             if ( executeRendererBoundsChange ) {
                 let overlays = this.mutateOverlays( this.#overlayDatabase.getAll() );
                 let newOrigin = { x: 0 - bounds.x, y: 0 - bounds.y };
@@ -984,7 +991,8 @@ class WindowManager {
             y: ( workAreaSize.height - size.height ) / 2,
         } );
         
-        deathRecap.loadURL( `file://${__dirname}/windows/death-recap.html?logFilePath=${encodeURI( logFilePath )}&lineNo=&messageId=${encodeURI(messageId)}` );
+        const query = new URLSearchParams( { logFilePath: logFilePath, lineNo: '', messageId: messageId } );
+        deathRecap.loadURL( `file://${__dirname}/windows/death-recap.html?${query}` );
         deathRecap.setIgnoreMouseEvents( true );
         
         // Open the DevTools.
@@ -1149,7 +1157,17 @@ class WindowManager {
 
         let characterModel = this.#characterDatabase.findCharacterByNameAndServer( characterName, serverName );
         
-        deathRecap.loadURL( `file://${__dirname}/windows/death-recap.html?logFilePath=${encodeURI( logFilePath )}&lineNo=${lineNo}&characterName=${encodeURI( characterName )}&messageId=${encodeURI( messageId )}&takp=${characterModel?.takp ? '1' : '0'}&thj=${characterModel?.thj ? '1' : '0'}` );
+        // URLSearchParams encodes every value, so log paths and names containing &, #, + or % arrive intact.
+        const query = new URLSearchParams( {
+            logFilePath: logFilePath,
+            lineNo: `${lineNo}`,
+            characterName: characterName ?? '',
+            serverName: serverName ?? '',
+            messageId: messageId ?? '',
+            takp: characterModel?.takp ? '1' : '0',
+            thj: characterModel?.thj ? '1' : '0',
+        } );
+        deathRecap.loadURL( `file://${__dirname}/windows/death-recap.html?${query}` );
         deathRecap.setAlwaysOnTop( true, "screen-saver" );
         
         // Open the DevTools.
@@ -1716,21 +1734,42 @@ class WindowManager {
                 scraperWindow.webContents.openDevTools( { mode: 'undocked' } );
             }
             
-            ipcMain.once( 'scraper:done[' + wi + ']', ( event, spell ) => {
-                ipcMain.removeAllListeners( 'scraper:error' );
-                scraperWindow.close();
-                scraperWindow = null;
-                resolve( spell );
-            } );
+            const doneChannel = `scraper:done[${wi}]`;
+            const errorChannel = `scraper:error[${wi}]`;
+            let finished = false;
+            let timeoutId = null;
 
-            ipcMain.once( 'scraper:error[' + wi + ']', ( event, error ) => {
-                ipcMain.removeAllListeners( 'scraper:done' );
-                scraperWindow.close();
-                scraperWindow = null;
-                reject( error );
-            } );
+            /**
+             * Ends the scrape: removes both listeners, closes the window, and
+             * settles the promise.  Only the first call does anything.
+             */
+            const finish = ( settle ) => {
+                if ( finished ) {
+                    return;
+                }
+                finished = true;
+                clearTimeout( timeoutId );
+                ipcMain.removeListener( doneChannel, onDone );
+                ipcMain.removeListener( errorChannel, onError );
+                if ( !scraperWindow.isDestroyed() ) {
+                    scraperWindow.destroy();
+                }
+                settle();
+            };
+            const onDone = ( event, spell ) => finish( () => resolve( spell ) );
+            const onError = ( event, error ) => finish( () => reject( new Error( error?.message ?? 'Could not read the EQ Spell Resources page.' ) ) );
 
-            scraperWindow.loadURL( `file://${__dirname}/threads/scraper-eqsr.html?i=${wi}&action=${scrapeAction}&url=${encodeURI( JSON.stringify( url ) )}` );
+            ipcMain.once( doneChannel, onDone );
+            ipcMain.once( errorChannel, onError );
+
+            // The page gives up on its own request after 20 seconds; this also
+            // covers the page itself failing to load or run.
+            timeoutId = setTimeout( () => onError( null, { message: `EQ Spell Resources didn't respond within ${scrapeTimeoutMs / 1000} seconds.` } ), scrapeTimeoutMs );
+            scraperWindow.on( 'closed', () => onError( null, { message: 'The EQ Spell Resources reader closed before it finished.' } ) );
+            scraperWindow.webContents.on( 'render-process-gone', () => onError( null, { message: 'The EQ Spell Resources reader stopped before it finished.' } ) );
+
+            const query = new URLSearchParams( { i: `${wi}`, action: scrapeAction, url: url } );
+            scraperWindow.loadURL( `file://${__dirname}/threads/scraper-eqsr.html?${query}` );
 
         } );
     

@@ -17,9 +17,15 @@
             <mat-hint>{{serviceName}} URL</mat-hint>
           </mat-form-field>
         </p>
+        @if (scraping) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+        @if (scrapeError) {
+          <p class="color-red">{{scrapeError}}</p>
+        }
 
         <div>
-          <button mat-button (click)="scrape()">Next</button>
+          <button mat-button (click)="scrape()" [disabled]="scraping">Next</button>
         </div>
       </form>
     </mat-step>

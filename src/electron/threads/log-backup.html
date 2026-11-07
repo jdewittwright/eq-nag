@@ -13,7 +13,8 @@
     <script type="text/javascript">
         const urlParams = new URLSearchParams(window.location.search);
         var LogBackup = require('./log-backup');
-        LogBackup(JSON.parse(decodeURI(urlParams.get('logFiles'))), decodeURI(urlParams.get('eqFolder')), JSON.parse(decodeURI(urlParams.get('daysOfWeek'))), urlParams.get('i'));
+        // URLSearchParams has already decoded the values; decoding them again would change any % in them.
+        LogBackup(JSON.parse(urlParams.get('logFiles')), urlParams.get('eqFolder'), JSON.parse(urlParams.get('daysOfWeek')), urlParams.get('i'));
     </script>
     <h1>Log File Backup</h1>
 </body>

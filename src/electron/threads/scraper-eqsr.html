@@ -14,7 +14,8 @@
         
         let action = urlParams.get('action');
         let i = urlParams.get('i');
-        let url = JSON.parse(decodeURI(urlParams.get('url')));
+        // URLSearchParams has already decoded the value.
+        let url = urlParams.get('url');
 
         window.api.setIndex(i);
 

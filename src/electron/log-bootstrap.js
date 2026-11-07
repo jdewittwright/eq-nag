@@ -1038,7 +1038,9 @@ function startLogWatcherWindow( logFile, isDev, sendTick, character, logPosition
         webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false, devTools: isDev === true },
     } );
     logWatcherWindow.webContents.openDevTools( { mode: 'undocked' } );
-    logWatcherWindow.loadURL( `file://${__dirname}/threads/log-watcher.html?character=${encodeURI( JSON.stringify( character ) )}&logPosition=${logPosition}` );
+    // URLSearchParams encodes every value, so a log path containing &, #, + or % arrives intact.
+    const query = new URLSearchParams( { character: JSON.stringify( character ), logPosition: `${logPosition}` } );
+    logWatcherWindow.loadURL( `file://${__dirname}/threads/log-watcher.html?${query}` );
 
     logWatcherWindow.on( 'closed', async () => {
         logWatcherWindow = null;
@@ -1279,7 +1281,14 @@ function startLogBackup( logFiles, everquestInstallFolder, isDev, daysOfWeek, ba
     if ( isDev ) {
         logBackupWindow.webContents.openDevTools( { mode: 'undocked' } );
     }
-    logBackupWindow.loadURL( `file://${__dirname}/threads/log-backup.html?logFiles=${encodeURI(JSON.stringify(logFiles))}&eqFolder=${encodeURI(everquestInstallFolder)}&daysOfWeek=${encodeURI(JSON.stringify(daysOfWeek ?? []))}&i=${backupIndex}` );
+    // URLSearchParams encodes every value, so paths containing &, #, + or % arrive intact.
+    const query = new URLSearchParams( {
+        logFiles: JSON.stringify( logFiles ),
+        eqFolder: everquestInstallFolder ?? '',
+        daysOfWeek: JSON.stringify( daysOfWeek ?? [] ),
+        i: `${backupIndex}`,
+    } );
+    logBackupWindow.loadURL( `file://${__dirname}/threads/log-backup.html?${query}` );
 
     return logBackupWindow;
 }

@@ -29,6 +29,10 @@ export class NewTriggerDialogComponent implements OnInit {
     public spell: ScrapedSpell;
     public selectedItems: ScrapedClickEffect[] = [];
     public loadingItemDetails: boolean = false;
+    /** True while the spell page is being read. */
+    public scraping: boolean = false;
+    /** Why the spell page couldn't be read, if it couldn't. */
+    public scrapeError: string = null;
 
     public get timerOverlays(): OverlayWindowModel[] {
         return this.overlays.filter( f => f.overlayType === 'Timer' );
@@ -75,10 +79,19 @@ export class NewTriggerDialogComponent implements OnInit {
 
         let complete = ( spell: ScrapedSpell ) => {
             this.spell = spell;
+            this.scraping = false;
             this.stepper.next();
         }
 
-        this.ipcService.scrapeEqSpellResourceSpell( this.url ).subscribe( spell => complete( spell ) );
+        this.scraping = true;
+        this.scrapeError = null;
+        this.ipcService.scrapeEqSpellResourceSpell( this.url ).subscribe( {
+            next: spell => complete( spell ),
+            error: ( message: string ) => {
+                this.scraping = false;
+                this.scrapeError = message;
+            },
+        } );
 
     }
     

@@ -16,9 +16,15 @@
             <mat-hint>{{serviceName}} URL</mat-hint>
           </mat-form-field>
         </p>
+        @if (scraping) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+        @if (scrapeError) {
+          <p class="color-red">{{scrapeError}}</p>
+        }
 
         <div>
-          <button mat-button (click)="scrape()">Next</button>
+          <button mat-button (click)="scrape()" [disabled]="scraping">Next</button>
         </div>
       </form>
     </mat-step>
@@ -131,6 +137,9 @@
     @if (!loadingItemDetails) {
       <form #optionalAForm="ngForm">
         <p>There are item(s) with this effect.  Would you like to include any of these?</p>
+        @if (itemDetailsError) {
+          <p class="color-red">Couldn't read the selected items: {{itemDetailsError}}</p>
+        }
         @for (item of spell.itemsWithEffect; track item; let i = $index) {
           <p>
             <mat-checkbox [(ngModel)]="item.selected" name="includeItem_{{i}}">{{item.name}}</mat-checkbox>

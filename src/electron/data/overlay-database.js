@@ -7,7 +7,7 @@ const log = require( 'electron-log' );
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const idLen = 16;
 const nanoid = customAlphabet( alphabet, 16 );
-const { OverlayDimensions, OverlayWindow, OverlayStoreModel, CombatTypes, FctCombatGroup, HitStartPositionTypes } = require( './models/overlay-window' );
+const { OverlayDimensions, OverlayWindow, OverlayStoreModel, CombatTypes, FctCombatGroup, HitStartPositionTypes, TextOverflowModel } = require( './models/overlay-window' );
 const { StyleProperties } = require( './models/common' );
 const TriggerDatabaseStore = require( "./trigger-database" );
 const ElectronUtilities = require( "../utilities/electron" );
@@ -153,6 +153,9 @@ class OverlayDatabaseStore extends Store {
         // Generate a new id for the overlay.
         overlay.overlayId = overlay.overlayId?.length === 16 ? overlay.overlayId : nanoid();
 
+        // Overlays from older packages and shares can be missing their text overflow settings.
+        overlay.textOverflow = Object.assign( new TextOverflowModel(), overlay.textOverflow );
+
         // Add it to the store.
         this.#data.overlays.push( overlay );
 
@@ -266,6 +269,7 @@ class OverlayDatabaseStore extends Store {
 
         // If the index is valid, then update the found overlay.
         if ( i > -1 && i < this.#data?.overlays?.length ) {
+            overlay.textOverflow = Object.assign( new TextOverflowModel(), overlay.textOverflow );
             this.#data.overlays[ i ] = overlay;
 
             // Save changes to the data.

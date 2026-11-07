@@ -20,7 +20,10 @@ contextBridge.exposeInMainWorld( 'api', {
             ipcRenderer.send( 'scraper:done[' + i + ']', data );
         },
         sendError: ( error ) => {
-            ipcRenderer.send( 'scraper:error[' + i + ']', error );
+            // Only plain data can be sent over IPC (sending a DOM event
+            // throws, so the error would never arrive), so send just the message.
+            const message = typeof error === 'string' ? error : error?.message ?? String( error );
+            ipcRenderer.send( 'scraper:error[' + i + ']', { message: message } );
         },
     },
     sanitizeHtml: ( html ) => sanitizeHtml( html ),

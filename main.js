@@ -75,6 +75,8 @@ const __dirname = path.dirname( __filename );
 var mainWindow, logWatcherWindow, testWindow;
 var enableDevMode = false;
 const updateCheckInterval = 10 * 60 * 1000;
+/** @type {NodeJS.Timeout | null} */
+var updateCheckTimer = null;
 migrateUserDataFolder();
 registerShareFileHandlers();
 const winManager = new WindowManager(__dirname);
@@ -173,8 +175,8 @@ const getDefaultMainWindowBounds = () => {
     nagBounds.height = Math.max( Math.min( screenBounds.height, 600 ), maxHeight );
 
     // Position the window in the center of the screen.
-    nagBounds.x = Math.floor( ( screenBounds.width - nagBounds.width ) / 2 );
-    nagBounds.y = Math.floor( ( screenBounds.height - nagBounds.height ) / 2 );
+    nagBounds.x = screenBounds.x + Math.floor( ( screenBounds.width - nagBounds.width ) / 2 );
+    nagBounds.y = screenBounds.y + Math.floor( ( screenBounds.height - nagBounds.height ) / 2 );
 
     return nagBounds;
 }
@@ -187,24 +189,26 @@ function createWindow() {
         y: userPreferences.windowY,
     };
 
-    // If the nag window bounds any of the dimensions are undefined or less than 100, then we need to reset the bounds.
+    // If any of the saved dimensions are missing, or the window is too small to use, then reset the bounds.
+    // Negative positions are fine: monitors to the left of or above the primary monitor have negative coordinates.
     let widthInvalid = nagBounds.width == null || nagBounds.width < 100;
     let heightInvalid = nagBounds.height == null || nagBounds.height < 100;
-    let xInvalid = nagBounds.x == null || nagBounds.x < 0;
-    let yInvalid = nagBounds.y == null || nagBounds.y < 0;
+    let xInvalid = nagBounds.x == null || !Number.isFinite( nagBounds.x );
+    let yInvalid = nagBounds.y == null || !Number.isFinite( nagBounds.y );
     if ( widthInvalid || heightInvalid || xInvalid || yInvalid ) {
         log.warn( '[main:createWindow] Main window bounds are invalid. Resetting window bounds.' );
         nagBounds = getDefaultMainWindowBounds();
     }
 
-    // If the main window has any part that is not on any screen, then we need to reset the bounds.
-    const displays = screen.getAllDisplays();
-    let isWindowOutOfBounds = false;
-    displays.forEach( display => {
-        if ( !isWindowOutOfBounds ) {
-            let out = nagBounds.x + nagBounds.width < display.bounds.x || nagBounds.x > display.bounds.x + display.bounds.width || nagBounds.y + nagBounds.height < display.bounds.y || nagBounds.y > display.bounds.y + display.bounds.height;
-            isWindowOutOfBounds = out;
-        }
+    // If the window isn't on any monitor enough for the user to grab it (for
+    // example, the monitor it was on was disconnected), then reset the bounds.
+    const minVisibleWidth = 100;
+    const minVisibleHeight = 50;
+    const isWindowOutOfBounds = !screen.getAllDisplays().some( display => {
+        const area = display.workArea;
+        const visibleWidth = Math.min( nagBounds.x + nagBounds.width, area.x + area.width ) - Math.max( nagBounds.x, area.x );
+        const visibleHeight = Math.min( nagBounds.y + nagBounds.height, area.y + area.height ) - Math.max( nagBounds.y, area.y );
+        return visibleWidth >= minVisibleWidth && visibleHeight >= minVisibleHeight;
     } );
 
     if ( isWindowOutOfBounds ) {
@@ -265,7 +269,7 @@ function createWindow() {
     mainWindow.webContents.once( 'dom-ready', () => {
         sendTick();
         checkForUpdates();
-        setInterval( () => {
+        updateCheckTimer = setInterval( () => {
             checkForUpdates();
         }, updateCheckInterval );
 
@@ -330,7 +334,75 @@ app.on( 'web-contents-created', ( event, contents ) => {
         log.warn( `[main:web-contents-created] Blocked navigation: ${url}` );
         e.preventDefault();
     } );
+    // The address each page was opened with, to reload it from after a crash.
+    // Angular rewrites the address in place (e.g. to file:///F:/#/dashboard),
+    // and reloading that address doesn't find index.html, so it can't be used.
+    contents.on( 'did-navigate', ( e, url ) => pageLoadUrls.set( contents, url ) );
+    contents.on( 'render-process-gone', ( e, details ) => recoverFromPageCrash( contents, details ) );
 } );
+
+/** @type {WeakMap<Electron.WebContents, string>} */
+const pageLoadUrls = new WeakMap();
+
+// The hidden worker windows (log watcher, combat watcher, log backup, scraper)
+// are left to the code that runs them, e.g. the log watcher's hang watchdog
+// crashes and replaces hung watchers on purpose.  Every other window is one of
+// Nag's own pages.  (Those can't be matched by address: once Angular starts,
+// the main window and its dialogs report addresses like file:///F:/#/dashboard.)
+const workerPageRegex = /\/threads\/(log-watcher|combat-watcher|log-backup|scraper-eqsr)\.html/i;
+/** A page that crashes this many times within the time window isn't reloaded again. */
+const pageCrashLimit = 3;
+const pageCrashWindowMs = 60 * 1000;
+/** @type {WeakMap<Electron.WebContents, number[]>} */
+const pageCrashTimes = new WeakMap();
+
+/**
+ * When a window's page process stops (a crash, or ended by Windows), the
+ * window is left blank, and Nag's dialogs have no frame to close them with.
+ * The page is reloaded.  A dialog that keeps crashing is closed instead; the
+ * main window and the overlay window are never closed, since Nag can't work
+ * without them.
+ *
+ * @param {Electron.WebContents} contents The web contents whose page stopped.
+ * @param {Electron.RenderProcessGoneDetails} details Why the page stopped.
+ */
+function recoverFromPageCrash( contents, details ) {
+    if ( app.isQuitting || quitCalled || details.reason === 'clean-exit' ) {
+        return;
+    }
+
+    const win = BrowserWindow.fromWebContents( contents );
+    const url = contents.getURL();
+    if ( !win || win.isDestroyed() || workerPageRegex.test( url ) ) {
+        return;
+    }
+
+    const now = Date.now();
+    const crashTimes = ( pageCrashTimes.get( contents ) ?? [] ).filter( time => now - time < pageCrashWindowMs ).concat( now );
+    pageCrashTimes.set( contents, crashTimes );
+
+    const essential = win === mainWindow || /\/threads\/renderer\.html/i.test( url );
+    const reload = crashTimes.length < pageCrashLimit;
+
+    log.error( `[main:render-process-gone] A window's page stopped (${details.reason}, exit code ${details.exitCode}). ${reload ? 'Reloading it' : essential ? 'It keeps stopping, so it is left as is' : 'It keeps stopping, so it is closed'}: ${url}` );
+
+    if ( reload ) {
+        const loadUrl = pageLoadUrls.get( contents );
+        if ( loadUrl ) {
+            contents.loadURL( loadUrl ).catch( error => log.error( `[main:render-process-gone] Could not reload ${loadUrl}`, error ) );
+        } else {
+            contents.reload();
+        }
+    } else if ( !essential ) {
+        // close(), not destroy(), so the window's own 'close' handlers run
+        // (e.g. the window manager's list of open overlay editors).
+        win.close();
+    }
+
+    if ( win !== mainWindow ) {
+        appLogException( { source: 'Window Error', error: { message: `A window stopped unexpectedly (${details.reason}) and was ${reload ? 'reloaded' : essential ? 'left as is' : 'closed'}.` } } );
+    }
+}
 
 // Deprecated: This event is superceded by the child-process-gone event which contains more information about why the child process disappeared. It isn't always because it crashed. The killed boolean can be replaced by checking reason === 'killed' when you switch to that event.
 // app.on('gpu-process-crashed', (event, killed) => {
@@ -743,11 +815,11 @@ autoUpdater.on( 'update-downloaded', () => {
             window.webContents.send( 'update_downloaded', updateInfo );
         } );
 
-    }
-
-    if ( updateCheckInterval > 0 ) {
-        // Once an update is loaded, stop checking for updates.
-        clearInterval( updateCheckInterval );
+        // The user has been told about this update, so stop checking, or they
+        // would be asked to install the same update again every 10 minutes.
+        clearInterval( updateCheckTimer );
+        updateCheckTimer = null;
+        doUpdateCheck = false;
     }
 } );
 
