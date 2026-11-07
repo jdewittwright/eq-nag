@@ -39,6 +39,21 @@ const defaultTriggerLogRetentionCount = 500;
 /** @type {Record<string, Electron.WebContents[]>} */
 const keySubscribers = {};
 
+/**
+ * Sends the given window the setting's changes.  A window that subscribes
+ * again (e.g. after it reloads) is only added once, so it isn't sent each
+ * change more than once.
+ *
+ * @param {string} key The setting key.
+ * @param {Electron.WebContents} subscriber The window's web contents.
+ */
+function subscribeToSetting( key, subscriber ) {
+    const subscribers = keySubscribers[ key ] ?? ( keySubscribers[ key ] = [] );
+    if ( !subscribers.includes( subscriber ) ) {
+        subscribers.push( subscriber );
+    }
+}
+
 
 /**
  * Get windows drives
@@ -739,8 +754,7 @@ class UserPreferencesStore extends Store {
              */
             ( event, arg ) => {
                 if ( arg.subscribe === true ) {
-                    keySubscribers[ arg.key ] = keySubscribers[ arg.key ] ? keySubscribers[ arg.key ] : [];
-                    keySubscribers[ arg.key ].push( event.sender );
+                    subscribeToSetting( arg.key, event.sender );
                 }
                 return this[ arg.key ];
             } );
@@ -753,8 +767,7 @@ class UserPreferencesStore extends Store {
              */
             ( event, arg ) => {
                 if ( arg.subscribe === true ) {
-                    keySubscribers[ arg.key ] = keySubscribers[ arg.key ] ? keySubscribers[ arg.key ] : [];
-                    keySubscribers[ arg.key ].push( event.sender );
+                    subscribeToSetting( arg.key, event.sender );
                 }
                 event.sender.send( `settings:get:${arg.key}:generic`, this[ arg.key ] );
             } );

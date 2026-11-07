@@ -102,23 +102,46 @@ const classTransformer = {
 
 
 
+/** How long to wait for EQ Spell Resources to send a page. */
+const requestTimeoutMs = 20 * 1000;
+
+/**
+ * Downloads the given page and passes its contents to onLoad.  A network
+ * error, a timeout or an error page is sent to the main process as an error,
+ * so that the scrape always finishes.
+ *
+ * @param {string} url The page to download.
+ * @param {(responseText: string) => void} onLoad Receives the page's contents.
+ */
+function requestPage( url, onLoad ) {
+    let request = new XMLHttpRequest();
+    request.timeout = requestTimeoutMs;
+    request.addEventListener( 'error', () => window.api.ipc.sendError( `Could not reach ${url}.` ) );
+    request.addEventListener( 'timeout', () => window.api.ipc.sendError( `${url} didn't respond within ${requestTimeoutMs / 1000} seconds.` ) );
+    request.addEventListener( 'load', function () {
+        if ( this.status !== 200 ) {
+            window.api.ipc.sendError( `${url} returned an error (${this.status}).` );
+            return;
+        }
+        onLoad( this.responseText );
+    } );
+    request.open( 'GET', url );
+    request.send();
+}
+
 /**
  * Scrapes an item's click information from the given url.
- * 
+ *
  * @param {string} url The resource url.
  */
 function scrapeItemClickInfo( url ) {
-    let request = new XMLHttpRequest();
-    request.addEventListener( 'error', function ( e ) {
-        window.api.ipc.sendError( e );
-    } );
-    request.addEventListener( 'load', function () {
+    requestPage( url, responseText => {
 
         try {
-            
+
             let div = document.createElement( 'div' );
             document.body.appendChild( div );
-            div.innerHTML = window.api.sanitizeHtml( this.responseText );
+            div.innerHTML = window.api.sanitizeHtml( responseText );
 
 
             let effectLine = document.evaluate( "//div[contains(., 'Effect: ')]", document, null, XPathResult.ANY_TYPE, null ).iterateNext()?.textContent?.split( 'Effect: ' )[ 1 ]?.split( /\r\n|\r|\n/gi )[ 0 ]?.trim();
@@ -158,8 +181,6 @@ function scrapeItemClickInfo( url ) {
         }
 
     } );
-    request.open( 'GET', url );
-    request.send();
 }
 
 
@@ -177,18 +198,14 @@ function scrapeItemClickInfo( url ) {
  * @param {string} url The resource url.
  */
 function scrapeSpell( url ) {
-    let request = new XMLHttpRequest();
-    request.addEventListener( 'error', function ( e ) {
-        window.api.ipc.sendError( e );
-    } );
-    request.addEventListener( 'load', function () {
-        
+    requestPage( url, responseText => {
+
         try {
-            
+
 
             let div = document.createElement( 'div' );
             document.body.appendChild( div );
-            div.innerHTML = window.api.sanitizeHtml( this.responseText );
+            div.innerHTML = window.api.sanitizeHtml( responseText );
         
 
             // let test = document.querySelector('tr')
@@ -249,8 +266,6 @@ function scrapeSpell( url ) {
         }
 
     } );
-    request.open( 'GET', url );
-    request.send();
 }
 
 

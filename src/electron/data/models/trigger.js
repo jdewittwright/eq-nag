@@ -715,6 +715,15 @@ class FileModel extends BaseFileModel {
     /** @type {string} */
     physicalName = null;
 
+    /**
+     * The full path of the file this was copied from, for files copied from
+     * the computer (e.g. GINA's sounds).  Null for other files, and for files
+     * stored before this was recorded.
+     *
+     * @type {string|null}
+     */
+    sourcePath = null;
+
 }
 
 class PackageFileModel extends BaseFileModel {

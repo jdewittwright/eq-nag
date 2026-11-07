@@ -37,6 +37,12 @@ export class NewTriggerBuffDialogComponent implements OnInit {
     public readyForImport: boolean = false;
     public selectedItems: ScrapedClickEffect[] = [];
     public loadingItemDetails: boolean = false;
+    /** True while the spell page is being read. */
+    public scraping: boolean = false;
+    /** Why the spell page couldn't be read, if it couldn't. */
+    public scrapeError: string = null;
+    /** Why the selected items' pages couldn't be read, if they couldn't. */
+    public itemDetailsError: string = null;
     public trackType: 'mine' | 'others' = 'mine';
     public lockTrackType: boolean = false;
     public hideTimer: boolean = true;
@@ -104,10 +110,19 @@ export class NewTriggerBuffDialogComponent implements OnInit {
                     this.spell.duration > 600 && this.spell.duration < 900 ? 120 :
                         600;
 
+            this.scraping = false;
             this.stepper.next();
         }
 
-        this.ipcService.scrapeEqSpellResourceSpell( this.url ).subscribe( spell => complete( spell ) );
+        this.scraping = true;
+        this.scrapeError = null;
+        this.ipcService.scrapeEqSpellResourceSpell( this.url ).subscribe( {
+            next: spell => complete( spell ),
+            error: ( message: string ) => {
+                this.scraping = false;
+                this.scrapeError = message;
+            },
+        } );
 
     }
 
@@ -137,13 +152,21 @@ export class NewTriggerBuffDialogComponent implements OnInit {
             }
         } );
 
+        this.itemDetailsError = null;
         if ( observables.length > 0 ) {
-            forkJoin( observables ).subscribe( items => {
-                this.selectedItems = items;
-                this.loadingItemDetails = false;
-                this.stepper.next();
+            forkJoin( observables ).subscribe( {
+                next: items => {
+                    this.selectedItems = items;
+                    this.loadingItemDetails = false;
+                    this.stepper.next();
+                },
+                error: ( message: string ) => {
+                    this.loadingItemDetails = false;
+                    this.itemDetailsError = message;
+                },
             } );
         } else {
+            this.loadingItemDetails = false;
             this.stepper.next();
         }
     }

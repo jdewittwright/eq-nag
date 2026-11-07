@@ -14,6 +14,7 @@ const StringUtilities = require( "../utilities/string" );
 const Fuse = require( 'fuse.js' );
 const { MediaTypes, FileModel, PackageFileModel } = require( './models/trigger' );
 const log = require( 'electron-log' );
+const { createHash } = require( 'crypto' );
 
 const eqSpellPages = 63;
 const eqIconPageSize = 256;
@@ -25,6 +26,36 @@ const filesFolder = 'resource-files';
 // from Nag (see storeFile).
 const packageFileExtensions = new Set( [ '.mp3', '.ogg', '.m4a', '.opus', '.webm', '.aac', '.wav' ] );
 const fileIdRegex = /^[A-Za-z0-9_-]{1,64}$/;
+
+/**
+ * Returns the given path in a form that can be compared: absolute, and
+ * ignoring case on Windows, where paths aren't case sensitive.
+ *
+ * @param {string} filePath The path.
+ */
+function comparablePath( filePath ) {
+    const resolved = path.resolve( filePath );
+    return process.platform === 'win32' ? resolved.toLowerCase() : resolved;
+}
+
+/**
+ * Returns true if the two files have the same contents.  Returns false if
+ * either can't be read.
+ *
+ * @param {string} fileA The first file.
+ * @param {string} fileB The second file.
+ */
+function sameContents( fileA, fileB ) {
+    try {
+        if ( fs.statSync( fileA ).size !== fs.statSync( fileB ).size ) {
+            return false;
+        }
+        const hash = file => createHash( 'sha256' ).update( fs.readFileSync( file ) ).digest( 'hex' );
+        return hash( fileA ) === hash( fileB );
+    } catch {
+        return false;
+    }
+}
 
 class FilesDatabaseStore extends Store {
 
@@ -272,42 +303,71 @@ class FilesDatabaseStore extends Store {
 
     
     /**
-     * Stores the specified filename in the data store, copying the file that 
-     * exists on the computer into the files path.
-     * 
+     * Stores the specified filename in the data store, copying the file that
+     * exists on the computer into the files path.  A file that was already
+     * copied is reused, so many triggers that play the same sound share one
+     * copy of it.
+     *
      * @param {string} filename The full path and name of the desired file.
-     * @returns 
+     * @returns {string|undefined} Returns the id of the stored file, or undefined if it couldn't be stored.
      */
     storeFileByName( filename ) {
 
-        if ( filename ) {
-            let name = path.basename( filename );
-            let existing = _.find( this.#data.files, f => f.fileName === name );
-
-            if ( existing ) {
-                return existing.fileId;
-
-            } else {
-                let id = nanoid();
-                let model = new FileModel();
-            
-                model.fileId = id;
-                model.mediaType = MediaTypes.Audio;
-                model.fileName = name;
-                model.physicalName = path.join( this.#filePath, `${id}${path.extname( name )}` );
-    
-                fs.copyFile( filename, model.physicalName, () => { } );
-    
-                this.#data.files.push( model );
-                this.storeDataFile( this.#data );
-    
-                return id;
-
-            }
-        } else {
+        if ( !filename ) {
             log.error( `[files-database:storeFileByName] Invalid filename: ${filename === undefined ? 'undefined' : filename === null ? 'null' : filename}` );
             return undefined;
         }
+
+        const sourcePath = path.resolve( filename );
+        const name = path.basename( sourcePath );
+        const ext = path.extname( name ).toLowerCase();
+
+        if ( !packageFileExtensions.has( ext ) ) {
+            log.warn( `[files-database:storeFileByName] Skipped a file that isn't a supported sound type: ${sourcePath}` );
+            return undefined;
+        }
+
+        // Reuse the copy of this exact file, if there is one.  Matching on the
+        // name alone isn't enough: different sounds can share a name.
+        const sourceKey = comparablePath( sourcePath );
+        let existing = this.#data.files.find( f => f.sourcePath != null && comparablePath( f.sourcePath ) === sourceKey );
+
+        // Files stored before source paths were recorded only have their name,
+        // so one with the same name is reused only if its contents match too.
+        if ( !existing ) {
+            existing = this.#data.files.find( f => f.sourcePath == null && f.fileName === name && this.isInFilesFolder( f.physicalName ) && sameContents( f.physicalName, sourcePath ) );
+            if ( existing ) {
+                existing.sourcePath = sourcePath;
+                this.storeDataFile( this.#data );
+            }
+        }
+
+        if ( existing ) {
+            return existing.fileId;
+        }
+
+        let id = nanoid();
+        let model = new FileModel();
+
+        model.fileId = id;
+        model.mediaType = MediaTypes.Audio;
+        model.fileName = name;
+        model.physicalName = path.join( this.#filePath, `${id}${ext}` );
+        model.sourcePath = sourcePath;
+
+        // Copy before saving the entry, so a file that's missing or can't be
+        // read doesn't leave an entry pointing at nothing.
+        try {
+            fs.copyFileSync( sourcePath, model.physicalName );
+        } catch ( error ) {
+            log.error( `[files-database:storeFileByName] Could not copy ${sourcePath}.`, error );
+            return undefined;
+        }
+
+        this.#data.files.push( model );
+        this.storeDataFile( this.#data );
+
+        return id;
     }
 
 

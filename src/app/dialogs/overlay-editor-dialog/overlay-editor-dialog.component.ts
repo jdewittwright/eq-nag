@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener, ChangeDetectionStrategy } from '@angular/core';
 import { IpcService } from 'src/app/ipc.service';
-import { OverlayWindowModel, ActionTypes, TriggerAction, TimerSortTypes, TimerRestartBehaviors, StylePropertiesModel } from 'src/app/core.model';
+import { OverlayWindowModel, ActionTypes, TriggerAction, TimerSortTypes, TimerRestartBehaviors, StylePropertiesModel, TextOverflowModel } from 'src/app/core.model';
 import { ActivatedRoute } from '@angular/router';
 import { ThemePalette } from '@angular/material/core';
 import { AbstractControl, FormControl } from '@angular/forms';
@@ -139,7 +139,10 @@ export class OverlayEditorDialogComponent implements OnInit {
                 this.ipcService.getOverlayWindow( this.overlayId ).subscribe( overlay => {
                     
                     this.ipcService.enableOverlayEditMode( this.overlayId );
-                    this._noChangesModel = Object.assign( new OverlayWindowModel(), overlay );
+                    // Overlays saved without text overflow settings (null) use the defaults.
+                    overlay.textOverflow = Object.assign( new TextOverflowModel(), overlay.textOverflow );
+                    // The editor changes textOverflow in place, so cancel needs its own copy to revert to.
+                    this._noChangesModel = Object.assign( new OverlayWindowModel(), overlay, { textOverflow: Object.assign( new TextOverflowModel(), overlay.textOverflow ) } );
                     this.model = overlay;
                     this.enterDescription = this.model.description?.length > 0;
 

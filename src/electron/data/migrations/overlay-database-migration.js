@@ -8,7 +8,7 @@ const nanoid = customAlphabet( alphabet, 16 );
 const { StyleProperties } = require( '../models/common' );
 const ElectronUtilities = require( '../../utilities/electron' );
 
-const currentOverlayDbVersion = 19;
+const currentOverlayDbVersion = 20;
 
 /**
  * 
@@ -310,6 +310,21 @@ function executeDataMigration( data ) {
         } );
 
         data.version = 19;
+
+    }
+    if ( !data.version || data.version < 20 ) {
+        log.log( '[Migrations] Migrating overlay database to version -> 20.' );
+
+        // Overlays added after version 18 (e.g. from older packages and
+        // shares) could still be missing their text overflow settings, which
+        // broke the overlay editor.
+        data.overlays?.forEach( overlay => {
+            if ( overlay ) {
+                overlay.textOverflow = Object.assign( new TextOverflowModel(), overlay.textOverflow );
+            }
+        } );
+
+        data.version = 20;
 
     }
 

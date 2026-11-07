@@ -259,7 +259,8 @@
         const urlParams = new URLSearchParams(window.location.search);
         var DeathRecap = window.api.getDeathRecap();
         let lineNo = urlParams.get('lineNo') === 'last' ? null : +urlParams.get('lineNo');
-        DeathRecap(decodeURI(urlParams.get('logFilePath')), lineNo > 0 || lineNo === null ? lineNo : -1, decodeURI(urlParams.get('messageId')), decodeURI(urlParams.get('characterName')), decodeURI(urlParams.get('serverName')), decodeURI(urlParams.get('takp')) === '1');
+        // URLSearchParams has already decoded the values; decoding them again would change any % in them.
+        DeathRecap(urlParams.get('logFilePath'), lineNo > 0 || lineNo === null ? lineNo : -1, urlParams.get('messageId'), urlParams.get('characterName'), urlParams.get('serverName'), urlParams.get('takp') === '1');
     </script>
 
     <section class="body">
