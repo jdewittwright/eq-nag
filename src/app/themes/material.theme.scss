@@ -61,6 +61,13 @@ html {
     .mat-mdc-form-field {
         --mat-form-field-filled-container-color: transparent;
         --mat-form-field-filled-disabled-container-color: transparent;
+
+        // The text cursor took the primary color (purple 700, #7b1fa2), which
+        // barely shows on Nag's dark fields; so did the legacy theme's.  Match
+        // the white text instead.  Accent and error fields keep their own
+        // (more specific) green and red cursors.
+        --mat-form-field-filled-caret-color: #fff;
+        --mat-form-field-outlined-caret-color: #fff;
     }
 
     // The legacy fields took the font size of the text around them; MDC sets

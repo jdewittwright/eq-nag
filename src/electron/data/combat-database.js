@@ -11,6 +11,7 @@ const ForwardRef = require( "../forward-ref" );
 const fsp = fs.promises;
 const log = require( 'electron-log' );
 const { migrateCombatData } = require( "./migrations/combat-database-migration" );
+const { normalizeServerName } = require( "../utilities/server-names" );
 // TODO: Unzip with: https://github.com/max-mapper/extract-zip
 const archiver = require( 'archiver' );
 
@@ -45,7 +46,7 @@ As important: only players can kill NPCs.
 
 class CombatDatabase extends Store {
 
-    /** @type {Record<string, Electron.WebContents>} */
+    /** @type {Record<string, {sender: Electron.WebContents, serverName: string}>} */
     #serverDataListeners = {};
 
     /** The data store for this object.
@@ -94,7 +95,9 @@ class CombatDatabase extends Store {
              */
             ( event, serverName ) => {
                 event.sender.send( `combat-database:get-server:${serverName}`, this.getOrInitServer( serverName ) );
-                this.#serverDataListeners[ serverName ] = event.sender;
+                // Kept by the stored form of the name, along with the name the
+                // listener asked with, which its reply channel uses.
+                this.#serverDataListeners[ normalizeServerName( serverName ) ] = { sender: event.sender, serverName: serverName };
             } );
 
         ipcMain.on( 'combat-database:get-server-names',
@@ -122,8 +125,9 @@ class CombatDatabase extends Store {
             async ( event, server ) => {
                 await this.putServer( server );
 
-                if ( this.#serverDataListeners[ server.server ] && this.#serverDataListeners[ server.server ] != event.sender ) {
-                    this.#serverDataListeners[ server.server ].send( `combat-database:get-server:${server.server}`, server );
+                const listener = this.#serverDataListeners[ server.server ];
+                if ( listener && listener.sender != event.sender && !listener.sender.isDestroyed() ) {
+                    listener.sender.send( `combat-database:get-server:${listener.serverName}`, server );
                 }
             } );
 
@@ -242,6 +246,7 @@ class CombatDatabase extends Store {
      * @param {ServerCombatModel} server The server combat model.
      */
     async putServer( server ) {
+        server.server = normalizeServerName( server.server );
         let index = this.#data.servers.findIndex( f => f.server === server.server );
         if ( index >= 0 ) {
             this.#data.servers[ index ] = server;
@@ -268,6 +273,7 @@ class CombatDatabase extends Store {
      * @param {string} serverName The name of the server.
      */
     getOrInitServer( serverName ) {
+        serverName = normalizeServerName( serverName );
         let server = this.#data.servers.find( f => f.server === serverName );
         if ( !server ) {
             server = new ServerCombatModel();

@@ -9,6 +9,7 @@ const nanoid = customAlphabet( alphabet, 16 );
 const { CharacterModel, CharacterStoreModel, TriggersProfileModel } = require( "./models/character" );
 const fs = require( 'fs' );
 const { migrateCharacterData } = require( "./migrations/character-database-migration" );
+const { normalizeServerName, thjServerName } = require( "../utilities/server-names" );
 
 /** @type {((character: CharacterModel) => void)[]} */
 var onCreatedHandlers = [];
@@ -66,6 +67,7 @@ class CharacterDatabaseStore extends Store {
 
         // Generate a new id for the character.
         character.characterId = nanoid();
+        character.server = normalizeServerName( character.server );
 
         // Add it to the store.
         this.#data.characters.push( character );
@@ -213,6 +215,7 @@ class CharacterDatabaseStore extends Store {
 
         // If the index is valid, then update the found character.
         if ( i > -1 && i < this.#data?.characters?.length ) {
+            character.server = normalizeServerName( character.server );
             this.#data.characters[ i ] = character;
 
             // Save changes to the data.
@@ -259,6 +262,7 @@ class CharacterDatabaseStore extends Store {
      * @param {string} server The name of the server.
      */
     findCharacterByNameAndServer( name, server ) {
+        server = normalizeServerName( server );
         return this.#data.characters.find( c => c.name === name && c.server === server );
     }
 
@@ -547,15 +551,18 @@ class CharacterDatabaseStore extends Store {
             files.forEach( file => {
                 let results = /eqlog_(?<Character>.*)_(?<Server>[a-z]*)\.txt$/gi.exec( file );
                 if ( results != null && results?.groups?.Character != null && results?.groups?.Server != null ) {
-                    const thj = results.groups.Server === 'thj';
-                    const key = thj ? 'The Heroe\'s Journey' : results.groups.Server.toUpperCase();
+                    const thj = results.groups.Server.toLowerCase() === 'thj';
+                    // The upper-case name is only the heading the list groups
+                    // characters under; the character stores the normal form,
+                    // the same as every other character on that server.
+                    const key = thj ? thjServerName : results.groups.Server.toUpperCase();
                     if ( dictionary[ key ] == null ) {
                         dictionary[ key ] = [];
                     }
                     let option = {};
 
                     option.name = results.groups.Character;
-                    option.server = key;
+                    option.server = normalizeServerName( results.groups.Server );
                     option.logFile = `${logsPath}\\${file}`;
                     option.thj = thj === true;
                     option.daybreak = thj === false && results.groups.Server !== 'p99';

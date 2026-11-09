@@ -1,10 +1,11 @@
 const { CharacterStoreModel } = require( '../models/character' );
 const { backupDatafile } = require( './backup-data-file' );
+const { normalizeServerName } = require( '../../utilities/server-names' );
 const customAlphabet = require( 'nanoid' ).customAlphabet;
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const nanoid = customAlphabet( alphabet, 16 );
 
-const currentCharacterDbVersion = 13;
+const currentCharacterDbVersion = 14;
 
 /**
  * 
@@ -125,6 +126,21 @@ function executeDataMigration( data ) {
         } );
 
         data.version = 13;
+
+    }
+    if ( !data.version || data.version < 14 ) {
+        // Characters picked from the log file list were saved with their
+        // server in upper case (and THJ as "The Heroe's Journey"), while other
+        // characters on the same server were saved in lower case.  Server
+        // names are compared exactly, so those characters didn't share combat
+        // data with the rest of the server.
+        data?.characters?.forEach( f => {
+            if ( f ) {
+                f.server = normalizeServerName( f.server );
+            }
+        } );
+
+        data.version = 14;
 
     }
 
