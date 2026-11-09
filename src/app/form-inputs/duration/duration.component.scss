@@ -38,6 +38,23 @@
             width: 20px;
             height: 20px;
             line-height: 20px;
+
+            // MDC icon buttons pad themselves out to a 40px size and draw a
+            // 24px icon, which pushed the icon 8px right and down out of this
+            // 20px button and over the edge of the box.  Center a smaller icon
+            // instead, and keep the ripple to the button's size.
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            --mat-icon-button-state-layer-size: 20px;
+            --mat-icon-button-icon-size: 16px;
+
+            // The 48px touch target around each button covered the top and
+            // bottom of the number box, so clicking there pressed the button.
+            ::ng-deep .mat-mdc-button-touch-target {
+                display: none;
+            }
         }
         box-sizing: border-box;
         position: relative;

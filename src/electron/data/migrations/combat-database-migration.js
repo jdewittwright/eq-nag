@@ -1,11 +1,57 @@
 const path = require( 'path' );
 const { CombatDb } = require( '../models/combat-parser' );
 const { backupDatafile } = require( './backup-data-file' );
+const { normalizeServerName } = require( '../../utilities/server-names' );
 const fs = require( 'fs' );
 const fsp = fs.promises;
 const electron = require( 'electron' );
 
-const combatDbVersion = 2;
+const combatDbVersion = 3;
+
+/**
+ * Merges server records whose names differ only in how they were written
+ * (e.g. "FROSTREAVER" and "frostreaver"), and stores every server name in its
+ * normal form.  Characters picked from the log file list were saved with their
+ * server in upper case, so their combat data went to a separate record.
+ * Where both records have an entry for the same player or pet, the record that
+ * already used the normal name wins.
+ *
+ * @param {CombatDb} data The combat database.
+ */
+function mergeServersByNormalName( data ) {
+    /** @type {Record<string, any>} */
+    const merged = {};
+
+    // Records already using the normal name go first, so their entries win.
+    const servers = ( data.servers ?? [] ).filter( s => s != null );
+    const ordered = [
+        ...servers.filter( s => s.server === normalizeServerName( s.server ) ),
+        ...servers.filter( s => s.server !== normalizeServerName( s.server ) ),
+    ];
+
+    for ( const server of ordered ) {
+        const name = normalizeServerName( server.server );
+        const target = merged[ name ];
+        if ( !target ) {
+            server.server = name;
+            merged[ name ] = server;
+            continue;
+        }
+        target.verifiedPlayers = { ...( server.verifiedPlayers ?? {} ), ...( target.verifiedPlayers ?? {} ) };
+        target.petOwners = { ...( server.petOwners ?? {} ), ...( target.petOwners ?? {} ) };
+        target.verifiedNpcs = [ ...new Set( [ ...( target.verifiedNpcs ?? [] ), ...( server.verifiedNpcs ?? [] ) ] ) ];
+        target.verifiedPets = [ ...new Set( [ ...( target.verifiedPets ?? [] ), ...( server.verifiedPets ?? [] ) ] ) ];
+    }
+
+    // Keep the records in their original order.
+    data.servers = servers.filter( s => merged[ s.server ] === s );
+
+    data.encounters?.forEach( encounter => {
+        if ( encounter ) {
+            encounter.serverName = normalizeServerName( encounter.serverName );
+        }
+    } );
+}
 
 /**
  * 
@@ -78,10 +124,10 @@ async function executeDataMigration( data ) {
         
         data.version = 2;
     }
-    // if ( !data.version || data.version < 3 ) {
-        
-    //     data.version = 3;
-    // }
+    if ( !data.version || data.version < 3 ) {
+        mergeServersByNormalName( data );
+        data.version = 3;
+    }
 
     return data.version !== startVersion;
 }
