@@ -3,7 +3,27 @@
 Each version's section is written to be pasted into its GitHub release
 description, which Nag shows in the Update Notes window.
 
-## v0.3.4 (unreleased)
+## v0.3.6 (unreleased)
+
+### Fixes
+- **Characters added from the log file list now share their server with your other characters.** Since v0.3.0, a character picked from the list was saved with its server in capitals (such as "FROSTREAVER"), which Nag treated as a different server from "frostreaver". That character's combat data was kept separately, and it didn't recognize your other characters or their pets on the same server. The Heroes Journey had the same problem. Nag now saves server names one way, and fixes existing characters and combat data automatically the first time it starts, keeping a backup of each file first.
+- **The text cursor is easy to see.** It was dark purple and barely showed on Nag's dark text boxes. It's now white, like the text.
+- **The + and − buttons on durations are lined up again.** In timer and other duration settings, they were shifted down and to the right, overlapping the edges of the boxes.
+
+## v0.3.5
+
+### Fixes
+- **The update prompt no longer comes back every 10 minutes.** Nag kept checking for updates after one had downloaded, and could ask you to install the same update again.
+- **Nag opens where you left it on a second monitor.** It moved back to the main monitor on every start if you had more than one, especially when the other monitor is to the left of or above the main one.
+- **Nag's windows no longer load the wrong data.** When several things loaded at once, a window could be given the answer meant for another request, such as the wrong trigger or overlay.
+- **Windows recover if they crash.** A window whose page stopped was left blank, and Nag's dialogs have no frame to close them with. Nag now reloads it, and closes a dialog that keeps crashing.
+- **The overlay editor works for overlays from older packages and shares.** Their text overflow settings were missing, which caused errors and broke those controls. Cancel now also undoes changes to text overflow.
+- **EQ Spell Resources imports no longer hang.** If the site was slow, unreachable or returned an error, the DoT and Buff generators could wait forever. They now give up after 20 seconds and show what went wrong, so you can try again.
+- **Folders with &, #, + or % in their names work.** If your EverQuest folder or log files were in such a folder (for example "D:\Games & Mods\EverQuest"), that character's triggers didn't run, and log backups and the death recap could get the wrong path.
+- **The death recap recognizes your characters and pets.** It wasn't given the character's server, so it couldn't look them up.
+- **GINA sounds with the same file name are imported separately.** Two different sounds called "alert.wav" in different folders both became the first one. Missing files, and files that aren't sounds, are now skipped instead of leaving a trigger with a sound that doesn't exist.
+
+## v0.3.4
 
 ### Changes
 - **Nag's windows are built on a current version of Angular.** Angular is the framework behind everything you see in Nag, and the version it used (14) stopped getting security fixes in late 2023. Nag now uses Angular 22. Your triggers, overlays and settings are unchanged, and nothing needs to be set up again.
