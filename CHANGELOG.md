@@ -12,7 +12,7 @@ description, which Nag shows in the Update Notes window.
 - **The overlay window and death recap only get what they need.** Their pages could call every function behind them. The overlay page can now only open the combat settings and turn encounter recording on or off, and the death recap page can't call anything.
 - **Windows can only change real settings.** A window could change any part of Nag's settings storage by name, including parts that aren't settings. Nag now only accepts the settings its windows actually use, and ignores anything else.
 
-## v0.3.6 (unreleased)
+## v0.3.6
 
 ### Fixes
 - **Characters added from the log file list now share their server with your other characters.** Since v0.3.0, a character picked from the list was saved with its server in capitals (such as "FROSTREAVER"), which Nag treated as a different server from "frostreaver". That character's combat data was kept separately, and it didn't recognize your other characters or their pets on the same server. The Heroes Journey had the same problem. Nag now saves server names one way, and fixes existing characters and combat data automatically the first time it starts, keeping a backup of each file first.
