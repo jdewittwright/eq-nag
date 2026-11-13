@@ -36,10 +36,19 @@ function createWorkFolder() {
  *
  * @param {{webSocketDebuggerUrl: string}} target The target to connect to.
  * @param {string[]} [errors] Receives errors the target reports.
+ * @param {{isolated?: boolean}} [options] isolated: run code in the window's preload world instead of its page.
  */
-async function open( target, errors ) {
+async function open( target, errors, { isolated = false } = {} ) {
     const { connect } = await import( '../../../tools/perf/cdp.mjs' );
     const cdp = await connect( target );
+    // Electron runs preloads in their own world, which Runtime.enable lists as a context.
+    let isolatedContextId;
+    if ( isolated ) {
+        cdp.ws.addEventListener( 'message', event => {
+            const m = JSON.parse( event.data );
+            if ( m.method === 'Runtime.executionContextCreated' && m.params.context.name === 'Electron Isolated Context' ) isolatedContextId = m.params.context.id;
+        } );
+    }
     if ( errors ) {
         cdp.ws.addEventListener( 'message', event => {
             const m = JSON.parse( event.data );
@@ -50,12 +59,13 @@ async function open( target, errors ) {
         await cdp.send( 'Log.enable' );
     }
     await cdp.send( 'Runtime.enable' );
+    if ( isolated && isolatedContextId == null ) throw new Error( `No preload world in ${target.url}` );
     return {
         send: cdp.send,
         close: cdp.close,
         eval: async ( expression, timeout = 15000 ) => {
             const r = await Promise.race( [
-                cdp.send( 'Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true, includeCommandLineAPI: true } ),
+                cdp.send( 'Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true, includeCommandLineAPI: true, ...( isolated ? { contextId: isolatedContextId } : {} ) } ),
                 sleep( timeout ).then( () => ( { timedOut: true } ) ),
             ] );
             if ( r.timedOut ) throw new Error( `Timed out evaluating: ${expression.slice( 0, 80 )}` );
@@ -73,7 +83,7 @@ async function open( target, errors ) {
  */
 async function start( exe, profile ) {
     const { targets } = await import( '../../../tools/perf/cdp.mjs' );
-    const child = spawn( exe, [ `--user-data-dir=${profile}`, `--remote-debugging-port=${devToolsPort}`, `--inspect=${inspectPort}` ], { stdio: 'ignore', env: { ...process.env, NAG_NO_UPDATES: '1', NAG_NO_FOCUS: '1' } } );
+    const child = spawn( exe, [ `--user-data-dir=${profile}`, `--remote-debugging-port=${devToolsPort}`, `--inspect=${inspectPort}` ], { stdio: 'ignore', env: { ...process.env, NAG_NO_UPDATES: '1', NAG_NO_FOCUS: '1', NAG_E2E: '1' } } );
     const pages = async () => ( await targets( devToolsPort ) ).filter( t => t.type === 'page' );
     const app = { child, pages, profile };
 
@@ -94,7 +104,8 @@ async function start( exe, profile ) {
     app.rendererErrors = [];
     app.renderer = await open( renderer, app.rendererErrors );
     app.ui = await open( main );
-    app.combat = await open( combat );
+    // The combat watcher's code runs in its preload, so the tests run theirs there too.
+    app.combat = await open( combat, undefined, { isolated: true } );
     app.node = await open( ( await targets( inspectPort ) )[ 0 ] );
 
     /** Runs code in the main process, where `electron` and `dialog` are available. */

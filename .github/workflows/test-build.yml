@@ -67,6 +67,8 @@ jobs:
         run: |
           git checkout -- src/electron/utilities/perf-taps.js
           echo '{}' > src/electron/utilities/perf-always-on.json
+          # The sandboxed windows' preloads bundle the taps, so bundle them again.
+          npm run build:preloads
           rm -rf electron/output
           npx electron-builder build --win portable --publish never
           if ! npx asar list electron/output/win-unpacked/resources/app.asar | grep -q 'perf-always-on'; then

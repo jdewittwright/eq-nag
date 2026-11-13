@@ -13,7 +13,7 @@ const PNG = require( 'pngjs' ).PNG;
 const eqSpellPages = 63;
 const eqIconPageSize = 256;
 const eqIconSize = 40;
-var userDataPath = ( electron.app || electron.remote.app ).getPath( 'userData' );
+var userDataPath = electron.app.getPath( 'userData' );
 
 class GameResources {
 

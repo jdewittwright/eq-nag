@@ -525,7 +525,7 @@ function parseDictionaryKeys( value ) {
     let keys = [ ...value.matchAll( /(?<=\[)(.*?)(?=\])/g ) ];
     /** @type {string[]} */
     let output = [];
-    for ( let i = 0; i < keys?.length ?? 0; i++ ) {
+    for ( let i = 0; i < ( keys?.length ?? 0 ); i++ ) {
         let key = keys[ i ][ 1 ];
         if ( key ) {
             output.push( key );

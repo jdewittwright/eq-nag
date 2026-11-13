@@ -3,7 +3,16 @@
 Each version's section is written to be pasted into its GitHub release
 description, which Nag shows in the Update Notes window.
 
-## v0.3.6 (unreleased)
+## v0.4.0 (unreleased)
+
+### Security
+- **Log lines from other players can no longer reach code with full access to your computer.** The hidden windows that read your logs, track combat and back up logs could run anything with Nag's full access to your files, and had the browser's usual protections turned off. Nothing in them was known to be exploitable, but they handle chat that anyone in game can type, so one small mistake could have let a message run code. Their work now happens apart from the page, with the protections back on, and the pages are blocked from running any script.
+- **Nag's windows now run in Chromium's sandbox.** The main window, settings, editors, dialogs and the overlay window are now restricted like web pages in a browser, so a problem in one of them can't reach your files. The death recap still runs outside the sandbox for now, because it reads your log file itself.
+- **Removed the outdated "remote" module.** It let Nag's windows control the app directly, which Electron advises against. The few things it was used for (closing a window, letting clicks pass through overlays, finding the mouse and the screen size) now go through Nag's main process, which only acts on the window that asked.
+- **The overlay window and death recap only get what they need.** Their pages could call every function behind them. The overlay page can now only open the combat settings and turn encounter recording on or off, and the death recap page can't call anything.
+- **Windows can only change real settings.** A window could change any part of Nag's settings storage by name, including parts that aren't settings. Nag now only accepts the settings its windows actually use, and ignores anything else.
+
+## v0.3.6
 
 ### Fixes
 - **Characters added from the log file list now share their server with your other characters.** Since v0.3.0, a character picked from the list was saved with its server in capitals (such as "FROSTREAVER"), which Nag treated as a different server from "frostreaver". That character's combat data was kept separately, and it didn't recognize your other characters or their pets on the same server. The Heroes Journey had the same problem. Nag now saves server names one way, and fixes existing characters and combat data automatically the first time it starts, keeping a backup of each file first.

@@ -1,4 +1,4 @@
-const activeWindow = require( 'active-win' );
+// active-win is only used for types here; loading it would pull a native module into the overlay window.
 const StringUtilities = require( '../../utilities/string' );
 const { DpsMeterSettings } = require( './combat-parser' );
 
@@ -333,7 +333,7 @@ class WinInfo {
 
     /**
      * 
-     * @param {activeWindow.Result} window The active window.
+     * @param {import('active-win').Result} window The active window.
      * @param {number} nagPid The process id of the nag window.
      */
     constructor( window, nagPid ) {

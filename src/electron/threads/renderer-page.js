@@ -1,6 +1,4 @@
-const urlParams = new URLSearchParams( window.location.search );
-var Renderer = window.api.getRenderer();
-var data = Renderer( +urlParams.get( 'originX' ), +urlParams.get( 'originY' ), urlParams.get('glowOnStart') === 'true' );
+// The overlays themselves are drawn by preloaders/renderer.js.
 
 var recordEncounters = false;
 function toggleRecordEncounters() {

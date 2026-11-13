@@ -11,7 +11,7 @@ const FsUtilities = require( '../../utilities/file-system' );
  * @param {(backupFile: string) => void} onComplete Executed when the operation succeeds.
  */
 function backupDatafile( configName, onComplete ) {
-    const userDataPath = ( electron.app || electron.remote.app ).getPath( 'userData' );
+    const userDataPath = electron.app.getPath( 'userData' );
     const fullFileName = path.join( userDataPath, configName + '.json' );
     const backupFolder = 'migrations_backup';
 

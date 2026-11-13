@@ -6,7 +6,8 @@ const ArrayUtilities = require( '../utilities/arrays' );
 const { OverlayDimensions, OverlayWindow, OverlayComponent, TimerSortTypes, TriggerSecondaryActionModel, FctCombatGroup, CombatTypes, getCombatModifiersFlags, HitStartPositionTypes, DisplayMetaModel } = require( '../data/models/overlay-window' );
 const { ActionTypes, TriggerAction, TriggerConditionTypes, OperatorTypes, TimerRestartBehaviors } = require( '../data/models/trigger' );
 const { ipcRenderer } = require( 'electron' );
-const Handlebars = require( "handlebars" );
+// The prebuilt copy, because the package's main file loads Node modules, which the overlay window's sandbox doesn't allow.
+const Handlebars = require( "handlebars/dist/cjs/handlebars" );
 const { sanitizeHtml } = require( '../utilities/html' );
 const perf = require( '../utilities/perf' );
 const _ = require( 'lodash' );
@@ -17,7 +18,7 @@ const StyleSheetUtil = require( '../utilities/style-sheet' );
 const { FctStylesModel, FctModel, FctTypes, FctRenderComponent, HitAccumulationModel } = require( '../data/models/fct' );
 const ElectronUtilities = require( '../utilities/electron' );
 const { StyleProperties, WinInfo } = require( '../data/models/common' );
-const { getCurrentWindow, screen } = require( '@electron/remote' );
+const DisplayUtilities = require( '../utilities/display' );
 const { DateUtilities } = require( '../utilities/dates' );
 const { SharedTriggerPermissions } = require( '../data/models/sharing-service' );
 const { StylePropertiesModel } = require( '../data/models/core' );
@@ -584,7 +585,7 @@ function createDpsWindow() {
 
     let databaseBtn = div.querySelector( '.database-dropdown-menu' );
     if ( databaseBtn ) {
-        databaseBtn.addEventListener( 'click', () => {
+        databaseBtn.addEventListener( 'click', ( clickEvent ) => {
             let menuObject = {
                 menuItems: [
                     {
@@ -625,7 +626,8 @@ function createDpsWindow() {
             document.body.appendChild( menuDiv );
 
             let dropdown = menuDiv.firstElementChild;
-            let mouseCoords = MouseUtilities.getMouseUpdate();
+            // The click's screen position, which is where the cursor is.
+            let mouseCoords = { x: clickEvent.screenX, y: clickEvent.screenY };
             const mousePadding = 15;
             dropdown.style.left = ( mouseCoords.x - mousePadding + origin.x ) + 'px';
             dropdown.style.top = ( mouseCoords.y - mousePadding + origin.y ) + 'px';
@@ -935,6 +937,28 @@ function renderDpsItems( characterName ) {
 
 
 /**
+ * Runs the callback now if the page has loaded, otherwise once it has.
+ *
+ * @param {() => void} fn The callback.
+ */
+function whenDomReady( fn ) {
+    if ( document.readyState === 'loading' ) {
+        document.addEventListener( 'DOMContentLoaded', fn );
+    } else {
+        fn();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/**
  * Initializes and starts the rendering system.
  * 
  * @param {number} originX The origin x of the main monitor.
@@ -946,7 +970,9 @@ function Renderer( originX, originY, glowOnStart ) {
     origin.x = originX;
     origin.y = originY;
 
-    DomUtilities.docReady( f => {
+    // The preload starts the renderer once the page has loaded, so this runs
+    // right away then, before the main process's first messages arrive.
+    whenDomReady( f => {
 
         // Dynamic menu item handlers
         document.addEventListener( 'click', ( ev ) => {
@@ -1096,8 +1122,8 @@ function Renderer( originX, originY, glowOnStart ) {
                             dpsWindow.style.height = '350px';
     
                             // center element on main monitor
-                            dpsWindow.style.left = ( origin.x + ( screen.getPrimaryDisplay().workArea.width / 2 ) - ( dpsWindow.offsetWidth / 2 ) ) + 'px';
-                            dpsWindow.style.top = ( origin.y + ( screen.getPrimaryDisplay().workArea.height / 2 ) - ( dpsWindow.offsetHeight / 2 ) ) + 'px';
+                            dpsWindow.style.left = ( origin.x + ( DisplayUtilities.getPrimaryDisplay().workArea.width / 2 ) - ( dpsWindow.offsetWidth / 2 ) ) + 'px';
+                            dpsWindow.style.top = ( origin.y + ( DisplayUtilities.getPrimaryDisplay().workArea.height / 2 ) - ( dpsWindow.offsetHeight / 2 ) ) + 'px';
 
                             // Re-engage move/resize.
                             disableMoveResize( dpsWindow );
@@ -1122,8 +1148,8 @@ function Renderer( originX, originY, glowOnStart ) {
                     dpsWindow.style.height = '350px';
 
                     // center element on main monitor
-                    dpsWindow.style.left = ( origin.x + ( screen.getPrimaryDisplay().workArea.width / 2 ) - ( dpsWindow.offsetWidth / 2 ) ) + 'px';
-                    dpsWindow.style.top = ( origin.y + ( screen.getPrimaryDisplay().workArea.height / 2 ) - ( dpsWindow.offsetHeight / 2 ) ) + 'px';
+                    dpsWindow.style.left = ( origin.x + ( DisplayUtilities.getPrimaryDisplay().workArea.width / 2 ) - ( dpsWindow.offsetWidth / 2 ) ) + 'px';
+                    dpsWindow.style.top = ( origin.y + ( DisplayUtilities.getPrimaryDisplay().workArea.height / 2 ) - ( dpsWindow.offsetHeight / 2 ) ) + 'px';
                 }
 
                 dpsWindow.style.display = 'block';
@@ -1997,8 +2023,8 @@ function renderToken( token ) {
             listDiv.style.minWidth = listObj.bounds.width + 'px';
         } else {
             // center element on main monitor
-            listDiv.style.left = ( origin.x + ( screen.getPrimaryDisplay().workArea.width / 2 ) - ( listDiv.offsetWidth / 2 ) ) + 'px';
-            listDiv.style.top = ( origin.y + ( screen.getPrimaryDisplay().workArea.height / 2 ) - ( listDiv.offsetHeight / 2 ) ) + 'px';
+            listDiv.style.left = ( origin.x + ( DisplayUtilities.getPrimaryDisplay().workArea.width / 2 ) - ( listDiv.offsetWidth / 2 ) ) + 'px';
+            listDiv.style.top = ( origin.y + ( DisplayUtilities.getPrimaryDisplay().workArea.height / 2 ) - ( listDiv.offsetHeight / 2 ) ) + 'px';
         }
 
         enableMoveResize( listDiv, listDiv.querySelector( '.list-container' ), bounds => {
@@ -2605,7 +2631,7 @@ function getRenderGroup( model ) {
     /** @type {FctCombatGroup | undefined} */
     let renderGroup = undefined;
 
-    for ( let i = 0; i < combatGroups?.length ?? 0; i++ ) {
+    for ( let i = 0; i < ( combatGroups?.length ?? 0 ); i++ ) {
         const group = combatGroups[ i ];
 
         if ( ( model.combatTypesFlags & group._combatTypesFlags ) === model.combatTypesFlags && !groupIgnoresHit( model.characterId, group, model.amount ) ) {
@@ -3766,8 +3792,8 @@ function renderListAction( component, restore ) {
         component.dom.style.minWidth = listObj.bounds.width + 'px';
     } else {
         // Put it on the center of the main monitor.
-        component.dom.style.left = ( screen.getPrimaryDisplay().workArea.width / 2 ) - ( component.dom.offsetWidth / 2 ) + 'px';
-        component.dom.style.top = ( screen.getPrimaryDisplay().workArea.height / 2 ) - ( component.dom.offsetHeight / 2 ) + 'px';
+        component.dom.style.left = ( DisplayUtilities.getPrimaryDisplay().workArea.width / 2 ) - ( component.dom.offsetWidth / 2 ) + 'px';
+        component.dom.style.top = ( DisplayUtilities.getPrimaryDisplay().workArea.height / 2 ) - ( component.dom.offsetHeight / 2 ) + 'px';
     }
 
     // Re-apply the css classes
@@ -5297,7 +5323,7 @@ function renderGlow( color, duration, flash ) {
     duration = flash && duration % 2000 > 0 ? duration + ( 2000 - duration % 2000 ) : duration;
 
     if ( !screenGlower ) {
-        let bounds = screen.getPrimaryDisplay().bounds;
+        let bounds = DisplayUtilities.getPrimaryDisplay().bounds;
         let content = createElement( 'div' );
 
         // box-shadow: inset 0 0 30px #00f;

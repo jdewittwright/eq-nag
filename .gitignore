@@ -59,3 +59,6 @@ electron/*
 __pycache__/
 # Created only by the Test build workflow for its perf portable.
 src/electron/utilities/perf-always-on.json
+
+# Bundled sandboxed preloads (npm run build:preloads)
+/src/electron/preloaders/build
