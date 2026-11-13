@@ -12,6 +12,12 @@ description, which Nag shows in the Update Notes window.
 - **The overlay window and death recap only get what they need.** Their pages could call every function behind them. The overlay page can now only open the combat settings and turn encounter recording on or off, and the death recap page can't call anything.
 - **Windows can only change real settings.** A window could change any part of Nag's settings storage by name, including parts that aren't settings. Nag now only accepts the settings its windows actually use, and ignores anything else.
 
+### Fixes
+- **The death recap works again.** Since v0.3.0, the death recap window opened with a spinner that never stopped for almost every log, so it never showed anything. It now shows the damage you took, where it came from and the encounter's statistics. It also no longer gets stuck when a damage over time spell was hurting you before you died.
+- **The death recap only covers the fight that killed you.** It could include fights from hours or even months earlier in the same log. It now starts after your previous death, or after the last full minute in which nothing hit you, you hit nothing and no one healed you or was healed by you. Chat doesn't count. Fights that go past midnight are also kept in the right order.
+- **The death recap says when there's nothing to show.** If your log has no deaths (for example, using the hotkey before dying in that log), or the log can't be read, the window now says so instead of spinning forever.
+- **The death recap window can be moved.** It has no frame, and there was nowhere to drag it from. Drag it by the "Death Recap" heading.
+
 ## v0.3.6
 
 ### Fixes

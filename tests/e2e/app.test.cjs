@@ -2,7 +2,7 @@
 //
 //   node tests/e2e/app.test.cjs [--exe <path>] [group ...]
 //
-// Groups: triggers, saving, settingsCleanup, generators, damagedFile, importFolders, closeToTray
+// Groups: triggers, saving, settingsCleanup, generators, damagedFile, importFolders, closeToTray, deathRecap
 const fs = require( 'fs' );
 const path = require( 'path' );
 const { check, finish, abort } = require( '../lib/report.cjs' );
@@ -339,6 +339,72 @@ const tests = {
             // The tray's Exit and the update installer quit through app.quit.
             app.main( `electron.app.quit(); return true;` ).catch( () => { } );
             check( 'Quitting the app closes the hidden window', await mainPageGoneWithin( 15000 ) );
+        } finally { await stop( app ); }
+    },
+
+    /** The death recap, opened the way its trigger opens it. Takes about 1 minute. */
+    async deathRecap() {
+        const { profile, log } = createProfile( path.join( work.folder, 'deathRecap' ) );
+        const app = await start( exePath( args ), profile );
+        const recapWindow = `electron.BrowserWindow.getAllWindows().find( w => /death-recap\\.html/.test( w.webContents.getURL() ) )`;
+        /** Opens the recap for the given log and waits for it to finish loading. */
+        const openRecap = async logFilePath => {
+            await app.main( `electron.ipcMain.emit( 'window:last-death-recap', {}, { id: 'e2e', value: ${JSON.stringify( { logFilePath, characterName: 'Tester', serverName: 'test' } )} } ); return true;` );
+            let target;
+            for ( let t = 0; t < 15000 && !target; t += 500 ) {
+                await sleep( 500 );
+                target = ( await app.pages() ).find( p => /death-recap\.html/.test( p.url ) );
+            }
+            if ( !target ) return null;
+            const recap = await open( target );
+            for ( let t = 0; t < 15000; t += 500 ) {
+                if ( await recap.eval( `getComputedStyle( document.querySelector( '.css-loader' ) ).display === 'none'` ) ) break;
+                await sleep( 500 );
+            }
+            return recap;
+        };
+        const closeRecap = async recap => {
+            try { recap?.close(); } catch { }
+            await app.main( `${recapWindow}?.close(); return true;` );
+            await sleep( 1000 );
+        };
+        try {
+            for ( const line of [
+                'A test golem hits YOU for 120 points of damage.',
+                'A test golem crushes YOU for 300 points of damage.',
+                'You have taken 250 damage from Venom of the Tester.',
+                'You have been slain by a test golem!',
+            ] ) writeLine( log, line );
+
+            let recap = await openRecap( log );
+            check( 'The death recap opens', !!recap );
+            if ( recap ) {
+                const state = await recap.eval( `( {
+                    loading: getComputedStyle( document.querySelector( '.css-loader' ) ).display !== 'none',
+                    dashboard: getComputedStyle( document.querySelector( '.dashboard' ) ).display !== 'none',
+                    message: document.querySelector( '.recap-message' ).textContent,
+                    damage: document.querySelector( '#damageLogContainer' ).textContent.replace( /\\s+/g, ' ' ).trim(),
+                    drag: getComputedStyle( document.querySelector( '.title-bar' ) ).getPropertyValue( '-webkit-app-region' ),
+                    closeDrag: getComputedStyle( document.querySelector( 'a.close-button' ) ).getPropertyValue( '-webkit-app-region' ),
+                } )` );
+                check( 'The recap stops loading', !state.loading );
+                check( 'The recap is shown', state.dashboard && state.message === '', state.message );
+                check( 'The recap lists the damage taken', state.damage.includes( '300' ) && state.damage.includes( 'A test golem' ), state.damage );
+                check( 'The recap can be dragged by its heading', state.drag === 'drag', state.drag );
+                check( 'The close button is not part of the drag area', state.closeDrag === 'no-drag', state.closeDrag );
+            }
+            await closeRecap( recap );
+
+            const quiet = path.join( profile, 'eqlog_Quiet_test.txt' );
+            writeLine( quiet, 'A test golem hits YOU for 120 points of damage.' );
+            recap = await openRecap( quiet );
+            const shown = recap && await recap.eval( `( {
+                loading: getComputedStyle( document.querySelector( '.css-loader' ) ).display !== 'none',
+                message: document.querySelector( '.recap-message' ).textContent,
+            } )` );
+            check( 'A log with no deaths stops loading', shown && !shown.loading );
+            check( 'A log with no deaths says so', shown?.message === 'No deaths found in this log.', shown?.message );
+            await closeRecap( recap );
         } finally { await stop( app ); }
     },
 };
