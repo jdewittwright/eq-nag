@@ -1,5 +1,6 @@
 const { app, BrowserWindow, dialog, ipcMain, screen } = require( "electron" );
 const fs = require('fs');
+const path = require( 'path' );
 const fsp = fs.promises;
 const CharacterDatabaseStore = require( './data/character-database' );
 const { CharacterModel } = require( './data/models/character' );
@@ -1021,6 +1022,39 @@ class LogBootstrapper {
 
 
 /**
+ * The settings for the hidden windows that watch logs and back them up.
+ *
+ * Their code runs in a preload, which keeps Node access, while the page itself
+ * gets none: context isolation keeps the page from reaching the preload, and
+ * the pages load no scripts.  Chat lines come from other players, so anything
+ * that ends up in these pages' DOM can't run code with Node access.
+ *
+ * @param {'log-watcher' | 'combat-watcher' | 'log-backup'} worker The worker's preload name.
+ * @param {boolean} isDev Allows the dev tools if true.
+ * @returns {Electron.WebPreferences}
+ */
+function workerWebPreferences( worker, isDev ) {
+    return {
+        nodeIntegration: false,
+        contextIsolation: true,
+        // The preload needs Node to read the log files, which the sandbox would block.
+        sandbox: false,
+        webSecurity: true,
+        preload: path.join( __dirname, 'preloaders', `${worker}.js` ),
+        devTools: isDev === true,
+    };
+}
+
+
+
+
+
+
+
+
+
+
+/**
  * Starts a new log watcher window for the specified log file.
  * 
  * @param {string} logFile The full path to the log file.
@@ -1034,8 +1068,7 @@ function startLogWatcherWindow( logFile, isDev, sendTick, character, logPosition
         //   width: 800,
         //   height: 600,
         show: isDev === true,
-        // TODO: use preloaders.
-        webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false, devTools: isDev === true },
+        webPreferences: workerWebPreferences( 'log-watcher', isDev ),
     } );
     logWatcherWindow.webContents.openDevTools( { mode: 'undocked' } );
     // URLSearchParams encodes every value, so a log path containing &, #, + or % arrives intact.
@@ -1202,7 +1235,7 @@ function startCombatWatcherWindow( isDev ) {
 
         combatWatcher.window = new BrowserWindow( {
             show: isDev === true,
-            webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false, devTools: isDev === true },
+            webPreferences: workerWebPreferences( 'combat-watcher', isDev ),
             // alwaysOnTop: true,
         } );
         combatWatcher.window.webContents.openDevTools( { mode: 'undocked' } );
@@ -1274,8 +1307,7 @@ function startLogBackup( logFiles, everquestInstallFolder, isDev, daysOfWeek, ba
     
     let logBackupWindow = new BrowserWindow( {
         show: isDev === true,
-        // TODO: use preloaders.
-        webPreferences: { nodeIntegration: true, contextIsolation: false, webSecurity: false, devTools: isDev === true },
+        webPreferences: workerWebPreferences( 'log-backup', isDev ),
     } );
 
     if ( isDev ) {

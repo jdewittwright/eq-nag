@@ -1,23 +1,12 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <title>ElectronAngularEqParse</title>
-    <base href="/">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <!-- <script type="text/javascript" src="testing.js"></script> -->
+    <!-- The work happens in preloaders/log-watcher.js.  This page runs no scripts, and it can only load sound files. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; media-src file: data: blob:;" />
+    <title>Log Watcher</title>
 </head>
-
 <body>
-    <script type="text/javascript">
-        const urlParams = new URLSearchParams(window.location.search);
-        var LogWatcher = require('./log-watcher');
-        // URLSearchParams has already decoded the values; decoding them again would change any % in them.
-        LogWatcher(JSON.parse(urlParams.get('character')), +urlParams.get('logPosition'));
-    </script>
-    <h1>Header text</h1>
+    <h1>Log Watcher</h1>
 </body>
-
 </html>

@@ -1,11 +1,10 @@
-const { contextBridge, ipcRenderer } = require( 'electron' );
-const { getCurrentWindow, screen } = require( '@electron/remote' );
+// This window is sandboxed, so this file is bundled with the modules it uses
+// (see tools/build-preloads.mjs) and the window loads preloaders/build/main.js.
+const { contextBridge, ipcRenderer, webUtils } = require( 'electron' );
 const { DateUtilities } = require( '../utilities/dates' );
 const StyleSheetUtil = require( '../utilities/style-sheet' );
-const log = require( 'electron-log' );
 const NumberUtilities = require( '../utilities/numbers' );
 const { pSBCr, pSBC, RGB_Linear_Blend, RGB_Linear_Shade, RGB_Log_Blend, RGB_Log_Shade } = require( '../utilities/colors' );
-const { webUtils } = require( 'electron' );
 
 const channelPrefixes = [
     'app',
@@ -87,7 +86,7 @@ contextBridge.exposeInMainWorld( 'api', {
         }
     },
     close: () => {
-        getCurrentWindow().close();
+        ipcRenderer.send( 'window:self:close' );
     },
     setVersionNumberViewed: ( value ) => {
         ipcRenderer.send( 'settings:set:lastViewedUpdateNotes', value );
@@ -107,7 +106,8 @@ contextBridge.exposeInMainWorld( 'api', {
             toggleFlag: NumberUtilities.toggleFlag,
         },
         screens: {
-            primaryDisplaySize: () => screen.getPrimaryDisplay().size,
+            // Synchronous because the callers need the answer right away; it's only called when sharing overlays.
+            primaryDisplaySize: () => ipcRenderer.sendSync( 'window:primary-display:sync' ).size,
         },
         colors: {
             pSBCr: pSBCr,
@@ -119,7 +119,7 @@ contextBridge.exposeInMainWorld( 'api', {
         }
     },
     logger: {
-        info: log.info,
+        info: ( ...params ) => ipcRenderer.send( 'app:log:info', params.map( p => typeof p === 'string' ? p : JSON.stringify( p ) ).join( ' ' ) ),
     },
     getPathForFile: ( file ) => {
         return webUtils.getPathForFile( file );

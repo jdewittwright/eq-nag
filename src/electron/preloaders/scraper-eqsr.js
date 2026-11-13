@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require( 'electron' );
 const { sanitizeHtml } = require( '../utilities/html' );
-// const { getCurrentWindow, screen } = require( '@electron/remote' );
+// This window is sandboxed, so this file is bundled with the modules it uses
+// (see tools/build-preloads.mjs) and the window loads preloaders/build/scraper-eqsr.js.
 
 const channelPrefixes = [
     'app',
@@ -31,6 +32,6 @@ contextBridge.exposeInMainWorld( 'api', {
         i = +index;
     },
     close: () => {
-        getCurrentWindow().close();
+        ipcRenderer.send( 'window:self:close' );
     },
 } );

@@ -42,6 +42,7 @@ import GameResources from "./src/electron/data/game-resources.js";
 import FilesDatabaseStore from "./src/electron/data/files-database.js";
 import GinaImporter from "./src/electron/gina-importer.js";
 import { registerShareFileHandlers } from "./src/electron/share-files.js";
+import { registerWindowIpc } from "./src/electron/window-ipc.js";
 
 import {
   IpcMessage,
@@ -109,9 +110,6 @@ if ( process.env.NAG_NO_FOCUS === '1' ) {
     BrowserWindow.prototype.focus = function () { };
 }
 
-
-import remoteMain from '@electron/remote/main/index.js';
-remoteMain.initialize();
 
 unhandled( {
     logger: log.error,
@@ -227,13 +225,11 @@ function createWindow() {
             nodeIntegration: false,
             contextIsolation: true,
             devTools: app.isDev(),
-            sandbox: false,
-            preload: path.join( __dirname, '/src/electron/preloaders/main.js' ),
+            sandbox: true,
+            preload: path.join( __dirname, '/src/electron/preloaders/build/main.js' ),
         },
         show: false,
     } );
-
-    remoteMain.enable( mainWindow.webContents );
 
     mainWindow.setBackgroundColor( '#1a1a1a' );
 
@@ -1041,6 +1037,7 @@ const scheduler = async () => {
 
 app.whenReady().then( () => {
 
+    registerWindowIpc();
     userPreferences.attachIpcEvents( mainWindowRef, sendTick, logBootstrapRef );
     winManager.attachIpcEvents( mainWindowRef, overlayDatabase, userPreferences, characterDatabase );
     dkpDatabase.attachIpcEvents( mainWindowRef, sendTick );

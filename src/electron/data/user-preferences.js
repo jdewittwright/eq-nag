@@ -40,6 +40,45 @@ const defaultTriggerLogRetentionCount = 500;
 const keySubscribers = {};
 
 /**
+ * The settings the windows can read and change by name with settings:get and
+ * settings:set.  Anything else (methods, internal fields, other settings) is
+ * refused, so a window can't replace parts of the preferences store.  Add a
+ * key here when a window starts using it.
+ *
+ * Every key must have a getter and a setter on UserPreferencesStore.
+ */
+const genericSettingKeys = Object.freeze( [
+    // SettingsKeys in src/app/core.model.ts.
+    'logMaintenanceRules',
+    'allowPrerelease',
+    'voiceIndex',
+    'enableCheckWindowPosition',
+    'sharedTriggerPermissions',
+    'speechVolume',
+    'audioVolume',
+    'baseSpeakingRate',
+    'enableGpuAcceleration',
+    'dpsWindowPosition',
+    'dpsMeterSettings',
+    'serverTrustedPlayers',
+    'serverBlockedPlayers',
+    // Used by name elsewhere.
+    'askForCombatGroupMigrations',
+    'defaultPaletteName',
+    'fileReadDelays',
+] );
+
+/**
+ * Returns true if windows can read and change the given setting by name.
+ *
+ * @param {unknown} key The setting key.
+ * @returns {boolean}
+ */
+function isGenericSettingKey( key ) {
+    return typeof key === 'string' && genericSettingKeys.includes( key );
+}
+
+/**
  * Sends the given window the setting's changes.  A window that subscribes
  * again (e.g. after it reloads) is only added once, so it isn't sent each
  * change more than once.
@@ -731,6 +770,10 @@ class UserPreferencesStore extends Store {
              * @param {{key: string, value: any}} arg The setting data.
              */
             ( event, arg ) => {
+                if ( !isGenericSettingKey( arg?.key ) ) {
+                    log.warn( '[UserPreferences:settings:set] Refused an unknown setting:', arg?.key );
+                    return;
+                }
                 this[ arg.key ] = arg.value;
                 sendTick();
                 this.emitChanges();
@@ -753,6 +796,10 @@ class UserPreferencesStore extends Store {
              * @param {{key: string, subscribe: boolean}} arg The setting data.
              */
             ( event, arg ) => {
+                if ( !isGenericSettingKey( arg?.key ) ) {
+                    log.warn( '[UserPreferences:settings:get] Refused an unknown setting:', arg?.key );
+                    return undefined;
+                }
                 if ( arg.subscribe === true ) {
                     subscribeToSetting( arg.key, event.sender );
                 }
@@ -766,6 +813,10 @@ class UserPreferencesStore extends Store {
              * @param {{key: string, subscribe: boolean}} arg The setting data.
              */
             ( event, arg ) => {
+                if ( !isGenericSettingKey( arg?.key ) ) {
+                    log.warn( '[UserPreferences:settings:get] Refused an unknown setting:', arg?.key );
+                    return;
+                }
                 if ( arg.subscribe === true ) {
                     subscribeToSetting( arg.key, event.sender );
                 }

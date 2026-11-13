@@ -16,8 +16,8 @@ npm test
 ```
 
 These take a few seconds and need only `npm ci`. They cover saving and
-recovering data, log backups, regex safety, the GINA search and share file
-validation. Electron is replaced with a small stub, so they say nothing about
+recovering data, log backups, regex safety, the GINA search, share file
+validation, and the windows' security settings (read from the source). Electron is replaced with a small stub, so they say nothing about
 windows or overlays.
 
 ## End-to-end tests
@@ -27,6 +27,7 @@ run the tests. It takes about 10 minutes, and windows will open while it runs:
 
 ```
 npx ng build --configuration=production
+npm run build:preloads
 npx electron-builder build --win dir --publish never
 npm run test:e2e
 ```

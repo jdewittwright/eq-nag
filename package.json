@@ -1,7 +1,7 @@
 {
   "name": "eqnag",
   "productName": "EQNag",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "main.js",
   "description": "An EverQuest Notification AGent",
   "license": "MIT",
@@ -13,13 +13,14 @@
     "copy-source-maps": "copyfiles --flat dist/*.map source-maps/%npm_package_version%",
     "tsc": "tsc",
     "ng": "ng",
-    "start": "electron .",
-    "test": "node tests/unit/app-logic.test.cjs && node tests/unit/share-files.test.cjs",
+    "build:preloads": "node tools/build-preloads.mjs",
+    "start": "npm run build:preloads && electron .",
+    "test": "node tests/unit/app-logic.test.cjs && node tests/unit/share-files.test.cjs && node tests/unit/security.test.cjs",
     "test:e2e": "node tests/e2e/overlay.test.cjs && node tests/e2e/app.test.cjs",
-    "start:electron": "tsc && ng build --configuration=production && electron .",
+    "start:electron": "tsc && ng build --configuration=production && npm run build:preloads && electron .",
     "perf": "node tools/perf/perf-test.mjs",
-    "build": "npm run copy-source-maps && electron-builder build --win --publish never",
-    "deploy": "npm run copy-source-maps && electron-builder build --win --publish always"
+    "build": "npm run copy-source-maps && npm run build:preloads && electron-builder build --win --publish never",
+    "deploy": "npm run copy-source-maps && npm run build:preloads && electron-builder build --win --publish always"
   },
   "private": true,
   "dependencies": {
@@ -33,7 +34,6 @@
     "@angular/platform-browser": "^22.2.4",
     "@angular/platform-browser-dynamic": "^22.2.4",
     "@angular/router": "^22.2.4",
-    "@electron/remote": "^2.1.4",
     "@types/lodash-es": "^4.17.4",
     "active-win": "^8.1.1",
     "adm-zip": "^0.5.10",
@@ -70,6 +70,7 @@
     "copyfiles": "^2.4.1",
     "electron": "^45.2.3",
     "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2",
     "typescript": "^6.0.3"
   },
   "repository": {

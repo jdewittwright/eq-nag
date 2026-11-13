@@ -88,7 +88,7 @@ async function executeDataMigration( data ) {
         // We are changing the combat data storage.  If there is any data in
         // the store folder, we need to delete the files.
         
-        const userDataPath = ( electron.app || electron.remote.app ).getPath( 'userData' );
+        const userDataPath = electron.app.getPath( 'userData' );
         const encountersPath = path.join( userDataPath, 'encounters' );
         const pathExists = fs.existsSync( encountersPath );
 

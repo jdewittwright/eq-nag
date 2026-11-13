@@ -1,4 +1,3 @@
-const { getCurrentWindow, screen } = require( '@electron/remote' );
 const { ipcRenderer } = require( 'electron' );
 const { mouseZIndex } = require( './constants' );
 
@@ -10,6 +9,9 @@ const _intervalMs = 33;
 var _intervalCount = 0;
 /** @type {NodeListOf<Element> | undefined} */
 var mouseEnabledDoms = undefined;
+/** The last cursor position the main process sent. */
+var cursor = { x: 0, y: 0 };
+var cursorRequested = false;
 
 
 
@@ -25,7 +27,7 @@ var mouseEnabledDoms = undefined;
 function setIgnoreMouseEvents() {
     if ( mouseEnabled ) {
         mouseEnabled = false;
-        getCurrentWindow().setIgnoreMouseEvents( true, { forward: false } );
+        ipcRenderer.send( 'window:self:ignore-mouse-events', true );
         if ( dynamicMouseIntervalId == null ) {
             dynamicMouseIntervalId = window.setInterval( trackDynamicMouse, 33 );
         }
@@ -49,7 +51,7 @@ function setIgnoreMouseEvents() {
 function setHandleMouseEvents( keepEnabled ) {
     if ( !mouseEnabled ) {
         mouseEnabled = true;
-        getCurrentWindow().setIgnoreMouseEvents( false );
+        ipcRenderer.send( 'window:self:ignore-mouse-events', false );
         if ( keepEnabled ) {
             window.clearInterval( dynamicMouseIntervalId );
             dynamicMouseIntervalId = null;
@@ -67,13 +69,22 @@ function setHandleMouseEvents( keepEnabled ) {
 
 
 /**
- * Returns the current mouse screen coordinates.
+ * Returns the mouse screen coordinates.
+ *
+ * The main process has the cursor position, so this returns the last position
+ * it sent and asks for a new one.  Called every 33ms while tracking, so the
+ * answer is at most one call behind.
  * 
  * @returns {{x: number, y: number}} The mouse coordinates.
  */
 function getMouseUpdate() {
-    const { x, y } = screen.getCursorScreenPoint();
-    return { x, y };
+    if ( !cursorRequested ) {
+        cursorRequested = true;
+        ipcRenderer.invoke( 'window:cursor-point' )
+            .then( point => cursor = point, () => { } )
+            .finally( () => cursorRequested = false );
+    }
+    return cursor;
 }
 
 

@@ -6,7 +6,8 @@
 // user data folder every 10 seconds, with those totals and each process's CPU
 // time.  Totals are cumulative, so compare two reports to see a rate.
 
-const { performance } = require( 'perf_hooks' );
+// Windows (including sandboxed ones, which can't load perf_hooks) have performance built in.
+const performance = globalThis.performance ?? require( 'perf_hooks' ).performance;
 
 /** @type {Record<string, {count: number, totalMs: number, maxMs: number}>} */
 const stats = {};

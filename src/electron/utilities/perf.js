@@ -26,12 +26,15 @@ try {
     // Not a perf build.
 }
 
-if ( alwaysOn || process.argv.includes( '--perf' ) ) {
+// A sandboxed window's process may not have argv or env.
+const env = process.env ?? {};
+
+if ( alwaysOn || process.argv?.includes( '--perf' ) ) {
     // Child processes (log watchers, overlays) inherit this.
-    process.env.NAG_PERF = '1';
+    env.NAG_PERF = '1';
 }
 
-if ( process.env.NAG_PERF === '1' ) {
+if ( env.NAG_PERF === '1' ) {
     try {
         taps = require( './perf-taps' );
     } catch {

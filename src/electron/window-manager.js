@@ -271,12 +271,11 @@ class WindowManager {
                     nodeIntegration: false,
                     contextIsolation: true,
                     devTools: app.isDev(),
-                    sandbox: false,
-                    preload: path.join( __dirname, '/preloaders/main.js' ),
+                    sandbox: true,
+                    preload: path.join( __dirname, '/preloaders/build/main.js' ),
                 }
             } );
 
-            require( "@electron/remote/main" ).enable( triggerWindow.webContents );
 
             let url = `file://${this.#dirname}/dist/index.html#/trigger/new`;
             if ( arg ) {
@@ -302,12 +301,11 @@ class WindowManager {
                     nodeIntegration: false,
                     contextIsolation: true,
                     devTools: app.isDev(),
-                    sandbox: false,
-                    preload: path.join( __dirname, '/preloaders/main.js' ),
+                    sandbox: true,
+                    preload: path.join( __dirname, '/preloaders/build/main.js' ),
                 }
             } );
 
-            require( "@electron/remote/main" ).enable( triggerWindow.webContents );
 
             triggerWindow.loadURL( `file://${this.#dirname}/dist/index.html#/trigger/${arg}` );
             triggerWindow.once( "ready-to-show", () => {
@@ -413,12 +411,11 @@ class WindowManager {
                     nodeIntegration: false,
                     contextIsolation: true,
                     devTools: app.isDev(),
-                    sandbox: false,
-                    preload: path.join( __dirname, '/preloaders/main.js' ),
+                    sandbox: true,
+                    preload: path.join( __dirname, '/preloaders/build/main.js' ),
                 }
             } );
 
-            require( "@electron/remote/main" ).enable( overlayEditorDialog.webContents );
 
             overlayEditorDialog.setBackgroundColor( '#1a1a1a' );
             overlayEditorDialog.loadURL( `file://${this.#dirname}/dist/index.html#/overlay/${overlayId}` );
@@ -458,12 +455,11 @@ class WindowManager {
                     nodeIntegration: false,
                     contextIsolation: true,
                     devTools: app.isDev(),
-                    sandbox: false,
-                    preload: path.join( __dirname, '/preloaders/main.js' ),
+                    sandbox: true,
+                    preload: path.join( __dirname, '/preloaders/build/main.js' ),
                 }
             } );
 
-            require( "@electron/remote/main" ).enable( overlayMoveDialog.webContents );
 
             overlayMoveDialog.loadURL( `file://${this.#dirname}/dist/index.html#/overlay/arrange` );
             overlayMoveDialog.once( 'dom-read', () => {
@@ -590,12 +586,11 @@ class WindowManager {
                     nodeIntegration: false,
                     contextIsolation: true,
                     devTools: app.isDev(),
-                    sandbox: false,
-                    preload: path.join( __dirname, '/preloaders/main.js' ),
+                    sandbox: true,
+                    preload: path.join( __dirname, '/preloaders/build/main.js' ),
                 }
             } );
 
-            require( "@electron/remote/main" ).enable( this.ginaImportWindow.webContents );
 
             let url = `file://${this.#dirname}/dist/index.html#/gina/import`;
             if ( arg ) {
@@ -631,12 +626,11 @@ class WindowManager {
                     nodeIntegration: false,
                     contextIsolation: true,
                     devTools: app.isDev(),
-                    sandbox: false,
-                    preload: path.join( __dirname, '/preloaders/main.js' ),
+                    sandbox: true,
+                    preload: path.join( __dirname, '/preloaders/build/main.js' ),
                 }
             } );
 
-            require( "@electron/remote/main" ).enable( this.logSimulatorWindow.webContents );
 
             if ( app.isDev() ) {
                 this.logSimulatorWindow.webContents.openDevTools( { mode: 'undocked' } );
@@ -676,12 +670,11 @@ class WindowManager {
                     nodeIntegration: false,
                     contextIsolation: true,
                     devTools: app.isDev(),
-                    sandbox: false,
-                    preload: path.join( __dirname, '/preloaders/main.js' ),
+                    sandbox: true,
+                    preload: path.join( __dirname, '/preloaders/build/main.js' ),
                 }
             } );
 
-            require( "@electron/remote/main" ).enable( this.easyWindow.webContents );
 
             if ( app.isDev() ) {
                 this.easyWindow.webContents.openDevTools( { mode: 'undocked' } );
@@ -765,13 +758,12 @@ class WindowManager {
             webPreferences: {
                 nodeIntegration: false,
                 devTools: app.isDev(),
-                preload: path.join( __dirname, '/preloaders/main.js' ),
+                preload: path.join( __dirname, '/preloaders/build/main.js' ),
                 contextIsolation: true,
-                sandbox: false,
+                sandbox: true,
             }
         } );
 
-        require( "@electron/remote/main" ).enable( this.updateNotesWindow.webContents );
 
         if ( app.isDev() ) {
             this.updateNotesWindow.webContents.openDevTools( { mode: 'undocked' } );
@@ -866,9 +858,9 @@ class WindowManager {
             webPreferences: {
                 nodeIntegration: false,
                 devTools: app.isDev(),
-                preload: path.join( __dirname, '/preloaders/renderer.js' ),
+                preload: path.join( __dirname, '/preloaders/build/renderer.js' ),
                 contextIsolation: true,
-                sandbox: false,
+                sandbox: true,
             },
             skipTaskbar: true,
             maximizable: false,
@@ -877,7 +869,6 @@ class WindowManager {
             show: process.env.NAG_NO_FOCUS !== '1',
         } );
 
-        require( "@electron/remote/main" ).enable( renderer.webContents );
         
         // TODO: Put the padding in the size calculations and not here.
         // Reducing the height by 1 pixel will allow access to a hidden taskbar.
@@ -972,6 +963,7 @@ class WindowManager {
                 nodeIntegration: false,
                 contextIsolation: true,
                 devTools: app.isDev(),
+                // Not sandboxed yet: the death recap reads the log file itself.
                 sandbox: false,
                 preload: path.join( __dirname, '/preloaders/death-recap.js' ),
             },
@@ -979,7 +971,6 @@ class WindowManager {
             maximizable: false,
         } );
 
-        require( "@electron/remote/main" ).enable( deathRecap.webContents );
 
         let size = { width: 1100, height: 800 };
         let workAreaSize = screen.getPrimaryDisplay().workAreaSize;
@@ -1037,14 +1028,13 @@ class WindowManager {
                 nodeIntegration: false,
                 contextIsolation: true,
                 devTools: app.isDev(),
-                sandbox: false,
-                preload: path.join( __dirname, '/preloaders/main.js' ),
+                sandbox: true,
+                preload: path.join( __dirname, '/preloaders/build/main.js' ),
             }
         } );
 
         this.settingsWindows[ name ] = settingsWindow;
 
-        require( "@electron/remote/main" ).enable( settingsWindow.webContents );
 
         if ( app.isDev() ) {
             settingsWindow.webContents.openDevTools( { mode: 'undocked' } );
@@ -1135,6 +1125,7 @@ class WindowManager {
                 nodeIntegration: false,
                 contextIsolation: true,
                 devTools: app.isDev(),
+                // Not sandboxed yet: the death recap reads the log file itself.
                 sandbox: false,
                 preload: path.join( __dirname, '/preloaders/death-recap.js' ),
             },
@@ -1143,7 +1134,6 @@ class WindowManager {
             minimizable: true,
         } );
 
-        require( "@electron/remote/main" ).enable( deathRecap.webContents );
 
         let size = { width: 1100, height: 800 };
         let workAreaSize = screen.getPrimaryDisplay().workAreaSize;
@@ -1724,8 +1714,8 @@ class WindowManager {
                     nodeIntegration: false,
                     contextIsolation: true,
                     devTools: app.isDev(),
-                    sandbox: false,
-                    preload: path.join( __dirname, '/preloaders/scraper-eqsr.js' ),
+                    sandbox: true,
+                    preload: path.join( __dirname, '/preloaders/build/scraper-eqsr.js' ),
                 }
             } );
         

@@ -75,7 +75,7 @@ class FilesDatabaseStore extends Store {
         
         this.#data = this.parseDataFile();
 
-        let userDataPath = ( electron.app || electron.remote.app ).getPath( 'userData' );
+        let userDataPath = electron.app.getPath( 'userData' );
         this.#filePath = path.join( userDataPath, filesFolder );
 
         if ( !fs.existsSync( this.#filePath ) ) {

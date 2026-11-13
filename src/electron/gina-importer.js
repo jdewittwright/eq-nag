@@ -27,7 +27,7 @@ class GinaImporter {
     #storePath;
 
     constructor() {
-        let userDataPath = ( electron.app || electron.remote.app ).getPath( 'userData' );
+        let userDataPath = electron.app.getPath( 'userData' );
         this.#storePath = path.join( userDataPath, 'imported.json' );
         this.loadDataFile();
     }
