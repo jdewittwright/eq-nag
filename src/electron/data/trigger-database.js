@@ -932,7 +932,8 @@ class TriggerDatabaseStore extends Store {
      * @param {number} i The index of the trigger to remove.
      */
     removeIndex( i ) {
-        if ( this.#data?.triggers?.length > i ) {
+        // A missing trigger's index is -1, and splice( -1, 1 ) would remove the last trigger.
+        if ( i > -1 && this.#data?.triggers?.length > i ) {
 
             // Remove the trigger by index.
             let removed = this.#data.triggers.splice( i, 1 );

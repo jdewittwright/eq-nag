@@ -270,6 +270,15 @@ const combatRgx = {
     // ResoluteStand: null,
 }
 
+// Your own deaths, which end a death recap's walk back to the start of the fight.
+const deathRgx = /^(You have been slain by .+!|You have fallen to your death!|You died\.)$/i;
+
+// Hits to you that don't name who did them, such as falling.
+const unnamedDamageRgx = /^(You were hit by non-melee for [0-9]+ damage\.|YOU were injured by falling\.)/i;
+
+// The combat lines a death recap looks for, and who did what to whom in each.
+const deathRecapCombatRgxs = [ 'MeleeDamage', 'MeleeMiss', 'ActiveDefense', 'DirectDamage', 'YourDoT', 'OtherDoT', 'SelfDot', 'Thorns', 'Healing' ];
+
 // https://regex101.com/r/cqfoUU/2
 // This won't capture anon people.
 // classTitleOrName will capture any one-word class name by default, however if the class title has spaces it must be added to the list.
@@ -296,6 +305,9 @@ class CombatParser {
     chunkSize = 1048576;
     /** @type {number} */
     chunks = 50;
+
+    /** How long, in seconds, nothing has to happen to or from you to separate a death's fight from what came before. */
+    deathRecapLullSeconds = 60;
 
     /** @type {string[]} */
     _unknownEntities = [];
@@ -955,31 +967,118 @@ class CombatParser {
     /**
      * Loads the death recap data.
      * 
+     * The callback is always executed exactly once.  On success it gets the
+     * model; otherwise it gets null and the reason it failed:
+     * 'no-deaths' when the log has no deaths, 'not-found' when the given line
+     * isn't in the log, 'read-error' when the log couldn't be read, or 'error'
+     * when parsing failed.
+     * 
      * @param {string} logFilePath The full path to the log file to process.
      * @param {number?} lineNo The line number at which death occurred, if no value is provided loads the last death found in the log file.
-     * @param {( data: any ) => void} callback Executed when the death recap data is ready.
      * @param {string} myCharacterName The character name of the log file owner.
+     * @param {( data: DeathRecapModel | null, failure?: 'no-deaths' | 'not-found' | 'read-error' | 'error', error?: any ) => void} callback Executed when the death recap data is ready, or loading failed.
      */
     loadDeathRecap( logFilePath, lineNo, myCharacterName, callback ) {
 
-        let act = () => {
+        if ( lineNo > 0 ) {
             this._doLoadDeathRecap( logFilePath, lineNo, callback );
+            return;
         }
 
-        if ( lineNo > 0 ) {
-            act();
-        } else {
-            this.findAllDeaths( logFilePath, found => {
-                if ( found?.length > 0 ) {
-                    lineNo = found[ found.length - 1 ].lineNo;
-                    act();
-                } else {
-                    // TODO: Display a message for No Deaths Found!
+        this.findAllDeaths( logFilePath, ( found, error ) => {
+            if ( error ) {
+                callback( null, 'read-error', error );
+            } else if ( found?.length > 0 ) {
+                this._doLoadDeathRecap( logFilePath, found[ found.length - 1 ].lineNo, callback );
+            } else {
+                callback( null, 'no-deaths' );
+            }
+        } );
+    }
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Reads the given log file in large chunks, giving each chunk's complete
+     * lines to onLines.  The last line is included even if the file doesn't
+     * end with a line break.
+     * @private
+     * 
+     * @param {string} logFilePath The full path to the log file to read.
+     * @param {( lines: string[], firstLineNo: number ) => boolean} onLines Executed for each chunk of lines, with the 1-based line number of the first line.  Return true to stop reading.
+     * @param {( error?: any ) => void} onDone Executed once, when reading ends, stops, or fails.  Errors thrown by onLines are passed here too.
+     */
+    _readLogFileLines( logFilePath, onLines, onDone ) {
+        fs.open( logFilePath, 'r', ( err, fd ) => {
+
+            if ( err || fd == null ) {
+                onDone( err ?? new Error( `Could not open ${logFilePath}` ) );
+                return;
+            }
+
+            let finished = false;
+            const finish = ( error ) => {
+                if ( finished ) {
+                    return;
                 }
-            } );
-        }
-        // parse the entire log file for player data.
-        // find the encounter duration.
+                finished = true;
+                fs.close( fd, () => onDone( error ) );
+            };
+
+            let size = 0;
+            let position = 0;
+            let lineNo = 0;
+            /** @type {string} */
+            let danglyBits = '';
+
+            const readChunk = () => {
+                const rsize = Math.min( size - position, this.chunkSize * this.chunks );
+
+                fs.read( fd, Buffer.alloc( rsize ), 0, rsize, position, ( err, bytecount, buff ) => {
+                    try {
+                        if ( err ) {
+                            finish( err );
+                            return;
+                        }
+
+                        position += bytecount;
+                        const atEnd = bytecount <= 0 || position >= size;
+
+                        let lines = ( danglyBits + buff.toString( 'utf-8', 0, bytecount ) ).split( /\r\n|\r|\n/gmi );
+                        danglyBits = lines.pop();
+                        if ( atEnd && danglyBits !== '' ) {
+                            lines.push( danglyBits );
+                            danglyBits = '';
+                        }
+
+                        const firstLineNo = lineNo + 1;
+                        lineNo += lines.length;
+
+                        if ( onLines( lines, firstLineNo ) === true || atEnd ) {
+                            finish();
+                        } else {
+                            setTimeout( readChunk, 50 );
+                        }
+                    } catch ( error ) {
+                        finish( error );
+                    }
+                } );
+            };
+
+            try {
+                size = fs.fstatSync( fd ).size;
+                readChunk();
+            } catch ( error ) {
+                finish( error );
+            }
+        } );
     }
 
 
@@ -997,65 +1096,72 @@ class CombatParser {
      * 
      * @param {string} logFilePath The full path to the log file to process.
      * @param {number} lineNo The line number at which death occurred.
-     * @param {( data: any ) => void} callback Executed when the death recap data is ready.
+     * @param {( data: DeathRecapModel | null, failure?: 'not-found' | 'read-error' | 'error', error?: any ) => void} callback Executed when the death recap data is ready, or loading failed.
      */
     _doLoadDeathRecap( logFilePath, lineNo, callback ) {
-        fs.open( logFilePath, 'r', ( err, fd ) => {
-            
-            if ( fd ) {
-                let file = fd;
-                let fstats = fs.fstatSync( file );
+        /** @type {string[]} */
+        let prevLines = [];
+        /** @type {string[] | null} */
+        let recapLines = null;
 
-                let position = 0;
-                let logLineNo = 0;
-                /** @type {string} */
-                let danglyBits = null;
-                /** @type {string[]} */
-                let prevLines = null;
-                /** @type {string[]} */
-                let currentLines = null;
+        this._readLogFileLines( logFilePath, ( lines, firstLineNo ) => {
+            const index = lineNo - firstLineNo;
+            if ( index >= 0 && index < lines.length ) {
+                // The previous chunk and this one up to the death.
+                recapLines = prevLines.concat( lines.slice( 0, index + 1 ) );
+                return true;
+            }
+            prevLines = lines;
+            return false;
 
-                let readFile = () => {
-                    let rsize = position + ( this.chunkSize * this.chunks ) > fstats.size ? fstats.size - position : ( this.chunkSize * this.chunks );
-    
-                    fs.read( file, Buffer.alloc( rsize ), 0, rsize, position, ( err, bytecount, buff ) => {
-
-                        position += bytecount;
-    
-                        let lineFound = false;
-                        let lines = ( ( danglyBits == null ? '' : danglyBits ) + buff.toString( 'utf-8', 0, bytecount ) ).split( /\r\n|\r|\n/gmi );
-                        currentLines = [];
-
-                        danglyBits = lines.pop();
-
-                        for ( let i = 0; i < lines?.length; i++ ) {
-                            logLineNo++;
-                            currentLines.push( lines[ i ] );
-                            if ( logLineNo === lineNo ) {
-                                setTimeout( () => this._processDeathRecapLines( Array.prototype.concat( [], prevLines, currentLines ), callback ) );
-                                return;
-                            }
-                        }
-
-                        prevLines = lines;
-
-                        if ( lineFound ) {
-                            return;
-                        } else if ( bytecount <= 0 ) {
-                            callback( null );
-                        } else if ( position < fstats.size ) {
-                            setTimeout( () => readFile(), 50 );
-                        } else {
-                            callback( null );
-                        }
-                    } );
-                    
-                }
-
-                readFile();
-                
+        }, ( error ) => {
+            if ( error ) {
+                callback( null, 'read-error', error );
+            } else if ( recapLines == null ) {
+                callback( null, 'not-found' );
+            } else {
+                setTimeout( () => {
+                    let model;
+                    try {
+                        model = this._processDeathRecapLines( recapLines );
+                    } catch ( error ) {
+                        callback( null, 'error', error );
+                        return;
+                    }
+                    callback( model );
+                } );
             }
         } );
+    }
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Returns true if the log line is combat or healing to or from you.
+     * @private
+     * 
+     * @param {string} log The log line, without its timestamp.
+     */
+    _involvesMe( log ) {
+        if ( unnamedDamageRgx.test( log ) ) {
+            return true;
+        }
+        const me = name => name != null && ( /^(you|your|yourself)$/i.test( name ) || name === this._characterName );
+        for ( const key of deathRecapCombatRgxs ) {
+            const groups = combatRgx[ key ].exec( log )?.groups;
+            if ( groups ) {
+                return me( groups.actor ) || me( groups.target );
+            }
+        }
+        return false;
     }
 
 
@@ -1072,74 +1178,49 @@ class CombatParser {
      * @private
      * 
      * @param {string[]} lines The two-block size of log file entries ending with the death.
-     * @param {( data: any ) => void} callback Executed when the death recap data is ready.
+     * @returns {DeathRecapModel} The death recap model.
      */
-    _processDeathRecapLines( lines, callback ) {
+    _processDeathRecapLines( lines ) {
 
-        let medianLogsPerSecond = 0;
-        let allBlocksLps = [];
-        let totalLogTimeBlocks = 0;
-        let currentTimestamp = null;
-        // Calculate the median lps every # log entries.
-        let calculateMedianAt = 100;
-        // When the number of logs per second (lps) are lower than this value times the median lps, we're likely at the beginning of the fight.
-        let dieDownMultiplier = 0.2;
-        // The number of consecutive block lps less than median * multiplier.
-        let dieDown = 0;
-        // When die down count equals the limit, we break the loop and have found the beginning of the fight.
-        let dieDownLimit = 5;
+        // Only log lines; anything else (such as a missing chunk) is skipped.
+        lines = ( lines ?? [] ).filter( line => typeof line === 'string' );
 
         /** @type {Record<string, string[]>} */
         let timeLogs = {};
 
-        // Trim lines to fight duration.
+        // Trim the lines to the fight that ended in the death.  Walking back
+        // from the death, the fight starts after your previous death, or after
+        // the first quiet spell of deathRecapLullSeconds in which nothing hit
+        // you, you hit nothing, and no one healed you or was healed by you.
+        // Chat and other lines don't keep the fight going.
+        let lastCombatTime = null;
         for ( let i = lines.length - 1; i >= 0; i-- ) {
             let timeLog = /^\[(?<timestamp>.*?)\]\s*(?<log>.*)/gi.exec( lines[ i ] )?.groups;
-            if ( timeLog ) {
-                let entry = {
-                    timestamp: timeLog.timestamp, 
-                    log: timeLog.log,
-                };
+            if ( !timeLog ) {
+                continue;
+            }
 
-                if ( !timeLogs[ entry.timestamp ] ) {
-                    timeLogs[ entry.timestamp ] = [];
+            if ( i < lines.length - 1 && deathRgx.test( timeLog.log ) ) {
+                break;
+            }
+
+            const time = new Date( timeLog.timestamp ).getTime();
+            if ( !isNaN( time ) ) {
+                if ( lastCombatTime == null ) {
+                    // The death itself.
+                    lastCombatTime = time;
+                } else if ( lastCombatTime - time > this.deathRecapLullSeconds * 1000 ) {
+                    break;
                 }
-
-                timeLogs[ entry.timestamp ].push( timeLog.log );
-
-                if ( currentTimestamp == null ) {
-                    currentTimestamp = entry.timestamp;
-                } else if ( currentTimestamp != entry.timestamp ) {
-                    // If we've started a new time block, we need to check the 
-                    // previous time block's LPS, and determine if we need to 
-                    // break the loop.
-                    totalLogTimeBlocks += 1;
-                    let blockLps = timeLogs[ currentTimestamp ].length;
-                    if ( blockLps < medianLogsPerSecond * dieDownMultiplier ) {
-                        dieDown += 1;
-                        if ( dieDown >= dieDownLimit ) {
-                            // Exit the loop.
-                            i = -1;
-                        }
-                    } else {
-
-                        // Reset the die down counter.
-                        dieDown = 0;
-
-                        // Push the current block into total LPS.
-                        allBlocksLps.push( blockLps );
-                        
-                        if ( allBlocksLps.length > 1 && allBlocksLps.length % calculateMedianAt === 0 ) {
-                            // Calculate the new median LPS.
-                            allBlocksLps.sort();
-                            medianLogsPerSecond = allBlocksLps[ ( allBlocksLps.length / 2 ) - 1 ];
-                        }
-                    }
-                    
-                    currentTimestamp = entry.timestamp;
-
+                if ( this._involvesMe( timeLog.log ) ) {
+                    lastCombatTime = time;
                 }
             }
+
+            if ( !timeLogs[ timeLog.timestamp ] ) {
+                timeLogs[ timeLog.timestamp ] = [];
+            }
+            timeLogs[ timeLog.timestamp ].push( timeLog.log );
         }
 
         const startParse = Date.now();
@@ -1157,7 +1238,8 @@ class CombatParser {
         /** @type {{name: string, start: Date, duration: number, end: Date}[]} */
         let defensiveTimers = [];
         
-        const timestamps = Object.keys( timeLogs ).sort();
+        // In time order; sorting the text would put Fri after Sat, and so on.
+        const timestamps = Object.keys( timeLogs ).sort( ( a, b ) => new Date( a ) - new Date( b ) );
         for ( let ti = 0; ti < timestamps.length; ti++ ) {
             const key = timestamps[ ti ];
             let logs = timeLogs[ key ];
@@ -1188,7 +1270,7 @@ class CombatParser {
                 }
                 regxResult = regxResult == null ? executCombatRgx( combatRgx.SelfDot, logs[ i ] ) : regxResult;
                 if ( regxResult !== null ) {
-                    this._addDetrimentalSpellEvent( timestamp, 'You', regxResult.groups.target, +regxResult.groups.damage, regxResult.groups.attackType, regxResult.groups.resistType, regxResult.groups.modifiers, logLine );
+                    this._addDetrimentalSpellEvent( timestamp, 'You', regxResult.groups.target, +regxResult.groups.damage, regxResult.groups.attackType, regxResult.groups.resistType, regxResult.groups.modifiers );
                     continue;
                 }
                 
@@ -1223,7 +1305,7 @@ class CombatParser {
 
         this._updateEntityVerifications( lines );
 
-        callback( this._getDeathRecapModel( defensiveTimers ) );
+        return this._getDeathRecapModel( defensiveTimers );
 
     }
 
@@ -1564,6 +1646,11 @@ class CombatParser {
         model.damageSources = [];
         model.encounterStatistics = new DeathRecapEncounter();
 
+        if ( this.encounterEvents.length === 0 ) {
+            // Nothing happened before the death.
+            return model;
+        }
+
         /** @type {Record<string, number>} */
         let damageToRaid = {};
         /** @type {Record<string, number>} */
@@ -1810,7 +1897,7 @@ class CombatParser {
 
         model.encounterStatistics.raid = new DeathRecapRaidStats();
         model.encounterStatistics.raid.damage = totalRaidDamage;
-        model.encounterStatistics.raid.dps = totalRaidDamage / encounterDuration;
+        model.encounterStatistics.raid.dps = encounterDuration > 0 ? totalRaidDamage / encounterDuration : totalRaidDamage;
         model.encounterStatistics.raid.healing = totalRaidHealing;
         model.encounterStatistics.raid.healingReceived = totalRaidHealingReceived;
         return model;
@@ -1820,70 +1907,31 @@ class CombatParser {
      * Queries the specified log file for all player deaths.
      * 
      * @param {string} logFilePath The full path to the log file to query.
-     * @param {(found: LogFileLocation[]) => void} callback After the file has been parsed, callback will be executed with the results.
+     * @param {(found: LogFileLocation[], error?: any) => void} callback After the file has been parsed, callback will be executed with the results.  If the file couldn't be read, found is empty and error says why.
      */
     findAllDeaths( logFilePath, callback ) {
         /** @type {LogFileLocation[]} */
         let deathsFound = [];
-        
-        fs.open( logFilePath, 'r', ( err, fd ) => {
-            // let read = 0;
-            
-            if ( fd ) {
-                let file = fd;
-                let fstats = fs.fstatSync( file );
 
-                let position = 0;
-                let lineNo = 0;
-                /** @type {string} */
-                let danglyBits = null;
+        this._readLogFileLines( logFilePath, ( lines, firstLineNo ) => {
+            for ( let i = 0; i < lines.length; i++ ) {
+                // https://regex101.com/r/a4YxfW/1
+                let e = /^\[(?<timestamp>.*?)\]\s*You have been slain by (?<slayer>[^!]*)!$/gi.exec( lines[ i ] );
+                if ( e ) {
+                    let log = new LogFileLocation();
 
-                let readFile = () => {
-                    let rsize = position + ( this.chunkSize * this.chunks ) > fstats.size ? fstats.size - position : ( this.chunkSize * this.chunks );
-    
-                    fs.read( file, Buffer.alloc( rsize ), 0, rsize, position, ( err, bytecount, buff ) => {
+                    log.lineNo = firstLineNo + i;
+                    log.description = `You have been slain by ${e.groups.slayer}!`;
+                    log.raw = lines[ i ];
+                    log.timestamp = new Date( e.groups.timestamp );
+                    log.logFilePath = logFilePath;
 
-                        // read += bytecount;
-                        position += bytecount;
-    
-                        let lines = ( ( danglyBits == null ? '' : danglyBits ) + buff.toString( 'utf-8', 0, bytecount ) ).split( /\r\n|\r|\n/gmi );
-
-                        danglyBits = lines.pop();
-
-                        for ( let i = 0; i < lines?.length; i++ ) {
-                            lineNo++;
-                            // https://regex101.com/r/a4YxfW/1
-                            let e = /^\[(?<timestamp>.*?)\]\s*You have been slain by (?<slayer>[^!]*)!$/gi.exec( lines[ i ] );
-                            if ( e ) {
-                                let log = new LogFileLocation();
-                                
-                                log.lineNo = lineNo;
-                                log.description = `You have been slain by ${e.groups.slayer}!`;
-                                log.raw = lines[ i ];
-                                log.timestamp = new Date( e.groups.timestamp );
-                                log.logFilePath = logFilePath;
-
-                                deathsFound.push( log );
-                            }
-                        }
-
-                        if ( bytecount <= 0 ) {
-                            callback( deathsFound );
-                        } else if ( position < fstats.size ) {
-                            setTimeout( () => readFile(), 50 );
-                        } else {
-                            callback( deathsFound );
-                        }
-                    } );
-                    
+                    deathsFound.push( log );
                 }
-
-                readFile();
-                
             }
-        } );
+            return false;
 
-        return deathsFound;
+        }, ( error ) => callback( error ? [] : deathsFound, error ) );
     }
 
 

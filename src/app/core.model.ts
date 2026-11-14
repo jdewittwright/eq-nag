@@ -1496,7 +1496,8 @@ export class IpcMessage<T> {
 
 export class DeathRecapPreferences {
     triggerId: string;
-    engageMode: 'hotkey' | 'automatic';
+    /** How the death recap opens; null when it's off. */
+    engageMode: 'hotkey' | 'automatic' | null;
     hotkeyPhrase: string;
 }
 
