@@ -103,7 +103,8 @@ async function start( exe, profile ) {
     }
     app.rendererErrors = [];
     app.renderer = await open( renderer, app.rendererErrors );
-    app.ui = await open( main );
+    app.uiErrors = [];
+    app.ui = await open( main, app.uiErrors );
     // The combat watcher's code runs in its preload, so the tests run theirs there too.
     app.combat = await open( combat, undefined, { isolated: true } );
     app.node = await open( ( await targets( inspectPort ) )[ 0 ] );

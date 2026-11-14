@@ -49,6 +49,7 @@ node tests/e2e/app.test.cjs --exe "C:\path\to\EQ Nag.exe" generators importFolde
 | `damagedFile` | Restoring a damaged trigger file from its backup |
 | `importFolders` | The import window's folder list |
 | `deathRecap` | The death recap loading, its "no deaths" message, and its drag area |
+| `deathRecapSettings` | The death recap setting turning on, off and on again, including after its trigger is deleted by hand |
 
 `overlay.test.cjs` covers the overlay window: building overlays, showing timers,
 and blocking script from shared triggers.

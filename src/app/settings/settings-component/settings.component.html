@@ -175,9 +175,14 @@
       <br />The <span class="color-orange-dark" style="font-weight: 400;">Encounter Statistics</span> will list the general statistics of the raid, and a list of metrics for each enemy encountered in the fight.</p>
       <p>To enable the Death Recap window, select how you would like the window to be loaded.
         <br/>Loading with <span class="color-blue" style="font-weight: 400;">Hotkey</span> will create an EQ hotkey that when pressed, will display your last death.
-        <br/>Loading with <span class="color-blue" style="font-weight: 400;">Automatic</span> will automatically display the Death Recap window when you are slain.</p>
+        <br/>Loading with <span class="color-blue" style="font-weight: 400;">Automatic</span> will automatically display the Death Recap window when you are slain.
+        <br/>Choosing <span class="color-blue" style="font-weight: 400;">Off</span> turns the Death Recap off and deletes the trigger Nag made for it.</p>
 
         <mat-radio-group [(ngModel)]="deathRecapPreferences.engageMode" name="deathRecapEngageMode" (change)="onDeathRecapPrefsChange()">
+          <mat-radio-button [value]="null">
+            <div>Off</div>
+          </mat-radio-button>
+
           <mat-radio-button value="hotkey">
             <div>Hotkey</div>
           </mat-radio-button>
