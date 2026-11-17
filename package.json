@@ -15,7 +15,7 @@
     "ng": "ng",
     "build:preloads": "node tools/build-preloads.mjs",
     "start": "npm run build:preloads && electron .",
-    "test": "node tests/unit/app-logic.test.cjs && node tests/unit/share-files.test.cjs && node tests/unit/security.test.cjs",
+    "test": "node tests/unit/app-logic.test.cjs && node tests/unit/share-files.test.cjs && node tests/unit/security.test.cjs && node tests/unit/death-recap.test.cjs",
     "test:e2e": "node tests/e2e/overlay.test.cjs && node tests/e2e/app.test.cjs",
     "start:electron": "tsc && ng build --configuration=production && npm run build:preloads && electron .",
     "perf": "node tools/perf/perf-test.mjs",

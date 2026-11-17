@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overlay Testing</title>
+    <title>Death Recap</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:ital,wght@0,300;0,700;1,300&family=Oswald:wght@200;300;400;500;600;700&family=Press+Start+2P&family=Ranchers&family=Red+Rose:wght@300;400;700&family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
 
@@ -142,7 +142,16 @@
             /* padding-left: 3px; */
         }
 
+        /* The window has no frame, so the heading is where it's dragged from. */
+        .title-bar {
+            -webkit-app-region: drag;
+            user-select: none;
+            padding-top: 1px;
+        }
+
         a.close-button {
+            -webkit-app-region: no-drag;
+            z-index: 1;
             text-decoration: none !important;
             position: fixed;
             right: 0;
@@ -217,6 +226,14 @@
             display: block;
         }
 
+        .recap-message {
+            text-align: center;
+            margin-top: 200px;
+            font-family: Oswald;
+            font-size: 24px;
+            color: rgb(204, 204, 204);
+        }
+
         /* CSS LOADER */
         .css-loader {
             text-align: center;
@@ -260,12 +277,15 @@
     <section class="body">
         
         <a class="close-button" href="javascript:void(0)">Close</a>
-        <h1 class="color-red">Death Recap</h1>
-        <h5 class="color-med-green character-name" id="characterName">Israphel</h5>
+        <div class="title-bar">
+            <h1 class="color-red">Death Recap</h1>
+            <h5 class="color-med-green character-name" id="characterName"></h5>
+        </div>
 
         <div class="css-loader">
             <span class="loader"></span>
         </div>
+        <div class="recap-message" style="display: none;"></div>
         <div class="dashboard" style="display: none;">
 
             <div class="dashboard-widget damage-log">

@@ -2,7 +2,7 @@
 //
 //   node tests/e2e/app.test.cjs [--exe <path>] [group ...]
 //
-// Groups: triggers, saving, settingsCleanup, generators, damagedFile, importFolders, closeToTray
+// Groups: triggers, saving, settingsCleanup, generators, damagedFile, importFolders, closeToTray, deathRecap, deathRecapSettings
 const fs = require( 'fs' );
 const path = require( 'path' );
 const { check, finish, abort } = require( '../lib/report.cjs' );
@@ -339,6 +339,150 @@ const tests = {
             // The tray's Exit and the update installer quit through app.quit.
             app.main( `electron.app.quit(); return true;` ).catch( () => { } );
             check( 'Quitting the app closes the hidden window', await mainPageGoneWithin( 15000 ) );
+        } finally { await stop( app ); }
+    },
+
+    /** The death recap, opened the way its trigger opens it. Takes about 1 minute. */
+    async deathRecap() {
+        const { profile, log } = createProfile( path.join( work.folder, 'deathRecap' ) );
+        const app = await start( exePath( args ), profile );
+        const recapWindow = `electron.BrowserWindow.getAllWindows().find( w => /death-recap\\.html/.test( w.webContents.getURL() ) )`;
+        /** Opens the recap for the given log and waits for it to finish loading. */
+        const openRecap = async logFilePath => {
+            await app.main( `electron.ipcMain.emit( 'window:last-death-recap', {}, { id: 'e2e', value: ${JSON.stringify( { logFilePath, characterName: 'Tester', serverName: 'test' } )} } ); return true;` );
+            let target;
+            for ( let t = 0; t < 15000 && !target; t += 500 ) {
+                await sleep( 500 );
+                target = ( await app.pages() ).find( p => /death-recap\.html/.test( p.url ) );
+            }
+            if ( !target ) return null;
+            const recap = await open( target );
+            for ( let t = 0; t < 15000; t += 500 ) {
+                if ( await recap.eval( `getComputedStyle( document.querySelector( '.css-loader' ) ).display === 'none'` ) ) break;
+                await sleep( 500 );
+            }
+            return recap;
+        };
+        const closeRecap = async recap => {
+            try { recap?.close(); } catch { }
+            await app.main( `${recapWindow}?.close(); return true;` );
+            await sleep( 1000 );
+        };
+        try {
+            for ( const line of [
+                'A test golem hits YOU for 120 points of damage.',
+                'A test golem crushes YOU for 300 points of damage.',
+                'You have taken 250 damage from Venom of the Tester.',
+                'You have been slain by a test golem!',
+            ] ) writeLine( log, line );
+
+            let recap = await openRecap( log );
+            check( 'The death recap opens', !!recap );
+            if ( recap ) {
+                const state = await recap.eval( `( {
+                    loading: getComputedStyle( document.querySelector( '.css-loader' ) ).display !== 'none',
+                    dashboard: getComputedStyle( document.querySelector( '.dashboard' ) ).display !== 'none',
+                    message: document.querySelector( '.recap-message' ).textContent,
+                    damage: document.querySelector( '#damageLogContainer' ).textContent.replace( /\\s+/g, ' ' ).trim(),
+                    drag: getComputedStyle( document.querySelector( '.title-bar' ) ).getPropertyValue( '-webkit-app-region' ),
+                    closeDrag: getComputedStyle( document.querySelector( 'a.close-button' ) ).getPropertyValue( '-webkit-app-region' ),
+                } )` );
+                check( 'The recap stops loading', !state.loading );
+                check( 'The recap is shown', state.dashboard && state.message === '', state.message );
+                check( 'The recap lists the damage taken', state.damage.includes( '300' ) && state.damage.includes( 'A test golem' ), state.damage );
+                check( 'The recap can be dragged by its heading', state.drag === 'drag', state.drag );
+                check( 'The close button is not part of the drag area', state.closeDrag === 'no-drag', state.closeDrag );
+            }
+            await closeRecap( recap );
+
+            const quiet = path.join( profile, 'eqlog_Quiet_test.txt' );
+            writeLine( quiet, 'A test golem hits YOU for 120 points of damage.' );
+            recap = await openRecap( quiet );
+            const shown = recap && await recap.eval( `( {
+                loading: getComputedStyle( document.querySelector( '.css-loader' ) ).display !== 'none',
+                message: document.querySelector( '.recap-message' ).textContent,
+            } )` );
+            check( 'A log with no deaths stops loading', shown && !shown.loading );
+            check( 'A log with no deaths says so', shown?.message === 'No deaths found in this log.', shown?.message );
+            await closeRecap( recap );
+        } finally { await stop( app ); }
+    },
+
+    /** The death recap setting turns on, off and on again, including after its trigger is deleted by hand. Takes about 1 minute. */
+    async deathRecapSettings() {
+        const { profile } = createProfile( path.join( work.folder, 'deathRecapSettings' ) );
+        const dbFile = path.join( profile, 'trigger-database.json' );
+        const prefsFile = path.join( profile, 'user-preferences.json' );
+        const app = await start( exePath( args ), profile );
+        const triggers = () => readJson( dbFile ).triggers;
+        const recapTriggers = () => triggers().filter( t => /^Death Recap/.test( t.name ) );
+        const prefs = () => readJson( prefsFile ).deathRecap ?? {};
+        const otherCount = triggers().length;
+        const radio = label => app.ui.eval( `( () => {
+            const button = [ ...document.querySelectorAll( 'mat-radio-group[name="deathRecapEngageMode"] mat-radio-button' ) ].find( b => b.innerText.trim() === ${JSON.stringify( label )} );
+            button.querySelector( 'input' ).click();
+            return true;
+        } )()` );
+        const checked = () => app.ui.eval( `document.querySelector( 'mat-radio-group[name="deathRecapEngageMode"] mat-radio-button.mat-mdc-radio-checked' )?.innerText.trim() ?? ''` );
+        const pickFolder = async name => {
+            for ( let t = 0; t < 5000 && !/Select Trigger Folder/.test( await ui.dialogText( app.ui ) ); t += 250 ) await sleep( 250 );
+            if ( !/Select Trigger Folder/.test( await ui.dialogText( app.ui ) ) ) return false;
+            if ( name == null ) await ui.click( app.ui, 'Cancel' );
+            else await app.ui.eval( `[ ...document.querySelectorAll( 'mat-dialog-container mat-tree-node' ) ].find( n => n.innerText.trim() === ${JSON.stringify( name )} ).click()` );
+            await sleep( 1500 );
+            return true;
+        };
+        /** Deletes a trigger the way the Triggers tab does. */
+        const deleteByHand = id => app.main( `electron.ipcMain.emit( 'trigger:delete', { sender: { send() { } } }, ${JSON.stringify( id )} ); return true;` );
+        try {
+            await ui.openTab( app.ui, 'Settings' );
+            await sleep( 1500 );
+            check( 'With no death recap setting, Off is selected', await checked() === 'Off', await checked() );
+
+            await radio( 'Hotkey' );
+            check( 'Hotkey asks for a folder', await pickFolder( 'Tests' ) );
+            let made = recapTriggers();
+            check( 'Hotkey makes the death recap trigger', made.length === 1 && made[ 0 ].name === 'Death Recap [Hotkey]' && made[ 0 ].actions.length === 1 && made[ 0 ].actions[ 0 ].actionType === 11,JSON.stringify( made.map( t => t.name ) ) );
+            check( 'Hotkey saves the trigger and hotkey', prefs().engageMode === 'hotkey' && prefs().triggerId === made[ 0 ]?.triggerId && /wonders how they died/.test( prefs().hotkeyPhrase ), JSON.stringify( prefs() ) );
+
+            await radio( 'Automatic' );
+            await sleep( 1500 );
+            const renamed = recapTriggers();
+            check( 'Automatic updates the same trigger', renamed.length === 1 && renamed[ 0 ].triggerId === made[ 0 ]?.triggerId && renamed[ 0 ].name === 'Death Recap [Auto]', JSON.stringify( renamed.map( t => t.name ) ) );
+            check( 'Automatic clears the hotkey', prefs().engageMode === 'automatic' && prefs().hotkeyPhrase == null, JSON.stringify( prefs() ) );
+
+            await radio( 'Off' );
+            await sleep( 1500 );
+            check( 'Off deletes the death recap trigger', recapTriggers().length === 0 );
+            check( 'Off keeps the other triggers', triggers().length === otherCount, `${triggers().length} of ${otherCount}` );
+            check( 'Off clears the death recap setting', prefs().engageMode == null && prefs().triggerId == null && prefs().hotkeyPhrase == null, JSON.stringify( prefs() ) );
+
+            await radio( 'Automatic' );
+            check( 'Turning it back on asks for a folder', await pickFolder( 'Tests' ) );
+            made = recapTriggers();
+            check( 'Turning it back on makes a new trigger', made.length === 1 && made[ 0 ].name === 'Death Recap [Auto]' && prefs().triggerId === made[ 0 ].triggerId );
+
+            await deleteByHand( made[ 0 ].triggerId );
+            await sleep( 1000 );
+            check( 'The trigger can be deleted by hand', recapTriggers().length === 0 );
+            await radio( 'Hotkey' );
+            check( 'After deleting it by hand, Hotkey asks for a folder', await pickFolder( 'Tests' ) );
+            const again = recapTriggers();
+            check( 'After deleting it by hand, Hotkey makes a new trigger', again.length === 1 && again[ 0 ].name === 'Death Recap [Hotkey]' && prefs().triggerId === again[ 0 ].triggerId && prefs().engageMode === 'hotkey', JSON.stringify( prefs() ) );
+
+            await deleteByHand( again[ 0 ].triggerId );
+            await sleep( 1000 );
+            await radio( 'Off' );
+            await sleep( 1500 );
+            check( 'After deleting it by hand, Off keeps the other triggers', triggers().length === otherCount, `${triggers().length} of ${otherCount}` );
+            check( 'After deleting it by hand, Off clears the setting', prefs().engageMode == null && prefs().triggerId == null, JSON.stringify( prefs() ) );
+
+            await radio( 'Hotkey' );
+            await pickFolder( null );
+            check( 'Cancelling the folder shows Off again', await checked() === 'Off', await checked() );
+            check( 'Cancelling the folder makes no trigger', recapTriggers().length === 0 && prefs().engageMode == null );
+
+            check( 'The main window logs no errors', app.uiErrors.length === 0, app.uiErrors.join( ' | ' ) );
         } finally { await stop( app ); }
     },
 };

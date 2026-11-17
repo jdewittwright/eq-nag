@@ -3,7 +3,18 @@
 Each version's section is written to be pasted into its GitHub release
 description, which Nag shows in the Update Notes window.
 
-## v0.4.0 (unreleased)
+## v0.4.1 (unreleased)
+
+### Fixes
+- **The death recap works again.** Since v0.3.0, the death recap window opened with a spinner that never stopped for almost every log, so it never showed anything. It now shows the damage you took, where it came from and the encounter's statistics. It also no longer gets stuck when a damage over time spell was hurting you before you died.
+- **The death recap only covers the fight that killed you.** It could include fights from hours or even months earlier in the same log. It now starts after your previous death, or after the last full minute in which nothing hit you, you hit nothing and no one healed you or was healed by you. Chat doesn't count. Fights that go past midnight are also kept in the right order.
+- **The death recap says when there's nothing to show.** If your log has no deaths (for example, using the hotkey before dying in that log), or the log can't be read, the window now says so instead of spinning forever.
+- **The death recap window can be moved.** It has no frame, and there was nowhere to drag it from. Drag it by the "Death Recap" heading.
+- **The death recap can be turned off.** Settings now has an Off choice next to Hotkey and Automatic. It deletes the trigger Nag made for the death recap. If you never picked a mode, Off is now shown as selected.
+- **Picking a death recap mode works after deleting its trigger.** If you had deleted the "Death Recap" trigger yourself, choosing Hotkey or Automatic did nothing. Nag now asks for a folder and makes a new trigger.
+- **Deleting a trigger that was already gone could delete a different trigger.** Nag would remove the last trigger in your list instead. It now does nothing.
+
+## v0.4.0
 
 ### Security
 - **Log lines from other players can no longer reach code with full access to your computer.** The hidden windows that read your logs, track combat and back up logs could run anything with Nag's full access to your files, and had the browser's usual protections turned off. Nothing in them was known to be exploitable, but they handle chat that anyone in game can type, so one small mistake could have let a message run code. Their work now happens apart from the page, with the protections back on, and the pages are blocked from running any script.
